@@ -12,6 +12,8 @@ namespace form\orm;
 define("ORM_RELATE_CHILD",1);
 define("ORM_RELATE_PARENT",2);
 
+//TODO: create database schema based on object public properties
+
 abstract class ORMObject implements \JsonSerializable
 {
     use \Magic;
@@ -21,6 +23,44 @@ abstract class ORMObject implements \JsonSerializable
     protected $prefix;
     protected $PDOInstance;
     protected $results;
+
+    /**
+     * Indicates if the schema should remain static or the database should be updated on class properties changes
+     * @var bool
+     */
+    static $freezed = false;
+
+    /**
+     * Maps class schema in database
+     */
+    protected function mapSchema()
+    {
+        $r = new \ReflectionClass(get_class($this));
+
+        $schemaMap = [];
+
+        $properties = $r->getProperties();
+
+        foreach ($properties as $property)
+        {
+            $comment = $r->getProperty($property)->getDocComment();
+
+            $pattern = "#(@[a-zA-Z]+\s*[a-zA-Z0-9, ()_].*)#";
+
+            preg_match_all($pattern,$comment,$matches,PREG_PATTERN_ORDER);
+
+            $commentArray = [];
+
+            foreach ($matches[0] as $k=>$match)
+            {
+                $explode =  explode(" ",$match);
+                $commentArray[$explode[0]] = $explode[1];
+            }
+
+            $schemaMap[$property] = $commentArray["@var"];
+        }
+
+    }
 
     /**
      * ORMObject constructor.

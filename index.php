@@ -5,15 +5,31 @@
  * Date: 27/04/2018
  * Time: 23:33
  */
-include "autoload.php";
 
-include "Person.php";
+class Demo
+{
+    /**
+     * @var string
+     */
+    public $demo;
+}
 
-include "Job.php";
 
-$pdo = new PDO("mysql:host=localhost;dbname=orm","root","");
+$r = new ReflectionClass(Demo::class);
+
+$comment = $r->getProperty("demo")->getDocComment();
+
+$pattern = "#(@[a-zA-Z]+\s*[a-zA-Z0-9, ()_].*)#";
+
+preg_match_all($pattern,$comment,$matches,PREG_PATTERN_ORDER);
+
+$commentArray = [];
+
+foreach ($matches[0] as $k=>$match)
+{
+    $explode =  explode(" ",$match);
+    $commentArray[$explode[0]] = $explode[1];
+}
 
 
-$person  = new \form\orm\Person($pdo);
-
-$person->readById(12);
+var_dump($commentArray);
