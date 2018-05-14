@@ -202,6 +202,7 @@ abstract class ORMObject implements \JsonSerializable
         return $this->PDOInstance->exec($oSql);
     }
 
+    /*
     function relate(ORMObject $object,string $path = null,int $relationId= null,int $pos = 0,array $extraData = [],int $relationType = ORM_RELATE_CHILD)
     {
 
@@ -270,6 +271,7 @@ abstract class ORMObject implements \JsonSerializable
 
 
     }
+    */
 
 
     function save()
