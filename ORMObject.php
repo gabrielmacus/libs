@@ -9,8 +9,6 @@
 namespace form\orm;
 
 
-define("ORM_RELATE_CHILD",1);
-define("ORM_RELATE_PARENT",2);
 
 //TODO: create database schema based on object public properties
 
@@ -18,6 +16,8 @@ abstract class ORMObject implements \JsonSerializable
 {
     use \Magic;
     public $id;
+    public $created_at;
+    public $updated_at;
 
     protected $table;
     protected $prefix;
@@ -210,6 +210,9 @@ abstract class ORMObject implements \JsonSerializable
 
     }
 
+
+
+
     private function update()
     {
 
@@ -236,12 +239,13 @@ abstract class ORMObject implements \JsonSerializable
     }
 
 
+    /*
     function unrelate(int $id)
     {
         $oSql = "DELETE FROM _relations WHERE relation_id = {$id}";
         return $this->PDOInstance->exec($oSql);
     }
-
+    */
     /*
     function relate(ORMObject $object,string $path = null,int $relationId= null,int $pos = 0,array $extraData = [],int $relationType = ORM_RELATE_CHILD)
     {
@@ -319,7 +323,12 @@ abstract class ORMObject implements \JsonSerializable
 
         if(empty($this->id))
         {
-            return $this->create();
+            $now = new \DateTime();
+            $this->created_at = $now->format('Y-m-d');
+            $id = $this->create();
+            $this->id = $id;
+
+            return $id;
         }
         else
         {
