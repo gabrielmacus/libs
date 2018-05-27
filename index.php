@@ -9,18 +9,31 @@ include "autoload.php";
 
 include "Person.php";
 include "Job.php";
+include "Company.php";
 
 
 $pdo = new PDO("mysql:host=localhost;dbname=libs","root","");
 
-$job = new \form\orm\Job($pdo);
+$company = new \form\orm\Company($pdo);
+$job  = new \form\orm\Job($pdo);
+$person  = new \form\orm\Person($pdo);
+$pagination = new \form\orm\ORMPagination();
 
-$person = new \form\orm\Person($pdo);
-$persons = $person->read();
-$persons->populate($job);
+$person->readById(5);
+$company->readById(2);
+$relation = new \form\orm\ORMRelation($pdo);
+$relation->setParent($company);
+$relation->setChild($person,"employees");
+$relation->save();
 
 
 
 
 
-exit();
+
+/*
+$companies = $company->read(null,$pagination);
+$companies->populate($person,"employees")->populate($job);
+
+echo json_encode($companies);
+*/

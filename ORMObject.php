@@ -12,8 +12,12 @@ namespace form\orm;
 
 //TODO: create database schema based on object public properties
 
-abstract class ORMObject implements \JsonSerializable
+abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 {
+    use ORMPopulate
+    {
+        populate as _populate;
+    }
     use \Magic;
     public $id;
     public $created_at;
@@ -174,26 +178,52 @@ abstract class ORMObject implements \JsonSerializable
         return false;
     }
 
-    function &read(array $query = ["where"=>"","params"=>[]],$limit = 100,$offset =0,array $fields = null)
+    function &read(ORMQuery $query= null,ORMPagination &$pagination ,array $fields = null)
     {
 
         $this->results =  new ORMArray();
 
+        $params =[];
+
         $oSql = "SELECT ".((empty($fields))?"*":implode($fields,","))." FROM {$this->table} ";
 
-        if(!empty($query["where"]))
+        if(!empty($query))
         {
-            $oSql.=" WHERE {$query["where"]} ";
+            if(!empty($query->join))
+            {
+                $oSql.=" {$query->join} ";
+            }
+
+            if(!empty($query->where))
+            {
+                $oSql.=" WHERE {$query->where} ";
+            }
+
+            if(!empty($query->groupBy))
+            {
+                $oSql.=" GROUP BY {$query->groupBy} ";
+            }
+
+            if(!empty($query->orderBy))
+            {
+                $oSql.=" ORDER BY {$query->orderBy} ";
+            }
+
+
+            if(!empty($query->params))
+            {
+                $params = $query->params;
+            }
+
         }
 
+        $pagination->total = $this->PDOInstance->query("SELECT count(*) as 'total' FROM ({$oSql}) as t")->fetchAll(\PDO::FETCH_ASSOC)[0]['total'];
 
-        //TODO: paginate
-        $oSql.= " LIMIT {$limit} OFFSET {$offset}";
-
+        $oSql.= " LIMIT {$pagination->limit} OFFSET {$pagination->offset}";
 
         $statement = $this->PDOInstance->prepare($oSql);
 
-        if(!$statement->execute($query["params"]))
+        if(!$statement->execute($params))
         {
             throw new ORMException("Couldn't fetch objects. Error info: ".implode($statement->errorInfo(),","));
         }
@@ -209,6 +239,7 @@ abstract class ORMObject implements \JsonSerializable
 
 
     }
+
 
 
 
@@ -324,7 +355,7 @@ abstract class ORMObject implements \JsonSerializable
         if(empty($this->id))
         {
             $now = new \DateTime();
-            $this->created_at = $now->format('Y-m-d');
+            $this->created_at = $now->format('Y-m-d H:i:s');
             $id = $this->create();
             $this->id = $id;
 
@@ -363,4 +394,23 @@ abstract class ORMObject implements \JsonSerializable
     }
 
 
+    public function offsetExists($offset)
+    {
+        return isset($this->$offset);
+    }
+
+    public function offsetGet($offset)
+    {
+        return (isset($this->$offset))?$this->$offset:null;
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->$offset =$value;
+    }
+
+    public function offsetUnset($offset)
+    {
+        $this->$offset = null;
+    }
 }

@@ -8,6 +8,8 @@
 
 require_once "Magic.php";
 require_once "ORMException.php";
+require_once "ORMPagination.php";
+require_once "ORMQuery.php";
 require_once "ORMPopulate.php";
 require_once "ORMObject.php";
 require_once "ORMArray.php";

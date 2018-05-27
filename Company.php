@@ -12,6 +12,5 @@ namespace form\orm;
 class Company extends ORMObject
 {
     public $name;
-    public $location;
 
 }
