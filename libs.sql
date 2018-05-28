@@ -33,7 +33,7 @@ CREATE TABLE `league` (
   `league_created_at` datetime NOT NULL,
   `league_updated_at` datetime NOT NULL,
   `league_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `league`
@@ -56,7 +56,7 @@ CREATE TABLE `person` (
   `person_birthdate` date NOT NULL,
   `person_created_at` datetime NOT NULL,
   `person_updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `person`
@@ -85,7 +85,7 @@ CREATE TABLE `team` (
   `team_created_at` datetime NOT NULL,
   `team_updated_at` datetime NOT NULL,
   `team_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `team`

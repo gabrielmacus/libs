@@ -27,6 +27,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
     protected $prefix;
     protected $PDOInstance;
     protected $results;
+    static $log;
 
     /**
      * Indicates if the schema should remain static or the database should be updated on class properties changes
@@ -74,6 +75,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
      */
     function __construct(\PDO $PDOInstance,string $table = "",string $prefix ="")
     {
+        $this->log("Initializing ".get_class($this));
 
         $class= new \ReflectionClass($this);
         $this->PDOInstance = $PDOInstance;
@@ -84,6 +86,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
     protected function getObjectVars()
     {
+        $this->log("Getting object vars");
         //TODO: Review for better alternative. This may be deprecated
         //Only public properties. The "trick" is that get_object_vars is being called from the scope of call_user_func and not the scope of the object
         $objectVars = call_user_func('get_object_vars', $this);
@@ -94,13 +97,24 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
                 unset($objectVars[$key]);
             }
         }
+        $this->log("End getting object vars",$objectVars);
         return $objectVars;
 
 
     }
 
+    function log($key,$value=""){
+        $now = new \DateTime();
+        static::$log[$key." - ". $now->format("d-m-Y H:i:s")] = $value;
+
+    }
+
     function makeObject(array $arr,ORMObject &$ormObject = null)
     {
+
+
+        $this->log("Making object from array",$arr);
+
         $className = get_class($this);
 
         $ormObject =empty($ormObject)?new $className($this->PDOInstance):$ormObject;
@@ -112,12 +126,18 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
             //TODO: identify json and convert to array
         }
 
+        $this->log("End making object from array",$ormObject);
+
         return $ormObject;
 
     }
 
     private function processPropertiesToSave()
     {
+
+        $this->log("Processing properties to save");
+
+
         $columns =[];
         $values = [];
 
@@ -138,11 +158,17 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
         //$columns = rtrim($columns,",");
         //$values  = rtrim($values,",");
 
-        return ["columns"=>$columns,"values"=>$values];
+        $result =["columns"=>$columns,"values"=>$values];
+
+        $this->log("End processing properties to save",$result);
+
+        return $result;
     }
 
     private function create()
     {
+
+        $this->log("Creating record");
         $properties = $this->processPropertiesToSave();
 
         $oSql = "INSERT INTO {$this->table} (".implode(",",$properties["columns"]).") 
@@ -155,11 +181,18 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
             throw new ORMException("Couldn't create object. Error info: ".implode($statement->errorInfo(),","));
         }
 
-        return  $this->PDOInstance->lastInsertId();
+        $lastInsertId = $this->PDOInstance->lastInsertId();
+
+        $this->log("End creating record",$lastInsertId);
+
+        return  $lastInsertId;
     }
 
     function readById(int $id)
     {
+
+        $this->log("Reading record by id",$id);
+
         $oSql ="SELECT * FROM {$this->table} WHERE {$this->prefix}_id = ?";
 
         $statement = $this->PDOInstance->prepare($oSql);
@@ -169,17 +202,20 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
             throw new ORMException("Couldn't fetch object by id. Error info: ".implode($statement->errorInfo(),","));
         }
 
+
         if($row = $statement->fetch())
         {
             $this->makeObject($row,$this);
+            $this->log("End reading record by id",$this);
             return true;
         }
-
+        $this->log("End reading record by id");
         return false;
     }
 
     function &read(ORMQuery $query= null,ORMPagination &$pagination ,array $fields = null)
     {
+        $this->log("Reading records");
 
         $this->results =  new ORMArray();
 
@@ -192,36 +228,48 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
             if(!empty($query->join))
             {
                 $oSql.=" {$query->join} ";
+                $this->log("Appending JOIN to query",$query->join);
             }
 
             if(!empty($query->where))
             {
                 $oSql.=" WHERE {$query->where} ";
+                $this->log("Appending WHERE to query",$query->where);
             }
 
             if(!empty($query->groupBy))
             {
                 $oSql.=" GROUP BY {$query->groupBy} ";
+                $this->log("Appending GROUP BY to query",$query->groupBy);
             }
 
             if(!empty($query->orderBy))
             {
                 $oSql.=" ORDER BY {$query->orderBy} ";
+                $this->log("Appending ORDER BY to query",$query->orderBy);
             }
 
 
             if(!empty($query->params))
             {
                 $params = $query->params;
+                $this->log("Appending PARAMS to query",$query->params);
             }
 
         }
+        $this->log("Counting records for pagination");
 
         $pagination->total = $this->PDOInstance->query("SELECT count(*) as 'total' FROM ({$oSql}) as t")->fetchAll(\PDO::FETCH_ASSOC)[0]['total'];
 
+        $this->log("End counting records for pagination",$pagination->total);
+
         $oSql.= " LIMIT {$pagination->limit} OFFSET {$pagination->offset}";
 
+        $this->log("End counting records for pagination",$pagination->total);
+
         $statement = $this->PDOInstance->prepare($oSql);
+
+        $this->log("Executing query",$oSql);
 
         if(!$statement->execute($params))
         {
@@ -234,6 +282,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
             $this->results[]=$this->makeObject($row);
         }
 
+        $this->log("End reading records",$this->results);
 
         return $this->results;//["objects"=>$results,"limit"=>$limit,"offset"=>$offset];
 
@@ -241,12 +290,9 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
     }
 
 
-
-
-
     private function update()
     {
-
+        $this->log("Updating record");
         $properties = $this->processPropertiesToSave();
 
         $oSql = "UPDATE {$this->table}  SET  ";
@@ -259,6 +305,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
         $oSql.=" {$set} WHERE {$this->prefix}_id = '{$this->id}'";
 
+        $this->log("UPDATE sql",$oSql);
 
         $statement = $this->PDOInstance->prepare($oSql);
 
@@ -266,88 +313,8 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
         {
             throw new ORMException("Couldn't update object. Error info: ".implode($statement->errorInfo(),","));
         }
-
+        $this->log("End updating record");
     }
-
-
-    /*
-    function unrelate(int $id)
-    {
-        $oSql = "DELETE FROM _relations WHERE relation_id = {$id}";
-        return $this->PDOInstance->exec($oSql);
-    }
-    */
-    /*
-    function relate(ORMObject $object,string $path = null,int $relationId= null,int $pos = 0,array $extraData = [],int $relationType = ORM_RELATE_CHILD)
-    {
-
-        $fields = ["relation_id","ref1","ref1table","ref2","ref2table","ref1pos","ref2pos","ref1path","ref2path"];
-
-        $extraFields = ["field_1","field_2"];
-
-        $fields =  $fields + $extraFields;
-
-        $oSql = "REPLACE INTO _relations   (".implode(",",$fields).")
-         VALUES (".implode(",",array_map(function($el){return ":{$el}";},$fields)).")";
-
-       foreach ($extraFields as $field)
-       {
-           $params[":{$field}"] = (!empty($extraData[$field]))?$extraData[$field]:"";
-       }
-
-        $params[":relation_id"] = (!empty($relationId))?$relationId:"";
-
-        if($relationType == ORM_RELATE_CHILD)
-        {
-            $params[":ref1"] = $this->id;
-            $params[":ref1table"] = $this->table;
-            $params[":ref1path"] = "";
-            $params[":ref1pos"] = "";
-
-
-            $params[":ref2"] = $object->id;
-            $params[":ref2table"]  =$object->table;
-            $params[":ref2pos"] =  $pos;
-            $params[":ref2path"] = (!empty($path))?$path:"";
-
-
-        }
-        else if($relationType ==ORM_RELATE_PARENT)
-        {
-            $params[":ref2"] = $this->id;
-            $params[":ref2table"] = $this->table;
-            $params[":ref2path"] = "";
-            $params[":ref2pos"] =  $pos;
-
-            $params[":ref1"] = $object->id;
-            $params[":ref1table"]  =$object->table;
-            $params[":ref1pos"] =  $pos;
-            $params[":ref1path"] = (!empty($path))?$path:"";
-        }
-        else
-        {
-            throw new ORMException("Wrong relation type option");
-        }
-
-        echo $oSql;
-        echo json_encode($params);
-
-        $statement=$this->PDOInstance->prepare($oSql);
-
-        if(!$statement->execute($params))
-        {
-            throw new ORMException("Couldn't relate objects. Error info: ".implode($statement->errorInfo(),","));
-
-        }
-
-        return $this->PDOInstance->lastInsertId();
-
-
-
-
-    }
-    */
-
 
     function save()
     {
@@ -369,10 +336,31 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
     }
 
-
-
-    function delete():bool
+    function delete():int
     {
+        $this->log("Deleting record");
+
+        if(empty($this->id))
+        {
+            throw new ORMException("Element intended to be deleted should exist");
+        }
+
+        $oSql ="DELETE FROM {$this->table} WHERE {$this->prefix}_id = {$this->id} LIMIT 1";
+
+        $this->log("DELETE query",$oSql);
+
+        $result = $this->PDOInstance->exec($oSql);
+
+        if($result === false)
+        {
+             throw new ORMException("Couldn't delete object. Error info: ".implode($this->PDOInstance->errorInfo(),","));
+        }
+
+        $this->log("End deleting record",$result);
+
+
+
+        return $result;
 
     }
 

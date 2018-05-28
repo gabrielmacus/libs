@@ -16,6 +16,11 @@ trait ORMPopulate
     function &populate(&$objectToPopulate,ORMObject $object,string $path = "",ORMPagination $pagination=null,$type = PARENT_RELATION_COMPONENT)
     {
 
+        if(empty($objectToPopulate))
+        {
+            return false;
+        }
+
         if(!is_a($objectToPopulate,ORMArray::class) && !is_a($objectToPopulate,ORMObject::class))
         {
             throw new ORMException("Object to populate should be either a ORMArray or a ORMObject");
@@ -32,17 +37,44 @@ trait ORMPopulate
 
         $pagination = !(empty($pagination))?$pagination:new ORMPagination();
 
-        $ids = array_map(function($el){return $el->id;},$objArray);
-
         $component_type = ($type == CHILD_RELATION_COMPONENT)?"child":"parent";
 
         $component_type_reverse = ($type == CHILD_RELATION_COMPONENT)?"parent":"child";
 
+
+        $whereArray = [];
+        foreach ($objArray as $item)
+        {
+            $whereArray[$item->table][] =$item->id;
+        }
+        $where="";
+        foreach ($whereArray as $table => $items)
+        {
+
+            $where.="(relation_{$component_type}_table='{$table}' AND relation_{$component_type}_id IN (";
+            foreach ($items as $item)
+            {
+
+
+                $where.="{$item},";
+
+            }
+            $where = rtrim($where,",");
+            $where.=")) AND ";
+
+        }
+
+        $where = rtrim($where,"AND ");
+
+
         $oSql = "SELECT * FROM _relations
-           WHERE relation_{$component_type}_id IN (".implode(",",$ids).") AND 
+           WHERE {$where} AND 
            relation_{$component_type_reverse}_table = '{$object->table}' AND
            relation_{$component_type_reverse}_key = '{$path}'";
 
+        /*
+        echo "\n";
+        echo $oSql;*/
 
 
         $query = new ORMQuery();

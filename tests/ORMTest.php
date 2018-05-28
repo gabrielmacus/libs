@@ -9,18 +9,8 @@
 include "../autoload.php";
 
 include "../Person.php";
-include "../Job.php";
-include "../Company.php";
-
-function generateRandomString($length = 10) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
-}
+include "../League.php";
+include "../Team.php";
 
 
 class ORMTest extends PHPUnit_Framework_TestCase
@@ -33,12 +23,20 @@ class ORMTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
 
-        $this->pdo = new PDO("mysql:host=localhost;dbname=orm","root","");
+        $this->pdo = new PDO("mysql:host=localhost;dbname=libs","root","");
 
-        $this->pdo->exec("TRUNCATE _relations");
-        $this->pdo->exec("TRUNCATE job");
-        $this->pdo->exec("TRUNCATE company");
-        $this->pdo->exec("TRUNCATE person");
+        $pdo = $this->pdo;
+
+        $concat = $pdo->query("SELECT CONCAT('truncate table ',table_schema,'.',table_name,';') 
+  FROM information_schema.tables 
+ WHERE table_schema IN ('libs');")->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($concat as $k=>$v)
+        {
+
+            $pdo->exec(reset($v));
+        }
+
 
     }
 
@@ -46,44 +44,12 @@ class ORMTest extends PHPUnit_Framework_TestCase
     {
 
         $person = new \form\orm\Person($this->pdo);
-
-        $person->name="Gabriel";
-
-        $person->surname ="Macus";
-
-        $date = new DateTime();
-        $date->setTimestamp(mktime(0,0,0,6,16,1996));
-
-        $person->birthdate =   $date->format(DATE_ATOM);
-
-        $this->assertEquals(($person->save() > 0),true);
-
-        $person->name="Roberto";
-
-        $person->surname ="Rodriguez";
-
-        $date = new DateTime();
-        $date->setTimestamp(mktime(0,0,0,5,22,1975));
-
-        $person->birthdate =   $date->format(DATE_ATOM);
+        $birthdate = new DateTime();
+        $birthdate->setDate(1987,3,3);
+        $person->name ="John";
+        $person->surname="Smith";
 
 
-        $this->assertEquals(($person->save() > 0),true);
-
-        $person->name="Ginko";
-
-        $person->surname ="Biloba";
-
-        $date = new DateTime();
-        $date->setTimestamp(mktime(0,0,0,12,1,1986));
-
-        $person->birthdate =   $date->format(DATE_ATOM);
-
-        $this->assertEquals(($person->save() > 0),true);
-
-        $total = $this->pdo->query("SELECT count(*) as 'total' FROM {$person->table}")->fetchAll(PDO::FETCH_ASSOC)[0]["total"];
-
-        $this->assertEquals($total,3);
 
     }
 
@@ -91,80 +57,198 @@ class ORMTest extends PHPUnit_Framework_TestCase
     public function testRelate()
     {
 
-        $company = new \form\orm\Company($this->pdo);
-        $company->name ="Google";
-        $company->location = "Palo Alto, CA";
-        $company->save();
 
-        $job = new \form\orm\Job($this->pdo);
-        $job->name  ="PHP semi-senior programmer";
-        $job->description = "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original. Fue popularizado en los 60s con la creación de las hojas \"Letraset\", las cuales contenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo Aldus PageMaker, el cual incluye versiones de Lorem Ipsum.";
-        $job->save();
-
-        $job = new \form\orm\Job($this->pdo);
-        $job->name  ="NodeJS junior programmer";
-        $job->description = "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original. Fue popularizado en los 60s con la creación de las hojas \"Letraset\", las cuales contenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo Aldus PageMaker, el cual incluye versiones de Lorem Ipsum.";
-        $job->save();
-
-        $job = new \form\orm\Job($this->pdo);
-        $job->name  ="JAVA senior programmer";
-        $job->description = "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original. Fue popularizado en los 60s con la creación de las hojas \"Letraset\", las cuales contenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo Aldus PageMaker, el cual incluye versiones de Lorem Ipsum.";
-        $job->save();
-
-        $job = new \form\orm\Job($this->pdo);
-        $job->name  ="Python junior tester";
-        $job->description = "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original. Fue popularizado en los 60s con la creación de las hojas \"Letraset\", las cuales contenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo Aldus PageMaker, el cual incluye versiones de Lorem Ipsum.";
-        $job->save();
-
-        $person = new \form\orm\Person($this->pdo);
-
-        $person->name="Gabriel";
-        $person->surname ="Macus";
-        $date = new DateTime();
-        $date->setTimestamp(mktime(0,0,0,6,16,1996));
-        $person->save();
-
-        $person->birthdate =   $date->format(DATE_ATOM);
-        $person->name="Roberto";
-        $person->surname ="Rodriguez";
-        $date = new DateTime();
-        $date->setTimestamp(mktime(0,0,0,5,22,1975));
-        $person->save();
-
-        $person->birthdate =   $date->format(DATE_ATOM);
-        $person->name="Ginko";
-        $person->surname ="Biloba";
-        $date = new DateTime();
-        $date->setTimestamp(mktime(0,0,0,12,1,1986));
-        $person->birthdate =   $date->format(DATE_ATOM);
-        $person->save();
+        $pdo =$this->pdo;
 
 
-        //Relating...
-        $company = new \form\orm\Company($this->pdo);
-        $company->readById(1);
+        $leagues = [];
 
-        for($i=1;$i<=4;$i++)
+        $league = new League($pdo);
+        $league->name = "Premier League";
+        $leagues[$league->name] = $league->save();
+
+        $league = new League($pdo);
+        $league->name = "La Liga";
+        $leagues[$league->name] = $league->save();
+
+
+        $teams = [];
+
+        $team = new Team($pdo);
+        $team->name ="Liverpool F.C";
+        $teams["Premier League"][$team->name]=$team->save();
+
+        $team = new Team($pdo);
+        $team->name ="Chelsea F.C";
+        $teams["Premier League"][$team->name]=$team->save();
+
+        $team = new Team($pdo);
+        $team->name ="Wigan Athletic";
+        $teams["Premier League"][$team->name]=$team->save();
+
+
+        $team = new Team($pdo);
+        $team->name ="F.C Barcelona";
+        $teams["La Liga"][$team->name]=$team->save();
+
+
+        $team = new Team($pdo);
+        $team->name ="Real Madrid F.C";
+        $teams["La Liga"][$team->name]=$team->save();
+
+        $players = [];
+
+        $person = new \form\orm\Person($pdo);
+        $person->name ="Mohamed";
+        $person->surname ="Salah";
+        $players["Premier League"]["Liverpool F.C"][]= $person->save();
+
+        $person = new \form\orm\Person($pdo);
+        $person->name ="Loris";
+        $person->surname ="Karius";
+        $players["Premier League"]["Liverpool F.C"][]= $person->save();
+
+
+        $person = new \form\orm\Person($pdo);
+        $person->name ="Willy";
+        $person->surname ="Caballero";
+        $players["Premier League"]["Chelsea F.C"][]= $person->save();
+
+        $person = new \form\orm\Person($pdo);
+        $person->name ="Eden";
+        $person->surname ="Hazard";
+        $players["Premier League"]["Chelsea F.C"][]= $person->save();
+
+
+
+
+        $person = new \form\orm\Person($pdo);
+        $person->name ="Alex";
+        $person->surname ="Bruce";
+        $players["Premier League"]["Wigan Athletic"][]= $person->save();
+
+        $person = new \form\orm\Person($pdo);
+        $person->name ="Nick";
+        $person->surname ="Powell";
+        $players["Premier League"]["Wigan Athletic"][]= $person->save();
+
+
+
+        $person = new \form\orm\Person($pdo);
+        $person->name ="Lionel";
+        $person->surname ="Messi";
+        $players["La Liga"]["F.C Barcelona"][]= $person->save();
+
+        $person = new \form\orm\Person($pdo);
+        $person->name ="Luis";
+        $person->surname ="Suárez";
+        $players["La Liga"]["F.C Barcelona"][]= $person->save();
+
+        $person = new \form\orm\Person($pdo);
+        $person->name ="Gareth";
+        $person->surname ="Bale";
+        $players["La Liga"]["Real Madrid F.C"][]= $person->save();
+
+        $person = new \form\orm\Person($pdo);
+        $person->name ="Sergio";
+        $person->surname ="Ramos";
+        $players["La Liga"]["Real Madrid F.C"][]= $person->save();
+
+        foreach ($teams as $i => $j)
         {
-            $job = new \form\orm\Job($this->pdo);
-            $job->readById(1);
-            $company->relate($job);
+            foreach ($j as $k)
+            {
+                $relation = new \form\orm\ORMRelation($pdo);
+                $league = new League($pdo);
+                $league->readById($leagues[$i]);
+                $relation->setParent($league,'leagues');
+
+                $team = new Team($pdo);
+                $team->readById($k);
+                $relation->setChild($team,"teams");
+                $relation->save();
+            }
         }
 
-        $c = $company->read();
-        $c->populate(new \form\orm\Job($this->pdo));
-        echo json_encode($c->results);
+        foreach ($players as $i => $j)
+        {
+            foreach ($j as $k => $l)
+            {
+                foreach ($l as $m)
+                {
+
+                    $relation = new \form\orm\ORMRelation($pdo);
+                    $team = new Team($pdo);
+                    $team->readById($teams[$i][$k]);
+                    $relation->setParent($team);
+
+                    $player = new \form\orm\Person($pdo);
+                    $player->readById($m);
+                    $relation->setChild($player,"players");
+                    $relation->save();
+
+                }
+            }
+        }
+
+        $league = new League($pdo);
+        $pagination = new \form\orm\ORMPagination();
+        $team =  new Team($pdo);
+        $leagues = $league->read(null,$pagination);
+        $player = new \form\orm\Person($pdo);
+
+        //Before populate
+
+        $this->assertArrayNotHasKey('teams', $leagues[0]);
+
+        $this->assertArrayNotHasKey('teams', $leagues[1]);
 
 
 
+        $leagues->populate($team,"teams")->populate($player,"players");
+
+        //After populate
+
+        $this->assertCount(3, $leagues[0]["teams"]);
+
+        $this->assertCount(2, $leagues[1]["teams"]);
 
 
-        $job = new \form\orm\Job($this->pdo);
-        $job->readById(1);
-        $person = new \form\orm\Job($this->pdo);
-        $person->readById(1);
-        //$job->relate($person,["ref1path"=>"jobs"]);
+        $this->assertCount(2, $leagues[0]["teams"][0]["players"]);
 
+        $this->assertCount(2, $leagues[0]["teams"][1]["players"]);
+
+        $this->assertCount(2, $leagues[0]["teams"][2]["players"]);
+
+
+        $this->assertCount(2, $leagues[1]["teams"][0]["players"]);
+
+        $this->assertCount(2, $leagues[1]["teams"][1]["players"]);
+
+
+        //Population in child
+
+        $player = new \form\orm\Person($this->pdo);
+        $pagination = new \form\orm\ORMPagination();
+        $players = $player->read(null,$pagination);
+        $team = new Team($this->pdo);
+
+        $players->populate($team,"teams");
+        $this->assertArrayNotHasKey('teams', $players[0]);
+        $this->assertArrayNotHasKey('team', $players[0]);
+        $players->populate($team,"",null,CHILD_RELATION_COMPONENT);
+        $this->assertArrayHasKey('team', $players[0]);
+
+
+        $team = new Team($this->pdo);
+        $pagination = new \form\orm\ORMPagination();
+        $teams = $team->read(null,$pagination);
+        $this->assertArrayNotHasKey('leagues', $teams[0]);
+        $league = new League($this->pdo);
+        $teams->populate($league,"leagues");
+        $this->assertArrayNotHasKey('leagues', $teams[0]);
+        $teams->populate($league,"leagues",null,CHILD_RELATION_COMPONENT);
+        $this->assertArrayHasKey('leagues', $teams[0]);
 
 
 
