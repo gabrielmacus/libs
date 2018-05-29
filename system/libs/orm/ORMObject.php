@@ -29,7 +29,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
     protected $prefix;
     protected $PDOInstance;
     protected $results;
-    static $log;
+    static $logData;
 
     /**
      * Indicates if the schema should remain static or the database should be updated on class properties changes
@@ -89,16 +89,25 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
     protected function getObjectVars()
     {
         $this->log("Getting object vars");
-        //TODO: Review for better alternative. This may be deprecated
-        //Only public properties. The "trick" is that get_object_vars is being called from the scope of call_user_func and not the scope of the object
-        $objectVars = call_user_func('get_object_vars', $this);
-        foreach ($objectVars as $key =>$var)
+
+        $reflect = new \ReflectionClass($this);
+
+        $propsPublic = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $propsProtected = $reflect->getProperties(\ReflectionProperty::IS_PROTECTED);
+        $propsPrivate = $reflect->getProperties(\ReflectionProperty::IS_PRIVATE);
+        $propsStatic = $reflect->getProperties(\ReflectionProperty::IS_STATIC);
+
+        $propsPublic = array_diff($propsPublic,$propsProtected);
+        $propsPublic = array_diff($propsPublic,$propsPrivate);
+        $propsPublic = array_diff($propsPublic,$propsStatic);
+
+        $objectVars = [];
+
+        foreach ($propsPublic as $prop)
         {
-            if(is_numeric($key))
-            {
-                unset($objectVars[$key]);
-            }
+            $objectVars[$prop->name] = $this[ $prop->name];
         }
+
         $this->log("End getting object vars",$objectVars);
         return $objectVars;
 
@@ -107,7 +116,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
     function log($key,$value=""){
         $now = new \DateTime();
-        static::$log[$key." - ". $now->format("d-m-Y H:i:s")] = $value;
+        static::$logData[$key." - ". $now->format("d-m-Y H:i:s")] = $value;
 
     }
 
@@ -261,6 +270,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
         }
         $this->log("Counting records for pagination");
 
+
         $pagination->total = $this->PDOInstance->query("SELECT count(*) as 'total' FROM ({$oSql}) as t")->fetchAll(\PDO::FETCH_ASSOC)[0]['total'];
 
         $this->log("End counting records for pagination",$pagination->total);
@@ -295,6 +305,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
     private function update()
     {
         $this->log("Updating record");
+
         $properties = $this->processPropertiesToSave();
 
         $oSql = "UPDATE {$this->table}  SET  ";

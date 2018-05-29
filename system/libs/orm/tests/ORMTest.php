@@ -86,25 +86,34 @@ class ORMTest extends PHPUnit_Framework_TestCase
     public function testUpdate()
     {
 
-        $person = new \system\libs\orm\Person($this->pdo);
-        $birthdate = new DateTime();
-        $birthdate->setDate(1987,3,3);
-        $person->name ="John";
-        $person->surname="Smith";
-        $id = $person->save();
+        try
+        {
+            $person = new \system\libs\orm\Person($this->pdo);
+            $birthdate = new DateTime();
+            $birthdate->setDate(1987,3,3);
+            $person->name ="John";
+            $person->surname="Smith";
+            $id = $person->save();
 
-        $person = new \system\libs\orm\Person($this->pdo);
-        $person->readById($id);
-        $person->name ="Juan";
-        $person->surname="Fernandez";
-        $person->save();
+            $person = new \system\libs\orm\Person($this->pdo);
+            $person->readById($id);
+            $person->name ="Juan";
+            $person->save();
 
 
-        $person = new \system\libs\orm\Person($this->pdo);
-        $person->readById($id);
-        $this->assertEquals("Juan",$person->name);
-        $this->assertEquals("Fernandez",$person->surname);
-        $this->assertEquals($id,$person->id);
+            $person = new \system\libs\orm\Person($this->pdo);
+            $person->readById($id);
+            $this->assertEquals("Juan",$person->name);
+            $this->assertEquals("Smith",$person->surname);
+            $this->assertEquals($id,$person->id);
+        }
+        catch(Exception $e)
+        {
+            print_r(\system\libs\orm\ORMObject::$logData);
+            $this->fail($e);
+
+
+        }
 
 
 

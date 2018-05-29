@@ -9,7 +9,19 @@
 include "vendor/autoload.php";
 include  "system/libs/orm/autoload.php";
 
+/*
 spl_autoload_register(function ($class) {
-    echo $class;
-    require_once ucfirst($class) . '.php';
-});
+
+    $systemPath = __DIR__."/system/modules/";
+    $userPath = __DIR__."/system/modules/";
+    $resource= "model";
+    $class = str_replace('-', '', ucwords($_COOKIE, '-'));
+    if(strpos($class,"Controller"))
+    {
+        $resource="controller";
+    }
+    if(file_exists($systemPath."{}/{$resource}.php"))
+    {
+
+    }
+});*/
