@@ -6,7 +6,9 @@
  * Time: 11:09 AM
  */
 
-namespace form\orm;
+namespace system\libs\orm;
+use system\libs\orm\ORMArray;
+
 define("PARENT_RELATION_COMPONENT",1);
 define("CHILD_RELATION_COMPONENT",2);
 

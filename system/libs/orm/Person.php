@@ -6,7 +6,7 @@
  * Time: 23:35
  */
 
-namespace form\orm;
+namespace system\libs\orm;
 
 
 class Person extends ORMObject

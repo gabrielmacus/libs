@@ -6,7 +6,11 @@
  * Time: 2:01
  */
 
-namespace form\orm;
+namespace system\libs\orm;
+
+use system\libs\orm\ORMObject;
+use system\libs\orm\ORMPagination;
+use system\libs\orm\ORMPopulate;
 
 class ORMArray extends \ArrayObject implements \JsonSerializable
 {

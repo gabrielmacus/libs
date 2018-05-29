@@ -6,11 +6,13 @@
  * Time: 23:34
  */
 
-namespace form\orm;
+namespace system\libs\orm;
 
 
 
 //TODO: create database schema based on object public properties
+
+use system\libs\orm\ORMArray;
 
 abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 {

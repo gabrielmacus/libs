@@ -6,7 +6,7 @@
  * Time: 22:39
  */
 
-class League extends \form\orm\ORMObject
+class League extends \system\libs\orm\ORMObject
 {
     public $name;
 }

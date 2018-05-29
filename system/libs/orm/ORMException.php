@@ -6,7 +6,7 @@
  * Time: 2:59
  */
 
-namespace form\orm;
+namespace system\libs\orm;
 
 
 class ORMException extends \Exception

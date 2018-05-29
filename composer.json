@@ -1,3 +1,11 @@
 {
-
+    "name": "puers/orm",
+    "authors": [
+        {
+            "name": "gabrielmacus",
+            "email": "gabrielmacus@gmail.com"
+        }
+    ],
+    "require": {
+    }
 }

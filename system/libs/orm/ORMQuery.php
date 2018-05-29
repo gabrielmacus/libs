@@ -6,7 +6,7 @@
  * Time: 14:58
  */
 
-namespace form\orm;
+namespace system\libs\orm;
 
 
 class ORMQuery

@@ -6,7 +6,7 @@
  * Time: 21:57
  */
 
-namespace form\orm;
+namespace system\libs\orm;
 
 
 

@@ -2,17 +2,14 @@
 /**
  * Created by PhpStorm.
  * User: Puers
- * Date: 27/04/2018
- * Time: 23:21
+ * Date: 28/05/2018
+ * Time: 22:02
  */
 
-require_once "Magic.php";
-require_once "ORMException.php";
-require_once "ORMPagination.php";
-require_once "ORMQuery.php";
-require_once "ORMPopulate.php";
-require_once "ORMObject.php";
-require_once "ORMArray.php";
-require_once "ORMRelation.php";
+include "vendor/autoload.php";
+include  "system/libs/orm/autoload.php";
 
-
+spl_autoload_register(function ($class) {
+    echo $class;
+    require_once ucfirst($class) . '.php';
+});

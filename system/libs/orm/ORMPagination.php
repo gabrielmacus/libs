@@ -6,7 +6,7 @@
  * Time: 15:38
  */
 
-namespace form\orm;
+namespace system\libs\orm;
 
 
 class ORMPagination
