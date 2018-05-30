@@ -105,7 +105,10 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
         foreach ($propsPublic as $prop)
         {
-            $objectVars[$prop->name] = $this[ $prop->name];
+            if(isset($this[$prop->name]))
+            {
+                $objectVars[$prop->name] = $this[$prop->name];
+            }
         }
 
         $this->log("End getting object vars",$objectVars);
@@ -331,11 +334,12 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
     function save()
     {
-
+        $now = new \DateTime();
+        $now = $now->format('Y-m-d H:i:s');
         if(empty($this->id))
         {
-            $now = new \DateTime();
-            $this->created_at = $now->format('Y-m-d H:i:s');
+
+            $this->created_at = $now;
             $id = $this->create();
             $this->id = $id;
 
@@ -343,6 +347,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
         }
         else
         {
+            $this->updated_at = $now;
             return $this->update();
         }
 

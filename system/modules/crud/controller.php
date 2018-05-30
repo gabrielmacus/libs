@@ -71,6 +71,14 @@ class CrudController
         }
     }
 
+    static function Delete(ORMObject $object,$params,$template=null)
+    {
+        $object->id = (!empty($params["id"]))?$params["id"]:null;
+        $result = $object->delete();
+
+        self::SendResponse($result,$template);
+    }
+
     static function Create(ORMObject $object,$params,$template = null)
     {
 

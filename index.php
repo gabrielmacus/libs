@@ -10,12 +10,14 @@ include "autoload.php";
 
 $router = new AltoRouter();
 
-$router->setBasePath('/libs');
+$router->setBasePath('/orm');
 $router->map( 'GET', '/api/[a:module]/[i:id]','Read');
 $router->map( 'POST', '/api/[a:module]/[i:id]','Update');
+$router->map( 'DELETE', '/api/[a:module]/[i:id]','Delete');
 
 $router->map( 'GET', '/api/[a:module]/','Read');
 $router->map( 'POST', '/api/[a:module]/','Create');
+
 
 
 // match current request
