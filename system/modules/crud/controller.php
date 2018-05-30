@@ -32,6 +32,7 @@ class CrudController
     {
         $query = new ORMQuery();
         $pagination = new ORMPagination();
+        $pagination->offset = (!empty($_GET["p"]) && is_numeric($_GET["p"]))?$_GET["p"]-1:0;
 
         if(empty($params["id"]))
         {

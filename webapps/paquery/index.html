@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Paquery</title>
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-touch.min.js"></script>
+
+    <script src="js/main.js"></script>
+
+    <!-- Directives -->
+
+    <script src="directives/menu/directive.js"></script>
+
+    <!-- Directives End -->
+
+
+</head>
+<body  data-ng-app="app">
+
+
+
+<sidenav data-menu-items="[{text:'Demo link',href:'http://google.com.ar'}]"></sidenav>
+
+
+<div class="w3-main" style="margin-left:350px">
+    <div class="w3-teal">
+        <button class="w3-button w3-teal w3-xlarge w3-hide-large" >&#9776;</button>
+        <div class="w3-container">
+            <h1>Paquery Control Panel</h1>
+        </div>
+    </div>
+
+
+    <div class="w3-container" data-ng-view>
+
+
+
+    </div>
+
+    <!--
+    <div class="w3-container">
+        <h3>Listado de clientes</h3>
+
+
+
+        <table class="w3-table w3-striped w3-border">
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Points</th>
+            </tr>
+            <tr>
+                <td>Jill</td>
+                <td>Smith</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>Eve</td>
+                <td>Jackson</td>
+                <td>94</td>
+            </tr>
+            <tr>
+                <td>Adam</td>
+                <td>Johnson</td>
+                <td>67</td>
+            </tr>
+        </table>
+
+
+        <div class="w3-bar w3-border w3-margin-top w3-light-grey">
+            <a href="#" class="w3-bar-item w3-button">&laquo;</a>
+            <a href="#" class="w3-bar-item w3-button w3-teal">1</a>
+            <a href="#" class="w3-bar-item w3-button">2</a>
+            <a href="#" class="w3-bar-item w3-button">3</a>
+            <a href="#" class="w3-bar-item w3-button">4</a>
+            <a href="#" class="w3-bar-item w3-button">&raquo;</a>
+        </div>
+
+
+
+    </div>-->
+
+</div>
+
+
+</body>
+</html>

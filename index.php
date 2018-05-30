@@ -10,7 +10,7 @@ include "autoload.php";
 
 $router = new AltoRouter();
 
-$router->setBasePath('/orm');
+$router->setBasePath('/libs');
 $router->map( 'GET', '/api/[a:module]/[i:id]','Read');
 $router->map( 'POST', '/api/[a:module]/[i:id]','Update');
 $router->map( 'DELETE', '/api/[a:module]/[i:id]','Delete');
