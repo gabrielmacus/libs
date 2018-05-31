@@ -6,3 +6,9 @@ app.config(function($routeProvider) {
         })
 
 });
+
+app.controller('controller', function($scope) {
+    $scope.start=function () {
+        alert('a');
+    }
+});

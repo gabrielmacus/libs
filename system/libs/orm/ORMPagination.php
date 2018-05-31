@@ -9,16 +9,39 @@
 namespace system\libs\orm;
 
 
-class ORMPagination
+class ORMPagination implements \JsonSerializable
 {
-    public $offset=0;
-    public $limit=100;
-    public $total;
+    use \Magic;
+    protected $offset=0;
+    protected $limit=100;
+    protected $total;
+    protected $pages;
 
-    public function getPages()
+    public function jsonSerialize()
     {
-     return floor($this->total / $this->limit);
+        $json = [];
+
+        foreach ($this as $k=>$v)
+        {
+            $json[$k] = $v;
+        }
+
+        return $json;
     }
+
+
+    public function __get($name)
+    {
+
+        if($name == "total" && isset($this->total) && isset($this->limit))
+        {
+            $this->pages =  ceil($this->total / $this->limit);
+        }
+
+        return $this->$name;
+    }
+
+
     public function getPaginator($offset = 2)
     {
         //TODO: add code

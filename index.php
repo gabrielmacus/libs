@@ -10,7 +10,7 @@ include "autoload.php";
 
 $router = new AltoRouter();
 
-$router->setBasePath('/libs');
+$router->setBasePath('/orm');
 $router->map( 'GET', '/api/[a:module]/[i:id]','Read');
 $router->map( 'POST', '/api/[a:module]/[i:id]','Update');
 $router->map( 'DELETE', '/api/[a:module]/[i:id]','Delete');
@@ -100,6 +100,6 @@ if(!empty($match))
 }
 
 
-
+http_response_code(404);
 //TODO: 404
 echo "404";

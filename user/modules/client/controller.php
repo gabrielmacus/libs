@@ -14,5 +14,6 @@ use system\modules\crud\CrudController;
 
 class ClientController extends CrudController
 {
+    static $paginationLimit = 5;
 
 }

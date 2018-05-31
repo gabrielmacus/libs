@@ -1,0 +1,32 @@
+
+<div class="w3-row">
+
+    <h3>{{title}}</h3>
+
+    <div class="w3-row-padding  w3-margin-bottom w3-light-grey w3-padding">
+        <div class="w3-half">
+            <input class="w3-input w3-border" type="text" placeholder="One">
+        </div>
+        <div class="w3-half">
+            <input class="w3-input w3-border" type="text" placeholder="Two">
+        </div>
+
+    </div>
+    <table class="w3-table w3-striped w3-border w3-col s12 m12 l12">
+        <tr>
+            <th data-ng-repeat="th in headers">{{th}}</th>
+            <th></th>
+
+        </tr>
+        <tr data-ng-repeat="row in rows">
+            <td data-ng-repeat="property in row">{{property}}</td>
+            <td style="width: 30px">
+                <input style="position: static" class="w3-left w3-check" type="checkbox" >
+
+            </td>
+        </tr>
+    </table>
+
+    <paginator data-pagination="pagination" data-page="query.p" data-offset="3"></paginator>
+
+</div>

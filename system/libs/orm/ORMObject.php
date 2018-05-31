@@ -235,7 +235,9 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
         $params =[];
 
-        $oSql = "SELECT ".((empty($fields))?"*":implode($fields,","))." FROM {$this->table} ";
+        $query->fields = (empty($query->fields))?"*":implode(",",array_map(function($el){ return $this->prefix."_".$el;},$query->fields));
+
+        $oSql = "SELECT {$query->fields} FROM {$this->table} ";
 
         if(!empty($query))
         {
@@ -278,7 +280,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
         $this->log("End counting records for pagination",$pagination->total);
 
-        $oSql.= " LIMIT {$pagination->limit} OFFSET {$pagination->offset}";
+        $oSql.= " LIMIT {$pagination->limit} OFFSET ".($pagination->offset * $pagination->limit);
 
         $this->log("End counting records for pagination",$pagination->total);
 

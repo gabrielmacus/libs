@@ -10,20 +10,19 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-route.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-touch.min.js"></script>
 
     <script src="js/main.js"></script>
 
     <!-- Directives -->
 
-    <script src="directives/menu/directive.js"></script>
-
+    <script src="directives/sidenav/directive.js"></script>
+    <script src="directives/table-data/directive.js"></script>
+    <script src="directives/paginator/directive.js"></script>
     <!-- Directives End -->
 
 
 </head>
-<body  data-ng-app="app">
-
+<body  data-ng-app="app" data-ng-controller="controller">
 
 
 <sidenav data-menu-items="[{text:'Demo link',href:'http://google.com.ar'}]"></sidenav>
@@ -33,10 +32,16 @@
     <div class="w3-teal">
         <button class="w3-button w3-teal w3-xlarge w3-hide-large" >&#9776;</button>
         <div class="w3-container">
-            <h1>Paquery Control Panel</h1>
+            <h1 class="w3-xlarge w3-right">Paquery Control Panel</h1>
         </div>
     </div>
 
+
+    <div class="w3-container">
+        <table-data data-headers="['Nombre','Apellido','ID']" data-read-url="'/orm/api/client/?fields=id,name,surname'" data-title="'Listado de clientes'" ></table-data>
+
+
+    </div>
 
     <div class="w3-container" data-ng-view>
 

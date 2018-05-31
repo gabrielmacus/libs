@@ -15,12 +15,13 @@ use system\libs\orm\ORMQuery;
 class CrudController
 {
 
+    static $paginationLimit = 100;
 
     protected static function SendResponse($data,$template = null)
     {
         if(empty($template))
         {
-            echo json_encode($data);
+            echo json_encode($data,JSON_NUMERIC_CHECK);
         }
         else
         {
@@ -31,13 +32,17 @@ class CrudController
     static function Read(ORMObject $object,$params,$template = null)
     {
         $query = new ORMQuery();
+        $query->fields = (!empty($_GET["fields"]))?explode(",",$_GET["fields"]):null;
+
+
         $pagination = new ORMPagination();
         $pagination->offset = (!empty($_GET["p"]) && is_numeric($_GET["p"]))?$_GET["p"]-1:0;
+        $pagination->limit = static::$paginationLimit;
 
         if(empty($params["id"]))
         {
 
-            $data = ["docs"=>$object->read($query,$pagination),"pagination"=>$pagination];
+            $data = ["results"=>$object->read($query,$pagination),"pagination"=>$pagination];
         }
         else
         {

@@ -6,7 +6,7 @@ app.directive('sidenav', function() {
         scope: {
             menuItems: '='
         },
-        templateUrl: 'directives/menu/view.html',
+        templateUrl: 'directives/sidenav/view.html',
         controller:function ($scope) {
             
         
