@@ -6,13 +6,13 @@
  * Time: 12:14 PM
  */
 
-namespace user\modules\client;
+namespace system\modules\menu;
 
 require_once (ROOT_PATH.'/system/modules/crud/controller.php');
 
 use system\modules\crud\CrudController;
 
-class ClientController extends CrudController
+class MenuController extends CrudController
 {
     static $paginationLimit = 15;
 

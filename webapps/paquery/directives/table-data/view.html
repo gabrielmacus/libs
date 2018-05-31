@@ -2,32 +2,62 @@
 <div class="w3-row">
 
 
-    <h3  >{{title}}</h3>
+    <h3 class="w3-container" >{{title}}</h3>
 
-    <div class="w3-row  w3-margin-bottom   ">
-        <div class="w3-half">
-            <input class="w3-input w3-border" type="text" placeholder="One">
-        </div>
-        <div class="w3-half">
-            <input class="w3-input w3-border" type="text" placeholder="Two">
+
+    <div  data-ng-if="status == 'loaded' && (!rows || rows.length == 0)">
+
+        <div class="w3-margin-left w3-border w3-margin-right w3-panel w3-pale-green">
+            <p >{{emptyText}}</p>
         </div>
 
     </div>
-    <table class="w3-table w3-striped w3-border w3-col s12 m12 l12 ">
-        <tr>
-            <th data-ng-repeat="th in headers">{{th}}</th>
-            <th></th>
 
-        </tr>
-        <tr data-ng-repeat="row in rows">
-            <td data-ng-repeat="property in row">{{property}}</td>
-            <td style="width: 30px">
-                <input style="position: static" class="w3-left w3-check" type="checkbox" >
+    <div data-ng-if="status == 'loading'">
 
-            </td>
-        </tr>
-    </table>
+        <div class="w3-margin-left w3-border w3-margin-right w3-panel w3-pale-green">
+            <p >Cargando elementos</p>
+        </div>
 
-    <paginator data-pagination="pagination" data-page="query.p" data-offset="3"></paginator>
+
+    </div>
+
+
+
+    <div data-ng-if="rows && rows.length">
+
+        <!--
+        <div class="w3-row  w3-margin-bottom   ">
+            <div class="w3-half">
+                <input class="w3-input w3-border" type="text" placeholder="One">
+            </div>
+            <div class="w3-half">
+                <input class="w3-input w3-border" type="text" placeholder="Two">
+            </div>
+
+        </div>-->
+
+
+        <div class="w3-row w3-container">
+
+            <table class="w3-table w3-striped w3-border w3-col s12 m12 l12 ">
+                <tr>
+                    <th data-ng-repeat="th in headers">{{th}}</th>
+                    <th>    <input style="position: static"  class="w3-left w3-check" id="select-all" data-ng-model="selectAll" data-ng-change="changeSelectAll()" type="checkbox" ></th>
+
+                </tr>
+                <tr data-ng-repeat="row in rows">
+                    <td data-ng-repeat="(k,property) in row" data-ng-if="k != '_selected'">{{property}}</td>
+                    <td style="width: 30px">
+                        <input data-ng-model="row._selected" style="position: static" class="w3-left w3-check" type="checkbox" >
+                    </td>
+                </tr>
+            </table>
+
+            <paginator data-pagination="pagination" data-page="query.p" data-offset="3"></paginator>
+        </div>
+
+
+    </div>
 
 </div>
