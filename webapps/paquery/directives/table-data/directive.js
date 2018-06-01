@@ -10,6 +10,7 @@ app.directive('tableData', function() {
             emptyText:'=',
             actions:'='
         },
+        transclude:true,
         templateUrl: 'directives/table-data/view.html',
         controller:function ($scope,$http) {
 

@@ -2,4 +2,26 @@
             data-empty-text="emptyText"
             data-read-url="readUrl"
             data-title="title"
-            data-actions="actions"></table-data>
+            data-actions="actions">
+        <a href="#" class="w3-bar-item w3-button w3-border-right">{{'Crear' | translate}}&nbsp;&nbsp;<i class="fas fa-file"></i></a>
+        <a href="#" class="w3-bar-item w3-button w3-border-right" data-ng-if="$parent.getSelectedRows().length > 0">{{'Delete elements' | translate:{count:$parent.$parent.getSelectedRows().length} }}&nbsp;&nbsp;<i class="fas fa-trash"></i></a>
+</table-data>
+
+
+<lightbox data-opened="singleDeleteLightbox">
+
+    <header class="w3-container ">
+
+        <span data-ng-click="closeDeleteLightbox()"
+              class="w3-button w3-display-topright">&times;</span>
+        <h4>Confirmar eliminación</h4>
+    </header>
+
+    <div class="w3-container w3-margin-top">
+        <button class="w3-button w3-padding-small w3-teal w3-margin-bottom" data-ng-click="delete()">Si</button>
+
+        <button data-ng-click="closeDeleteLightbox()" class="w3-button w3-padding-small w3-teal w3-margin-bottom">No</button>
+
+    </div>
+
+</lightbox>
