@@ -14,12 +14,16 @@
     <script src="js/main.js"></script>
 
     <!-- Directives -->
-
     <script src="directives/sidenav/directive.js"></script>
     <script src="directives/table-data/directive.js"></script>
     <script src="directives/paginator/directive.js"></script>
     <!-- Directives End -->
 
+    <!-- Controllers -->
+    <script src="controllers/list.js"></script>
+    <script src="controllers/client.js"></script>
+    <!-- Controllers End -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 
 </head>
 <body  data-ng-app="app" data-ng-controller="controller">
@@ -36,7 +40,6 @@
         </div>
     </div>
 
-    <table-data data-headers="['Nombre','Apellido','ID']" data-empty-text="'No hay resultados para mostrar'" data-read-url="'/libs/api/client/?fields=id,name,surname'" data-title="'Listado de clientes'" ></table-data>
 
 
     <div  data-ng-view>

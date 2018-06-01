@@ -6,10 +6,13 @@ app.directive('tableData', function() {
             headers:'=',
             title:'=',
             readUrl:'=',
-            emptyText:'='
+            deleteUrl:'=',
+            emptyText:'=',
+            actions:'='
         },
         templateUrl: 'directives/table-data/view.html',
         controller:function ($scope,$http) {
+
 
             $scope.query= ($scope.query)?$scope.query:{p:1};
 
