@@ -59,16 +59,17 @@
             <div class="table-container">
 
                 <table class="w3-table w3-striped w3-border w3-col s12 m12 l12 ">
-                    <tr class="w3-black">
+                    <tr class="w3-black actions-header">
                         <th data-ng-repeat="th in headers">{{th}}</th>
                         <th>
                             {{'Actions' | translate}}
                         </th>
-                        <th>    <input style="position: static"  class="w3-left w3-check" id="select-all" data-ng-model="selectAll" data-ng-change="changeSelectAll()" type="checkbox" ></th>
+                        <th>    <input style="position: static"  class="w3-left w3-check"  data-ng-model="select.all"  type="checkbox" ></th>
 
                     </tr>
                     <tr data-ng-repeat="row in rows">
-                        <td data-ng-repeat="(k,property) in row" data-ng-if="k != '_selected'">{{property}}</td>
+
+                        <td data-ng-repeat="p in properties">{{row[p] | translate}}</td>
                         <td class="actions">
                             <a class="action" data-ng-repeat="a in actions" data-ng-click="a.action(row)" title="{{a.title}}">
                                 <i class="w3-hover-text-teal" data-ng-class="a.icon"></i>
@@ -86,7 +87,7 @@
 
             <div class="w3-bar w3-border w3-margin-top w3-light-grey w3-col s12 m12 l12" >
 
-                <paginator data-pagination="pagination" data-page="query.p" data-offset="3"></paginator>
+                <paginator data-pagination="pagination" data-page="$parent.currentPage" data-offset="3"></paginator>
 
                 <span class="w3-right ">
                      <ng-transclude></ng-transclude>

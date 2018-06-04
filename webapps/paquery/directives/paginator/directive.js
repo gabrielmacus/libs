@@ -11,8 +11,10 @@ app.directive('paginator', function() {
         templateUrl: 'directives/paginator/view.html',
         controller:function ($scope,$http) {
 
+            console.log($scope.page);
             $scope.goToPage = function(page)
             {
+                console.log("Going to page "+page);
                 $scope.page = page;
             }
             $scope.$watch('pagination',function (pagination) {

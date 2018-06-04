@@ -5,5 +5,9 @@
   "Confirm deletion":"Confirmar eliminación",
   "Confirm multiple deletion":"Confirmar la eliminación de {{count}} elementos",
   "Yes":"Si",
-  "No":"No"
+  "No":"No",
+  "Clients list":"Listado de clientes",
+  "No results available":"No hay resultados disponibles",
+  "Name":"Nombre",
+  "Surname":"Apellido"
 }

@@ -20,16 +20,21 @@
     <script src="directives/table-data/directive.js"></script>
     <script src="directives/paginator/directive.js"></script>
     <script src="directives/lightbox/directive.js"></script>
+    <script src="directives/field/directive.js"></script>
     <!-- Directives End -->
 
     <!-- Controllers -->
+    <script src="controllers/main.js"></script>
     <script src="controllers/list.js"></script>
     <script src="controllers/client.js"></script>
     <!-- Controllers End -->
+
+    <script src="js/services.js"></script>
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 
 </head>
-<body  data-ng-app="app" data-ng-controller="controller">
+<body  data-ng-app="app" data-ng-controller="main">
 
 
 <sidenav data-menu-items="[{text:'Demo link',href:'http://google.com.ar'}]"></sidenav>

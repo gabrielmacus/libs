@@ -1,11 +1,17 @@
+
 <table-data data-headers="headers"
             data-empty-text="emptyText"
-            data-read-url="readUrl"
             data-title="title"
-            data-actions="actions">
+            data-pagination="pagination"
+            data-properties="properties"
+            data-actions="actions"
+            data-current-page="query.p"
+            data-rows="rows">
         <a href="#" class="w3-bar-item w3-button w3-border-right">{{'Crear' | translate}}&nbsp;&nbsp;<i class="fas fa-file"></i></a>
-        <a data-ng-click="$parent.openDeleteLightbox()" class="w3-bar-item w3-button w3-border-right" data-ng-if="$parent.getSelectedRows().length > 0">{{'Delete elements' | translate:{count:$parent.$parent.getSelectedRows().length} }}&nbsp;&nbsp;<i class="fas fa-trash"></i></a>
+        <a data-ng-click="openDeleteLightbox()" class="w3-bar-item w3-button w3-border-right" data-ng-if="getSelectedRows().length > 0">{{'Delete elements' | translate:{count:getSelectedRows().length} }}&nbsp;&nbsp;<i class="fas fa-trash"></i></a>
 </table-data>
+
+<field data-label="'Demo'" data-model="rata.atat" data-input-type="'number'" ></field>
 
 
 <lightbox data-opened="deleteLightbox">

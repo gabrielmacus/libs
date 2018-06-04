@@ -1,8 +1,10 @@
-app.controller('client-list', function ($scope,$routeParams,$controller) {
+app.controller('client-list', function ($scope,$routeParams,$controller,$translate,CRUD) {
 
-    $scope.headers = ['Nombre','Apellido','ID'];
-    $scope.emptyText ='No hay resultados para mostrar';
-    $scope.readUrl = '/libs/api/client/?fields=id,name,surname';
-    $scope.title = 'Listado de clientes';
+    $scope.headers = ['ID','Name','Surname'];
+    $scope.properties = ['id','name','surname'];
+    CRUD.url = '/libs/api/client/';
+    $scope.query.fields = "id,name,surname";
+    $scope.title = $translate.instant('Clients list');
+
 
 });
