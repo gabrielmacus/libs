@@ -25,7 +25,6 @@ $match = $router->match();
 
 define('ROOT_PATH',__DIR__);
 
-
 if(!empty($match))
 {
 

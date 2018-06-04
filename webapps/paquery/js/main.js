@@ -39,7 +39,7 @@ app.config(['$translateProvider', function ($translateProvider, $translatePartia
     $translateProvider.useStaticFilesLoader({
         files: [
             {
-                prefix: '/lang/',
+                prefix: 'lang/',
                 suffix: '.json'
             }]
     });

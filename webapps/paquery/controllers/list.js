@@ -1,33 +1,52 @@
-app.controller('list', function ($scope,$http,$routeParams,$controller) {
+app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScope) {
 
+
+    $scope.itemsToDelete = [];
     $scope.delete=function () {
-        var item = $scope.itemToDelete;
-        $http({
-            method : "DELETE",
-            url : '/libs/api/'+$routeParams.module+"/"+item.id
-        }).then(function(response) {
+        asyncForEach($scope.itemsToDelete,function () {
 
-            $scope.$$childHead.read();
-            $scope.closeDeleteLightbox();
+        },function (item,index,next) {
 
-        }, function (response) {
 
-            console.log(response);
-            $scope.closeDeleteLightbox();
+            $http({
+                method : "DELETE",
+                url : '/libs/api/'+$routeParams.module+"/"+item.id
+            }).then(function(response) {
 
-        });
+                $scope.$$childHead.read();
+                $scope.closeDeleteLightbox();
+                next();
+
+            }, function (response) {
+
+                $scope.closeDeleteLightbox();
+
+                $rootScope.errorHandler(response);
+
+            });
+
+        })
 
     }
 
     $scope.openDeleteLightbox = function (item) {
 
-        $scope.itemToDelete = item;
-        $scope.singleDeleteLightbox = true;
+        if(item)
+        {
+            $scope.itemsToDelete.push(item);
+        }
+        else
+        {
+            var selectedRows = $scope.$$childHead.getSelectedRows();
+            $scope.itemsToDelete = $scope.itemsToDelete.concat(selectedRows);
+        }
+
+        $scope.deleteLightbox = true;
 
     }
     $scope.closeDeleteLightbox = function () {
-        delete $scope.itemToDelete;
-        $scope.singleDeleteLightbox = false;
+        $scope.itemsToDelete = [];
+        $scope.deleteLightbox = false;
     }
 
 
