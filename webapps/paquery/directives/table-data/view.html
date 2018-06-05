@@ -41,17 +41,6 @@
 
     <div data-ng-if="rows && rows.length">
 
-        <!--
-        <div class="w3-row  w3-margin-bottom   ">
-            <div class="w3-half">
-                <input class="w3-input w3-border" type="text" placeholder="One">
-            </div>
-            <div class="w3-half">
-                <input class="w3-input w3-border" type="text" placeholder="Two">
-            </div>
-
-        </div>-->
-
 
         <div class="w3-row w3-container w3-margin-bottom">
 
@@ -71,7 +60,9 @@
 
                         <td data-ng-repeat="p in properties">{{row[p] | translate}}</td>
                         <td class="actions">
+
                             <a class="action" data-ng-repeat="a in actions" data-ng-click="a.action(row)" title="{{a.title}}">
+
                                 <i class="w3-hover-text-teal" data-ng-class="a.icon"></i>
                             </a>
 

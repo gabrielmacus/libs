@@ -11,5 +11,12 @@ app.service('CRUD', function ($http) {
         }).then(success,error);
 
     }
+    this.delete=function(id,success,error)
+    {
+        $http({
+            method : "DELETE",
+            url : this.url+id
+        }).then(success,error);
+    }
 
 });

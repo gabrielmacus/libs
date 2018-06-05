@@ -4,8 +4,12 @@ app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScop
 
     $scope.actions = [
 
-        {title:'Demo title',icon:'fas fa-trash',action:$scope.openDeleteLightbox},
-        {title:'Demo title',icon:'fas fa-edit'}
+        {title:'Demo title',icon:'fas fa-trash',action:function (item) {
+            $scope.openDeleteLightbox(item);
+        }},
+        {title:'Demo title',icon:'fas fa-edit',action:function (item) {
+
+        }}
     ];
 
     $scope.delete= function () {
@@ -16,22 +20,18 @@ app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScop
         },function (item,index,next) {
 
 
-            $http({
-                method : "DELETE",
-                url : '/libs/api/'+$routeParams.module+"/"+item.id
-            }).then(function(response) {
-
+            CRUD.delete(item.id,function (response) {
                 $scope.read();
                 $scope.closeDeleteLightbox();
                 next();
-
-            }, function (response) {
+            },function (response) {
 
                 $scope.closeDeleteLightbox();
 
                 $rootScope.errorHandler(response);
 
-            });
+            })
+
 
         })
 
@@ -87,7 +87,7 @@ app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScop
 
         if(item)
         {
-            $scope.itemsToDelete.push(item);
+            $scope.itemsToDelete = [item];
         }
         else
         {

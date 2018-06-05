@@ -29,6 +29,14 @@ app.config(function($routeProvider) {
             },
             controller: "list"
         })
+
+        .when("/:module/save",{
+            templateUrl : function (params) {
+
+                return 'views/'+params.module+"-save.html";
+            },
+            controller: "list"
+        })
         .otherwise({
             //TODO: 404
             redirectTo: '/route1/default-book/default-page'
