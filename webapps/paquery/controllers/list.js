@@ -1,16 +1,47 @@
-app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScope,$translate,CRUD) {
+app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScope,$translate,CRUD,$location) {
 
     $scope.emptyText =$translate('No results available');
 
+    CRUD.url = '/libs/api/'+$routeParams.module+'/';
+
+
+    $scope.title = $translate.instant($routeParams.module+' list');
+
     $scope.actions = [
 
-        {title:'Demo title',icon:'fas fa-trash',action:function (item) {
+        {title:'Delete element',icon:'fas fa-trash',action:function (item) {
             $scope.openDeleteLightbox(item);
         }},
-        {title:'Demo title',icon:'fas fa-edit',action:function (item) {
-
+        {title:'Edit element',icon:'fas fa-edit',action:function (item) {
+            $location.path('/'+$routeParams.module+"/save/"+item.id);
         }}
     ];
+
+    $scope.multipleActions = [
+
+        {
+            title:'Create',
+            icon:"fas fa-file",
+            action:function () {
+            $location.path("/"+$routeParams.module+"/save");
+            }
+        }
+        ,
+        {
+            title:'Delete elements',
+            visible:function () {
+            return $scope.getSelectedRows().length > 0;
+            },
+            titleData:function () {
+            return {count:$scope.getSelectedRows().length};
+            },
+            icon:"fas fa-trash",
+            action:function () {
+            $scope.openDeleteLightbox();
+            }
+        }
+    ]
+
 
     $scope.delete= function () {
         asyncForEach($scope.itemsToDelete,function () {

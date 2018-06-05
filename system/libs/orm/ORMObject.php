@@ -241,6 +241,8 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
         if(!empty($query))
         {
+
+
             if(!empty($query->join))
             {
                 $oSql.=" {$query->join} ";

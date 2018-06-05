@@ -29,13 +29,17 @@ app.config(function($routeProvider) {
             },
             controller: "list"
         })
-
         .when("/:module/save",{
             templateUrl : function (params) {
-
                 return 'views/'+params.module+"-save.html";
             },
-            controller: "list"
+            controller: "create"
+        })
+        .when("/:module/save/:id",{
+            templateUrl : function (params) {
+                return 'views/'+params.module+"-save.html";
+            },
+            controller: "update"
         })
         .otherwise({
             //TODO: 404

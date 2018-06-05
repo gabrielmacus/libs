@@ -49,7 +49,7 @@
 
                 <table class="w3-table w3-striped w3-border w3-col s12 m12 l12 ">
                     <tr class="w3-black actions-header">
-                        <th data-ng-repeat="th in headers">{{th}}</th>
+                        <th data-ng-repeat="th in headers">{{th | translate}}</th>
                         <th>
                             {{'Actions' | translate}}
                         </th>
@@ -61,7 +61,7 @@
                         <td data-ng-repeat="p in properties">{{row[p] | translate}}</td>
                         <td class="actions">
 
-                            <a class="action" data-ng-repeat="a in actions" data-ng-click="a.action(row)" title="{{a.title}}">
+                            <a class="action" data-ng-repeat="a in actions" data-ng-click="a.action(row)" title="{{a.title | translate}}">
 
                                 <i class="w3-hover-text-teal" data-ng-class="a.icon"></i>
                             </a>

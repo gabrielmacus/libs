@@ -11,12 +11,15 @@ namespace system\libs\orm;
 
 class ORMQuery
 {
+
+    public $fieldsPrefix;
     public $fields;
     public $params;
     public $where;
     public $join;
     public $orderBy;
     public $groupBy;
+
 
 
 

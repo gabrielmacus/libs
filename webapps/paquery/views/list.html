@@ -7,8 +7,11 @@
             data-actions="actions"
             data-current-page="query.p"
             data-rows="rows">
-        <a href="#" class="w3-bar-item w3-button w3-border-right">{{'Crear' | translate}}&nbsp;&nbsp;<i class="fas fa-file"></i></a>
-        <a data-ng-click="openDeleteLightbox()" class="w3-bar-item w3-button w3-border-right" data-ng-if="getSelectedRows().length > 0">{{'Delete elements' | translate:{count:getSelectedRows().length} }}&nbsp;&nbsp;<i class="fas fa-trash"></i></a>
+
+
+        <a data-ng-repeat="a in multipleActions" data-ng-click="a.action()" data-ng-show="a.visible?a.visible():true" class="w3-bar-item w3-button w3-border-right">{{a.title | translate:(a.titleData)?a.titleData():{} }}&nbsp;&nbsp;<i data-ng-class="a.icon"></i></a>
+
+
 </table-data>
 
 

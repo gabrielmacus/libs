@@ -34,6 +34,13 @@ class CrudController
         $query = new ORMQuery();
         $query->fields = (!empty($_GET["fields"]))?explode(",",$_GET["fields"]):null;
 
+        //$orderBy = (empty($_GET["sort"]))?"-created_at":$_GET["sort"];
+
+        $orderBy = (empty($_GET["sort"]))?"{$object->prefix}_created_at DESC":$_GET["sort"];
+
+        $query->orderBy = $orderBy;
+
+
 
         $pagination = new ORMPagination();
         $pagination->offset = (!empty($_GET["p"]) && is_numeric($_GET["p"]))?$_GET["p"]-1:0;
@@ -41,7 +48,6 @@ class CrudController
 
         if(empty($params["id"]))
         {
-
             $data = ["results"=>$object->read($query,$pagination),"pagination"=>$pagination];
         }
         else
