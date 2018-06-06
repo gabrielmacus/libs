@@ -11,6 +11,7 @@ namespace system\libs\orm;
 
 class ORMQuery
 {
+    use \Magic;
 
     public $fieldsPrefix;
     public $fields;
@@ -20,6 +21,11 @@ class ORMQuery
     public $orderBy;
     public $groupBy;
 
+
+    public function setOrderBy($orderBy)
+    {
+        $this->orderBy = $orderBy;
+    }
 
 
 

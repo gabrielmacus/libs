@@ -1,56 +1,10 @@
 <?php
-include "PhpSerial.php";
-$comPort = "COM8"; //The com port address. This is a debian address
 
-$msg = '';
+shell_exec("mode com8: BAUD=9600 PARITY=n DATA=8 STOP=1 to=off dtr=off rts=off");
+echo $consola;
+$fp = fopen ("com8", "w");
 
-if(isset($_POST["hi"])){
-
-    $serial = new phpSerial;
-
-    $serial->deviceSet($comPort);
-
-    $serial->confBaudRate(9600);
-
-    $serial->confParity("none");
-
-    $serial->confCharacterLength(8);
-
-    $serial->confStopBits(1);
-
-    $serial->deviceOpen();
-
-    sleep(2); //Unfortunately this is nessesary, arduino requires a 2 second delay in order to receive the message
-
-    $serial->sendMessage("Well hello!");
-    var_dump($serial->readPort());
-
-    $serial->deviceClose();
-
-    $msg = "You message has been sent! WOHOO!";
-
+$status = "connected";
+echo $status;
+fwrite($fp, "Hola Arduino");
 }
-
-?>
-
-<html>
-
-<head>
-
-    <title>Arduino control</title>
-
-</head>
-
-<body>
-
-<form method="POST">
-
-    <input type="submit" value="Send" name="hi">
-
-</form><br>
-
-<?=$msg?>
-
-</body>
-
-</html>
