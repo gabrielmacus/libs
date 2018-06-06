@@ -22,12 +22,6 @@ class ORMQuery
     public $groupBy;
 
 
-    public function setOrderBy($orderBy)
-    {
-        $this->orderBy = $orderBy;
-    }
-
-
 
 
 }

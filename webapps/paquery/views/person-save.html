@@ -1,0 +1,20 @@
+<form data-ng-submit="save()">
+
+    <div class="w3-container w3-margin-top">
+        <field data-label="'Name'" data-model="item.name"  ></field>
+    </div>
+
+
+    <div class="w3-container w3-margin-top">
+        <field data-label="'Name'" data-model="item.surname"  ></field>
+    </div>
+
+
+
+    <div class="w3-bar w3-margin-top  w3-right-align  w3-col s12 m12 l12 w3-container">
+
+        <button type="button" class="w3-button w3-teal" data-ng-click="goToList()">{{'Cancel' | translate}}</button>
+        <button type="submit" class="w3-button w3-teal ">{{'Accept' | translate}}</button>
+    </div>
+
+</form>

@@ -35,8 +35,7 @@ class ORMArray extends \ArrayObject implements \JsonSerializable
        return $this->getArrayCopy();
     }
 
-
-     function &populate(ORMObject $object, string $path = "",ORMPagination $pagination =null,$type = PARENT_RELATION_COMPONENT)
+    function &populate(ORMObject $object, string $path = "",ORMPagination $pagination =null,$type = PARENT_RELATION_COMPONENT)
     {
        return $this->_populate($this,$object,$path,$pagination,$type);
     }

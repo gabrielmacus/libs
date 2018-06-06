@@ -29,48 +29,17 @@ if(!empty($match))
 {
 
 
-    $systemPath = __DIR__."/system/modules/";
-    $userPath = __DIR__."/user/modules/";
     $Action  = $match["target"];
+    $Module = $match["params"]["module"];
     $namespace = "";
 
-    $controllerLoaded = false;
-    $modelLoaded = false;
     //Loads controller
-    if(file_exists($userPath.$match["params"]["module"]."/controller.php"))
-    {
-        include_once ($userPath.$match["params"]["module"]."/controller.php");
-        $namespace = "user\\modules\\".$match["params"]["module"]."\\";
-        $controllerLoaded = true;
-    }
-    else if(file_exists($systemPath.$match["params"]["module"]."/controller.php"))
-    {
-        include_once ($systemPath.$match["params"]["module"]."/controller.php");
-        $namespace = "system\\modules\\".$match["params"]["module"]."\\";
-        $controllerLoaded = true;
-    }
-
-    $Controller = $namespace.str_replace('-', '', ucwords($match["params"]["module"], '-'))."Controller";
-
-    //Loads model
-    if(file_exists($userPath.$match["params"]["module"]."/model.php"))
-    {
-        include_once ($userPath.$match["params"]["module"]."/model.php");
-        $namespace = "user\\modules\\".$match["params"]["module"]."\\";
-        $modelLoaded = true;
-
-    }
-    else if(file_exists($systemPath.$match["params"]["module"]."/model.php"))
-    {
-        include_once ($systemPath.$match["params"]["module"]."/model.php");
-        $namespace = "system\\modules\\".$match["params"]["module"]."\\";
-        $modelLoaded = true;
-    }
-
-    $Model = $namespace.str_replace('-', '', ucwords($match["params"]["module"], '-'));
+    $Controller = \system\libs\Services::LoadClass($Module,CLASS_TYPE_CONTROLLER);
+    //Model controller
+    $Model = \system\libs\Services::LoadClass($Module,CLASS_TYPE_MODEL);
 
 
-    if($controllerLoaded && $modelLoaded)
+    if($Controller && $Model)
     {
 
         try{

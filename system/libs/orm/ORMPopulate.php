@@ -15,7 +15,7 @@ define("CHILD_RELATION_COMPONENT",2);
 
 trait ORMPopulate
 {
-    function &populate(&$objectToPopulate,ORMObject $object,string $path = "",ORMPagination $pagination=null,$type = PARENT_RELATION_COMPONENT)
+    protected function &populate(&$objectToPopulate,ORMObject $object,string $path = "",ORMPagination $pagination=null,$type = PARENT_RELATION_COMPONENT)
     {
 
         if(empty($objectToPopulate))
@@ -71,8 +71,13 @@ trait ORMPopulate
 
         $oSql = "SELECT * FROM _relations
            WHERE {$where} AND 
-           relation_{$component_type_reverse}_table = '{$object->table}' AND
+           relation_{$component_type_reverse}_table = '{$object->table}'";
+
+        if(!empty($path))
+        {
+            $oSql.="  AND
            relation_{$component_type_reverse}_key = '{$path}'";
+        }
 
         /*
         echo "\n";

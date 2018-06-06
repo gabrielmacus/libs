@@ -235,46 +235,45 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
         $params =[];
 
-        $query->fields = (empty($query->fields))?"*":implode(",",array_map(function($el){ return $this->prefix."_".$el;},$query->fields));
+        $oSql = "SELECT * FROM {$this->table} ";
 
-        $oSql = "SELECT {$query->fields} FROM {$this->table} ";
-
-        if(!empty($query))
+        if(!empty($query->fields))
         {
-
-
-            if(!empty($query->join))
-            {
-                $oSql.=" {$query->join} ";
-                $this->log("Appending JOIN to query",$query->join);
-            }
-
-            if(!empty($query->where))
-            {
-                $oSql.=" WHERE {$query->where} ";
-                $this->log("Appending WHERE to query",$query->where);
-            }
-
-            if(!empty($query->groupBy))
-            {
-                $oSql.=" GROUP BY {$query->groupBy} ";
-                $this->log("Appending GROUP BY to query",$query->groupBy);
-            }
-
-            if(!empty($query->orderBy))
-            {
-                $oSql.=" ORDER BY {$query->orderBy} ";
-                $this->log("Appending ORDER BY to query",$query->orderBy);
-            }
-
-
-            if(!empty($query->params))
-            {
-                $params = $query->params;
-                $this->log("Appending PARAMS to query",$query->params);
-            }
-
+            $oSql = "SELECT {$query->fields} FROM {$this->table} ";
         }
+
+        if(!empty($query->join))
+        {
+            $oSql.=" {$query->join} ";
+            $this->log("Appending JOIN to query",$query->join);
+        }
+
+        if(!empty($query->where))
+        {
+            $oSql.=" WHERE {$query->where} ";
+            $this->log("Appending WHERE to query",$query->where);
+        }
+
+        if(!empty($query->groupBy))
+        {
+            $oSql.=" GROUP BY {$query->groupBy} ";
+            $this->log("Appending GROUP BY to query",$query->groupBy);
+        }
+
+        if(!empty($query->orderBy))
+        {
+            $oSql.=" ORDER BY {$query->orderBy} ";
+            $this->log("Appending ORDER BY to query",$query->orderBy);
+        }
+
+
+        if(!empty($query->params))
+        {
+            $params = $query->params;
+            $this->log("Appending PARAMS to query",$query->params);
+        }
+
+
         $this->log("Counting records for pagination");
 
 

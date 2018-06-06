@@ -11,5 +11,7 @@
   "client list":"Listado de clientes",
   "No results available":"No hay resultados disponibles",
   "Name":"Nombre",
-  "Surname":"Apellido"
+  "Surname":"Apellido",
+  "Cancel":"Cancelar",
+  "Accept":"Aceptar"
 }

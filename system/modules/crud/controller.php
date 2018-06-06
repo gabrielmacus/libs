@@ -8,9 +8,12 @@
 
 namespace system\modules\crud;
 
+use system\libs\orm\ORMArray;
 use system\libs\orm\ORMObject;
 use system\libs\orm\ORMPagination;
 use system\libs\orm\ORMQuery;
+use system\libs\Services;
+use user\modules\person\Person;
 
 class CrudController
 {
@@ -29,18 +32,113 @@ class CrudController
         }
     }
 
+    static function ProcessQuery(ORMQuery &$query,ORMObject $object)
+    {
+        if(!empty($query->orderBy))
+        {
+            $orderBy = [];
+
+            $explode = explode(",",$query->orderBy);
+
+            foreach ($explode as $k=>$v)
+            {
+                if($asc = strpos($v,"+") === 0 || $desc = strpos($v,"-") === 0 )
+                {
+                    $orderBy[$k] = $object->prefix."_".str_replace("-","",str_replace("+","",$v)). " ";
+                    $orderBy[$k] .= (isset($asc))?"ASC":"DESC";
+
+                }
+                $query->orderBy = implode(",",$orderBy);
+            }
+        }
+
+        if(!empty($query->fields))
+        {
+            $query->fields = explode(",",$query->fields);
+
+            foreach ($query->fields as $k=>$v)
+            {
+                $query->fields[$k] = $object->prefix."_".$v;
+            }
+
+            $query->fields = implode(",",$query->fields);
+
+        }
+        if(!empty($query->groupBy))
+        {
+            $query->groupBy = explode(",",$query->groupBy);
+
+            foreach ($query->groupBy as $k=>$v)
+            {
+                $query->groupBy[$k] = $object->prefix."_".$v;
+            }
+
+            $query->groupBy = implode(",",$query->groupBy);
+        }
+    }
+
+    static function ProcessPopulate(ORMArray &$results,\PDO $pdo,$params){
+
+        if(is_array($params)  && count($params) > 0)
+        {
+            foreach ($params as $arr)
+            {
+
+
+                foreach ($arr as $module => $data)
+                {
+                    $type = (!empty( $data["type"]))? $data["type"]:"parent";
+                    switch ($type)
+                    {
+                        case "parent":
+
+                            $type = PARENT_RELATION_COMPONENT;
+
+                            break;
+                        case "child":
+
+                            $type = CHILD_RELATION_COMPONENT;
+
+                            break;
+                    }
+
+
+                    $path = (!empty($data["path"]))?$data["path"]:"";
+
+
+                    $Model =Services::LoadClass($module,CLASS_TYPE_MODEL);
+
+                    $obj = new $Model($pdo);
+
+                    if($Model)
+                    {
+
+                       $results->populate($obj,$path,null,$type);
+
+                       echo json_encode($results);
+                       echo "<br><br>";
+
+                    }
+
+                }
+
+            }
+
+        }
+
+
+    }
+
+
+
     static function Read(ORMObject $object,$params,$template = null)
     {
         $query = new ORMQuery();
-        $query->fields = (!empty($_GET["fields"]))?explode(",",$_GET["fields"]):null;
 
-        //$orderBy = (empty($_GET["sort"]))?"-created_at":$_GET["sort"];
-
-        $orderBy = (empty($_GET["sort"]))?"{$object->prefix}_created_at DESC":$_GET["sort"];
-
-        $query->orderBy = $orderBy;
-
-
+        $query->orderBy = (empty($_GET["sort"]))?"-created_at":$_GET["sort"];
+        $query->fields = (!empty($_GET["fields"]))?$_GET["fields"]:null;
+        $query->groupBy = (!empty($_GET["group"]))?$_GET["group"]:null;
+        self::ProcessQuery($query,$object);
 
         $pagination = new ORMPagination();
         $pagination->offset = (!empty($_GET["p"]) && is_numeric($_GET["p"]))?$_GET["p"]-1:0;
@@ -48,7 +146,23 @@ class CrudController
 
         if(empty($params["id"]))
         {
-            $data = ["results"=>$object->read($query,$pagination),"pagination"=>$pagination];
+            include ROOT_PATH."/user/modules/person/model.php";
+
+
+            $results = $object->read($query,$pagination);
+
+            $obj = new Person($object->PDOInstance);
+
+            $results->populate($obj,"",null);
+
+
+
+
+            self::ProcessPopulate($results, $object->PDOInstance,(!empty($_GET["populate"]))?$_GET["populate"]:[]);
+
+
+
+            $data = ["results"=>$results,"pagination"=>$pagination];
         }
         else
         {
