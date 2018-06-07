@@ -91,34 +91,61 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
     protected function getObjectVars()
     {
 
-
         $this->log("Getting object vars");
+
+        $objectVars = call_user_func('get_object_vars', $this);
 
         $reflect = new \ReflectionClass($this);
 
-        $propsPublic = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
-        $propsProtected = $reflect->getProperties(\ReflectionProperty::IS_PROTECTED);
-        $propsPrivate = $reflect->getProperties(\ReflectionProperty::IS_PRIVATE);
-        $propsStatic = $reflect->getProperties(\ReflectionProperty::IS_STATIC);
+        $reflectResult = $reflect->getProperties();
+        $reflectProps = [];
 
-        $propsPublic = array_diff($propsPublic,$propsProtected);
-        $propsPublic = array_diff($propsPublic,$propsPrivate);
-        $propsPublic = array_diff($propsPublic,$propsStatic);
-
-        $objectVars = [];
-
-        foreach ($propsPublic as $prop)
+        foreach ($reflectResult as $prop)
         {
-            if(isset($this[$prop->name]))
+            $reflectProps[$prop->name]=true;
+        }
+
+
+        foreach ($objectVars as $key =>$var)
+        {
+            if(is_numeric($key) || empty($reflectProps[$key]))
             {
-                $objectVars[$prop->name] = $this[$prop->name];
+                unset($objectVars[$key]);
             }
         }
 
-        $this->log("End getting object vars",$objectVars);
 
         return $objectVars;
 
+
+        /*
+
+
+                $reflect = new \ReflectionClass($this);
+
+                $propsPublic = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
+                $propsProtected = $reflect->getProperties(\ReflectionProperty::IS_PROTECTED);
+                $propsPrivate = $reflect->getProperties(\ReflectionProperty::IS_PRIVATE);
+                $propsStatic = $reflect->getProperties(\ReflectionProperty::IS_STATIC);
+
+                $propsPublic = array_diff($propsPublic,$propsProtected);
+                $propsPublic = array_diff($propsPublic,$propsPrivate);
+                $propsPublic = array_diff($propsPublic,$propsStatic);
+
+                $objectVars = [];
+
+                foreach ($propsPublic as $prop)
+                {
+                    if(isset($this[$prop->name]))
+                    {
+                        $objectVars[$prop->name] = $this[$prop->name];
+                    }
+                }
+
+                $this->log("End getting object vars",$objectVars);
+
+                return $objectVars;
+        */
 
     }
 
@@ -165,7 +192,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
         foreach ($objectVars as $key => $value)
         {
 
-            if(!is_array($value) && !is_object($value))
+            if(!is_array($value) && !is_object($value) && !is_numeric($key))
             {
                 $columns[] = "{$this->prefix}_{$key}";
                 $values[] = "{$value}";
@@ -192,6 +219,8 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
         $oSql = "INSERT INTO {$this->table} (".implode(",",$properties["columns"]).") 
                   VALUES (".rtrim(str_repeat('?,', count($properties["columns"])),",").")";
+
+
 
         $statement = $this->PDOInstance->prepare($oSql);
 
@@ -318,6 +347,8 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
         $this->log("Updating record");
 
         $properties = $this->processPropertiesToSave();
+
+
 
         $oSql = "UPDATE {$this->table}  SET  ";
         $set = "";

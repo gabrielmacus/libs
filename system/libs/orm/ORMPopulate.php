@@ -8,7 +8,6 @@
 
 namespace system\libs\orm;
 use system\libs\orm\ORMArray;
-use system\libs\Services;
 
 define("PARENT_RELATION_COMPONENT",1);
 define("CHILD_RELATION_COMPONENT",2);
@@ -16,7 +15,7 @@ define("CHILD_RELATION_COMPONENT",2);
 
 trait ORMPopulate
 {
-    protected function &populate(&$objectToPopulate,ORMObject $object,string $path = "",ORMPagination $pagination=null,$type = PARENT_RELATION_COMPONENT)
+    function &populate(&$objectToPopulate,ORMObject $object,string $path = "",ORMPagination $pagination=null,$type = PARENT_RELATION_COMPONENT)
     {
 
         if(empty($objectToPopulate))
@@ -37,8 +36,6 @@ trait ORMPopulate
             $objArray = [$objectToPopulate];
 
         }
-
-
 
         $pagination = !(empty($pagination))?$pagination:new ORMPagination();
 
@@ -74,9 +71,12 @@ trait ORMPopulate
 
         $oSql = "SELECT * FROM _relations
            WHERE {$where} AND 
-           relation_{$component_type_reverse}_table = '{$object->table}'   AND
-           relation_{$component_type_reverse}_key = '{$path}'" ;
+           relation_{$component_type_reverse}_table = '{$object->table}' AND
+           relation_{$component_type_reverse}_key = '{$path}'";
 
+        /*
+        echo "\n";
+        echo $oSql;*/
 
 
         $query = new ORMQuery();
@@ -100,17 +100,11 @@ trait ORMPopulate
                 }
 
 
-               $objArray[$searchKey]->$oKey[] = $relatedObjects[$k];
-                /*Services::BeautyPrint($objArray[$searchKey]);
-                echo "<br><br>";*/
+                $objArray[$searchKey]->$oKey[] = $relatedObjects[$k];
+
 
             }
-
         }
-
-
-
-
 
         return $relatedObjects;
     }

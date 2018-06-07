@@ -9,4 +9,5 @@
 class Team extends \system\libs\orm\ORMObject
 {
     public $name;
+    public $leagues = [];
 }

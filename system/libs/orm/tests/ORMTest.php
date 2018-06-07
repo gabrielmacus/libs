@@ -100,7 +100,6 @@ class ORMTest extends PHPUnit_Framework_TestCase
             $person->name ="Juan";
             $person->save();
 
-
             $person = new \system\libs\orm\Person($this->pdo);
             $person->readById($id);
             $this->assertEquals("Juan",$person->name);
@@ -109,7 +108,8 @@ class ORMTest extends PHPUnit_Framework_TestCase
         }
         catch(Exception $e)
         {
-            print_r(\system\libs\orm\ORMObject::$logData);
+
+
             $this->fail($e);
 
 
@@ -233,9 +233,7 @@ class ORMTest extends PHPUnit_Framework_TestCase
                 $relation->setChild($team,"teams");
                 $relation->save();
 
-                print_r($relation);
 
-                exit();
             }
         }
 
@@ -273,10 +271,8 @@ class ORMTest extends PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('teams', $leagues[0]);
 
         $this->assertArrayNotHasKey('teams', $leagues[1]);
+        $leagues->populate($team,"teams");
 
-        print_r( $leagues->populate($team,"teams"));
-
-        print_r(\system\libs\orm\ORMObject::$logData);
 
         $leagues->populate($team,"teams")->populate($player,"players");
 
@@ -285,6 +281,7 @@ class ORMTest extends PHPUnit_Framework_TestCase
         $this->assertCount(3, $leagues[0]["teams"]);
 
         $this->assertCount(2, $leagues[1]["teams"]);
+
 
 
         $this->assertCount(2, $leagues[0]["teams"][0]["players"]);

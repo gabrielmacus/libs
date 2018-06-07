@@ -34,11 +34,12 @@ class ORMRelation extends ORMObject implements \ArrayAccess
 
 
     public function setParent(ORMObject $parent,string $key = "",int $position = 0)
-    {
+    {   $this->log("Setting parent");
         $this->setComponent($parent,PARENT_RELATION_COMPONENT,$key,$position);
     }
     public function setChild(ORMObject $child,string $key = "",int $position = 0)
     {
+        $this->log("Setting child");
         $this->setComponent($child,CHILD_RELATION_COMPONENT,$key,$position);
     }
 
@@ -57,6 +58,8 @@ class ORMRelation extends ORMObject implements \ArrayAccess
         $this[$component_type."_position"] = $position;
 
     }
+
+
 
     public function offsetExists($offset)
     {
