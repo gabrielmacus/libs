@@ -115,8 +115,6 @@ class CrudController
 
                        $results->populate($obj,$path,null,$type);
 
-                       echo json_encode($results);
-                       echo "<br><br>";
 
                     }
 
