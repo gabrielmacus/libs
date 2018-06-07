@@ -149,11 +149,6 @@ class CrudController
 
             $results = $object->read($query,$pagination);
 
-            $obj = new Person($object->PDOInstance);
-
-            $results->populate($obj,"",null);
-
-
 
 
             self::ProcessPopulate($results, $object->PDOInstance,(!empty($_GET["populate"]))?$_GET["populate"]:[]);

@@ -232,6 +232,10 @@ class ORMTest extends PHPUnit_Framework_TestCase
                 $team->readById($k);
                 $relation->setChild($team,"teams");
                 $relation->save();
+
+                print_r($relation);
+
+                exit();
             }
         }
 
@@ -252,6 +256,8 @@ class ORMTest extends PHPUnit_Framework_TestCase
                     $relation->setChild($player,"players");
                     $relation->save();
 
+
+
                 }
             }
         }
@@ -268,7 +274,9 @@ class ORMTest extends PHPUnit_Framework_TestCase
 
         $this->assertArrayNotHasKey('teams', $leagues[1]);
 
+        print_r( $leagues->populate($team,"teams"));
 
+        print_r(\system\libs\orm\ORMObject::$logData);
 
         $leagues->populate($team,"teams")->populate($player,"players");
 

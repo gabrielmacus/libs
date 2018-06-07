@@ -30,6 +30,8 @@ class ORMArray extends \ArrayObject implements \JsonSerializable
         parent::offsetSet($index, $newval);
     }
 
+
+
     public function jsonSerialize()
     {
        return $this->getArrayCopy();

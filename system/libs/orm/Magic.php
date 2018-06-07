@@ -15,6 +15,7 @@ trait Magic
 
     public function __set($name, $value) {
 
+
         $this->$name = $value;
     }
 }

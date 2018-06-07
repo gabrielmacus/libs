@@ -13,5 +13,4 @@ use system\libs\orm\ORMObject;
 class Team extends ORMObject
 {
     public $name;
-
 }

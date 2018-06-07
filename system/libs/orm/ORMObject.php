@@ -9,10 +9,10 @@
 namespace system\libs\orm;
 
 
-
 //TODO: create database schema based on object public properties
 
-use system\libs\orm\ORMArray;
+
+use system\libs\Services;
 
 abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 {
@@ -25,11 +25,13 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
     public $created_at;
     public $updated_at;
 
+
     protected $table;
     protected $prefix;
     protected $PDOInstance;
     protected $results;
     static $logData;
+
 
     /**
      * Indicates if the schema should remain static or the database should be updated on class properties changes
@@ -88,6 +90,8 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
     protected function getObjectVars()
     {
+
+
         $this->log("Getting object vars");
 
         $reflect = new \ReflectionClass($this);
@@ -112,6 +116,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
         }
 
         $this->log("End getting object vars",$objectVars);
+
         return $objectVars;
 
 
@@ -338,6 +343,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
     function save()
     {
         $now = new \DateTime();
+
         $now = $now->format('Y-m-d H:i:s');
         if(empty($this->id))
         {
@@ -415,6 +421,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
     public function offsetSet($offset, $value)
     {
+
         $this->$offset =$value;
     }
 
