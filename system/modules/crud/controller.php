@@ -87,6 +87,7 @@ class CrudController
 
                 foreach ($arr as $module => $data)
                 {
+
                     $type = (!empty( $data["type"]))? $data["type"]:"parent";
                     switch ($type)
                     {
@@ -113,7 +114,17 @@ class CrudController
                     if($Model)
                     {
 
-                       $results->populate($obj,$path,null,$type);
+                        if(empty($relatedArr))
+                        {
+
+                            $relatedArr = $results->populate($obj,$path,null,$type);
+                        }
+                        else{
+
+                            //$relatedArr = $relatedArr->populate($obj,$path,null,$type);
+                        }
+
+
 
 
                     }

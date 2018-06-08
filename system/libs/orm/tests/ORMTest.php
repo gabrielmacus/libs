@@ -271,29 +271,28 @@ class ORMTest extends PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('teams', $leagues[0]);
 
         $this->assertArrayNotHasKey('teams', $leagues[1]);
-        $leagues->populate($team,"teams");
-
 
         $leagues->populate($team,"teams")->populate($player,"players");
 
         //After populate
 
-        $this->assertCount(3, $leagues[0]["teams"]);
+        $this->assertCount(3, $leagues[0]->_related["teams"]);
 
-        $this->assertCount(2, $leagues[1]["teams"]);
-
-
-
-        $this->assertCount(2, $leagues[0]["teams"][0]["players"]);
-
-        $this->assertCount(2, $leagues[0]["teams"][1]["players"]);
-
-        $this->assertCount(2, $leagues[0]["teams"][2]["players"]);
+        $this->assertCount(2, $leagues[1]->_related["teams"]);
 
 
-        $this->assertCount(2, $leagues[1]["teams"][0]["players"]);
 
-        $this->assertCount(2, $leagues[1]["teams"][1]["players"]);
+        $this->assertCount(2, $leagues[0]->_related["teams"][0]->_related["players"]);
+
+
+        $this->assertCount(2, $leagues[0]->_related["teams"][1]->_related["players"]);
+
+        $this->assertCount(2, $leagues[0]->_related["teams"][2]->_related["players"]);
+
+
+        $this->assertCount(2, $leagues[1]->_related["teams"][0]->_related["players"]);
+
+        $this->assertCount(2, $leagues[1]->_related["teams"][1]->_related["players"]);
 
 
         //Population in child
@@ -304,22 +303,25 @@ class ORMTest extends PHPUnit_Framework_TestCase
         $team = new Team($this->pdo);
 
         $players->populate($team,"teams");
-        $this->assertArrayNotHasKey('teams', $players[0]);
-        $this->assertArrayNotHasKey('team', $players[0]);
+        $this->assertAttributeEmpty("_related",$players[0]);
         $players->populate($team,"",null,CHILD_RELATION_COMPONENT);
-        $this->assertArrayHasKey('team', $players[0]);
 
+        $this->assertAttributeNotEmpty('_related', $players[0]);
+        $this->assertArrayHasKey('team', $players[0]->_related);
 
         $team = new Team($this->pdo);
         $pagination = new \system\libs\orm\ORMPagination();
         $teams = $team->read(null,$pagination);
-        $this->assertArrayNotHasKey('leagues', $teams[0]);
+        $this->assertAttributeEmpty('_related', $teams[0]);
+
+
         $league = new League($this->pdo);
         $teams->populate($league,"leagues");
-        $this->assertArrayNotHasKey('leagues', $teams[0]);
+        $this->assertAttributeEmpty('_related', $teams[0]);
         $teams->populate($league,"leagues",null,CHILD_RELATION_COMPONENT);
-        $this->assertArrayHasKey('leagues', $teams[0]);
-
+        $this->assertAttributeNotEmpty('_related', $teams[0]);
+        $this->assertCount(1, $teams[0]->_related["leagues"]);
+        $this->assertCount(1, $teams[1]->_related["leagues"]);
 
 
 
