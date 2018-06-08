@@ -94,13 +94,13 @@ trait ORMPopulate
             {
                 $oKey = !empty($v["relation_{$component_type_reverse}_key"])?$v["relation_{$component_type_reverse}_key"]:$v["relation_{$component_type_reverse}_table"];
 
-                if(!isset($objArray[$searchKey]->$oKey))
+                if(!isset($objArray[$searchKey]->_related[$oKey]))
                 {
-                    $objArray[$searchKey]->$oKey = [];
+                    $objArray[$searchKey]->_related[$oKey] = [];
                 }
 
 
-                $objArray[$searchKey]->$oKey[] = $relatedObjects[$k];
+                $objArray[$searchKey]->_related[$oKey][] = $relatedObjects[$k];
 
 
             }

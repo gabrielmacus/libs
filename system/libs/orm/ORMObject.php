@@ -24,6 +24,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
     public $id;
     public $created_at;
     public $updated_at;
+    public $_related;
 
 
     protected $table;
@@ -88,7 +89,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
     }
 
-    protected function getObjectVars()
+    protected function getObjectVars($includeRelated=false)
     {
 
         $this->log("Getting object vars");
@@ -108,7 +109,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
         foreach ($objectVars as $key =>$var)
         {
-            if(is_numeric($key) || empty($reflectProps[$key]))
+            if(is_numeric($key) || empty($reflectProps[$key]) || (!$includeRelated && $key == "_related"))
             {
                 unset($objectVars[$key]);
             }
@@ -426,7 +427,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
     {
         $json = [];
 
-        $objectVars = $this->getObjectVars();
+        $objectVars = $this->getObjectVars(true);
 
 
         foreach ($objectVars as $key=>$value)
