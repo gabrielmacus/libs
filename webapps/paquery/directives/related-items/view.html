@@ -6,8 +6,13 @@
 
     <div class="w3-col s12 w3-margin-top">
 
-        <div class="w3-padding  w3-light-grey">{{'No elements selected' | translate}}. <a href class="w3-link w3-text-teal">{{'Select elements' | translate}}</a></div>
+        <div class="w3-padding  w3-light-grey">{{'No elements selected' | translate}}.</div>
+        <div class="w3-bar w3-dark-grey">
+            <a href data-ng-click="goToSelect()" class="w3-bar-item w3-button w3-mobile w3-hover-text-teal">{{'Select existant' | translate}}<i class="w3-margin-left fas fa-hand-pointer"></i></a>
+            <a href data-ng-click="goToCreate()" class="w3-bar-item w3-button w3-mobile w3-hover-text-teal">{{'Create new' | translate}}<i class="w3-margin-left fas fa-file"></i>
 
+            </a>
+        </div>
     </div>
 
 

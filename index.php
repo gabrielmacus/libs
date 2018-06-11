@@ -44,6 +44,7 @@ if(!empty($match))
 
         try{
 
+
             $pdo =  new PDO("mysql:host=localhost;dbname=libs","root","");
             $model = new $Model($pdo);
             $Controller::$Action($model,$match["params"]);

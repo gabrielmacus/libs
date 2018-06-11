@@ -16,13 +16,14 @@
 <div class="w3-row">
 
 
-    <h3 class="w3-container" >{{title}}</h3>
+
+    <h3 class="w3-container" >{{title | translate}}</h3>
 
 
     <div  data-ng-if="status == 'loaded' && (!rows || rows.length == 0)">
 
-        <div class="w3-margin-left w3-border w3-margin-right w3-panel w3-pale-green">
-            <p >{{emptyText}}</p>
+        <div class="w3-margin-left w3-border w3-margin-right w3-container w3-light-grey">
+            <p >{{emptyText | translate}}</p>
         </div>
 
     </div>
@@ -39,13 +40,10 @@
 
 
 
-    <div data-ng-if="rows && rows.length">
+    <div class="w3-row w3-container w3-margin-bottom">
 
 
-        <div class="w3-row w3-container w3-margin-bottom">
-
-
-            <div class="table-container">
+            <div class="table-container"  data-ng-if="rows && rows.length">
 
                 <table class="w3-table w3-striped w3-border w3-col s12 m12 l12 ">
                     <tr class="w3-black actions-header">
@@ -78,7 +76,7 @@
 
             <div class="w3-bar w3-border w3-margin-top w3-light-grey w3-col s12 m12 l12" >
 
-                <paginator data-pagination="pagination" data-page="$parent.currentPage" data-offset="3"></paginator>
+                <paginator data-pagination="pagination" data-page="currentPage" data-offset="3"></paginator>
 
                 <span class="w3-right ">
                      <ng-transclude></ng-transclude>
@@ -87,10 +85,9 @@
 
             </div>
 
-        </div>
-
-
     </div>
+
+
 
 
 

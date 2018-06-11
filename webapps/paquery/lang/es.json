@@ -9,9 +9,13 @@
   "Yes":"Si",
   "No":"No",
   "client list":"Listado de clientes",
+  "Players list":"Listado de jugadores",
   "No results available":"No hay resultados disponibles",
+  "No elements selected":"Sin elementos seleccionados",
   "Name":"Nombre",
   "Surname":"Apellido",
   "Cancel":"Cancelar",
-  "Accept":"Aceptar"
+  "Accept":"Aceptar",
+  "Select existant":"Seleccionar existente",
+  "Create new":"Crear nuevo"
 }

@@ -5,6 +5,7 @@ app.controller('client-list', function ($scope,$routeParams,$controller,$transla
     $scope.query.fields = "id,name,surname";
 
 
+
 });
 app.controller('client-create', function ($scope,$routeParams,$controller,$translate,CRUD) {
 

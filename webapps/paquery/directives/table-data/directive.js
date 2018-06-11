@@ -10,7 +10,8 @@ app.directive('tableData', function() {
             pagination:'=',
             emptyText:'=',
             currentPage:'=',
-            actions:'='
+            actions:'=',
+            status:'='
         },
         transclude:true,
         templateUrl: 'directives/table-data/view.html',

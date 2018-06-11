@@ -154,29 +154,73 @@ class CrudController
 
     }
 
-    static function SaveRelations(ORMObject &$object)
+    static function SaveRelations(ORMObject &$object,$post = null)
     {
-        if(!empty($object->_related) && is_array($object->_related))
+        //TODO: Optimize
+        $post = empty($post)?$_POST:$post;
+
+        $relationsSaved = [];
+
+        if(!empty($post["_related"]) && is_array($post["_related"]))
         {
-            foreach ($object->_related as $key => $relatedObject)
+            foreach ($post["_related"] as $key => $relatedArray)
             {
-                $relation = new ORMRelation($object->PDOInstance);
-
-                if(!empty($relatedObject["_relatedData"]))
+                foreach ($relatedArray as $position =>$relatedObject)
                 {
-                    if(!empty($relatedObject["_relatedData"]["id"]))
+
+
+                    if(!empty($relatedObject["module"]) && !empty($relatedObject["id"]) && is_numeric($relatedObject["id"]) &&   $RelatedObjectClass = Services::LoadClass($relatedObject["module"],CLASS_TYPE_MODEL))
                     {
-                        $relation->readById($relatedObject["_relatedData"]["id"]);
+
+                        $relation = new ORMRelation($object->PDOInstance);
+                        $relationType = 'parent';
+
+
+                        if(!empty($relatedObject["_relatedData"]))
+                        {
+                            if(!empty($relatedObject["_relatedData"]["id"]))
+                            {
+                                $relation->id = $relatedObject["_relatedData"]["id"];
+                            }
+                            //TODO: set extra relation data
+
+                            if(!empty($relatedObject["_relatedData"]['type']) && $relatedObject["_relatedData"]['type'] == 'child')
+                            {
+                                $relationType = 'child';
+                            }
+                        }
+
+                        $relatedObject = new $RelatedObjectClass($object->PDOInstance);
+                        $relatedObject->id = $relatedObject["id"];
+
+                    switch ($relationType)
+                    {
+                        case 'parent':
+
+                            $relation->setParent($object);
+                            $relation->setChild($relatedObject,$key,$position);
+
+                            break;
+
+                        case 'child':
+
+                            $relation->setChild($object,$key,$position);
+                            $relation->setParent($relatedObject);
+
+                            break;
                     }
-                    //TODO: set extra relation data
+
+                        $relationsSaved[]=$relation->save();
 
 
+                    }
 
                 }
-
-
             }
         }
+
+        return $relationsSaved;
+
     }
 
     static function Read(ORMObject $object,$params,$template = null)
@@ -189,13 +233,8 @@ class CrudController
 
         if(empty($params["id"]))
         {
-            include ROOT_PATH."/user/modules/person/model.php";
-
 
             $results = $object->read($query,$pagination);
-
-
-
             self::ProcessPopulate($results, $object->PDOInstance,(!empty($_GET["populate"]))?$_GET["populate"]:[]);
 
 
@@ -227,7 +266,7 @@ class CrudController
         self::SendResponse($object,$template);
     }
 
-    protected static function AssignProperties(ORMObject &$object,$post)
+    protected static function AssignProperties(ORMObject &$object,$post = null)
     {
         $post = empty($post)?$_POST:$post;
 
@@ -254,6 +293,8 @@ class CrudController
         $id = $object->save();
 
         $object->readById($id);
+
+        self::SaveRelations($object);
 
         self::SendResponse($object,$template);
 

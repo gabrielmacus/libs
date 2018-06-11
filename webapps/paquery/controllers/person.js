@@ -3,7 +3,7 @@ app.controller('person-list', function ($scope,$routeParams,$controller,$transla
     $scope.headers = ['ID','Name','Surname','Birthdate'];
     $scope.properties = ['id','name','surname','birthdate'];
     $scope.query.fields = "id,name,surname,birthdate";
-
+    $scope.title = 'Players list';
 
 });
 app.controller('person-create', function ($scope,$routeParams,$controller,$translate,CRUD) {

@@ -6,7 +6,7 @@ app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScop
     }
 
 
-    $scope.emptyText =$translate('No results available');
+    $scope.emptyText ='No results available';
 
     CRUD.url = '/libs/api/'+$scope.module+'/';
 
@@ -96,6 +96,7 @@ app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScop
             }
             else
             {
+
                 $scope.status = 'loaded';
             }
         },$rootScope.errorHandler);

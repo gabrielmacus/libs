@@ -6,7 +6,8 @@
             data-properties="properties"
             data-actions="actions"
             data-current-page="query.p"
-            data-rows="rows">
+            data-rows="rows"
+            data-status="status">
 
 
         <a data-ng-repeat="a in multipleActions" data-ng-click="a.action()" data-ng-show="a.visible?a.visible():true" class="w3-bar-item w3-button w3-border-right">{{a.title | translate:(a.titleData)?a.titleData():{} }}&nbsp;&nbsp;<i data-ng-class="a.icon"></i></a>
