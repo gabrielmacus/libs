@@ -8,6 +8,7 @@
 
 namespace system\libs\orm;
 use system\libs\orm\ORMArray;
+use system\libs\Services;
 
 define("PARENT_RELATION_COMPONENT",1);
 define("CHILD_RELATION_COMPONENT",2);
@@ -98,6 +99,20 @@ trait ORMPopulate
                 {
                     $objArray[$searchKey]->_related[$oKey] = [];
                 }
+
+                $r = new ORMRelation($relatedObjects[$k]->PDOInstance);
+                foreach ($relatedObjects[$k] as $i => $j)
+                {
+                    if(strpos($i,"relation_") !== false)
+                    {
+
+                        $rKey=str_replace("relation_","",$i);
+                        $r[$rKey] = $j;
+
+                    }
+                }
+
+                $relatedObjects[$k]->_relationData[] = $r;
 
 
                 $objArray[$searchKey]->_related[$oKey][] = $relatedObjects[$k];

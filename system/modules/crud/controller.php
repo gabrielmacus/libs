@@ -12,6 +12,7 @@ use system\libs\orm\ORMArray;
 use system\libs\orm\ORMObject;
 use system\libs\orm\ORMPagination;
 use system\libs\orm\ORMQuery;
+use system\libs\orm\ORMRelation;
 use system\libs\Services;
 use user\modules\person\Person;
 
@@ -32,8 +33,15 @@ class CrudController
         }
     }
 
-    static function ProcessQuery(ORMQuery &$query,ORMObject $object)
+    static function ProcessQuery($params,ORMObject $object)
     {
+
+        $query = new ORMQuery();
+        $query->orderBy = (empty($params["sort"]))?"-created_at":$params["sort"];
+        $query->fields = (!empty($params["fields"]))?$params["fields"]:null;
+        $query->groupBy = (!empty($params["group"]))?$params["group"]:null;
+
+
         if(!empty($query->orderBy))
         {
             $orderBy = [];
@@ -75,16 +83,26 @@ class CrudController
 
             $query->groupBy = implode(",",$query->groupBy);
         }
+
+        return $query;
     }
 
+    /**
+     * Process params (generally from query string) to achieve array population
+     *
+     * @param ORMArray $results
+     * @param \PDO $pdo
+     * @param $params
+     */
     static function ProcessPopulate(ORMArray &$results,\PDO $pdo,$params){
 
         if(is_array($params)  && count($params) > 0)
         {
-            foreach ($params as $arr)
+
+
+            foreach ($params as $k=>$arr)
             {
-
-
+                $relatedArr = null;
                 foreach ($arr as $module => $data)
                 {
 
@@ -109,22 +127,20 @@ class CrudController
 
                     $Model =Services::LoadClass($module,CLASS_TYPE_MODEL);
 
-                    $obj = new $Model($pdo);
 
                     if($Model)
                     {
+                        $obj = new $Model($pdo);
 
-                        if(empty($relatedArr))
+                        if(empty($relatedArr) || !is_a($relatedArr,ORMArray::class))
                         {
 
                             $relatedArr = $results->populate($obj,$path,null,$type);
                         }
                         else{
 
-                            //$relatedArr = $relatedArr->populate($obj,$path,null,$type);
+                            $relatedArr = $relatedArr->populate($obj,$path,null,$type);
                         }
-
-
 
 
                     }
@@ -138,16 +154,34 @@ class CrudController
 
     }
 
+    static function SaveRelations(ORMObject &$object)
+    {
+        if(!empty($object->_related) && is_array($object->_related))
+        {
+            foreach ($object->_related as $key => $relatedObject)
+            {
+                $relation = new ORMRelation($object->PDOInstance);
 
+                if(!empty($relatedObject["_relatedData"]))
+                {
+                    if(!empty($relatedObject["_relatedData"]["id"]))
+                    {
+                        $relation->readById($relatedObject["_relatedData"]["id"]);
+                    }
+                    //TODO: set extra relation data
+
+
+
+                }
+
+
+            }
+        }
+    }
 
     static function Read(ORMObject $object,$params,$template = null)
     {
-        $query = new ORMQuery();
-
-        $query->orderBy = (empty($_GET["sort"]))?"-created_at":$_GET["sort"];
-        $query->fields = (!empty($_GET["fields"]))?$_GET["fields"]:null;
-        $query->groupBy = (!empty($_GET["group"]))?$_GET["group"]:null;
-        self::ProcessQuery($query,$object);
+        $query =self::ProcessQuery($_GET,$object);
 
         $pagination = new ORMPagination();
         $pagination->offset = (!empty($_GET["p"]) && is_numeric($_GET["p"]))?$_GET["p"]-1:0;
@@ -193,10 +227,13 @@ class CrudController
         self::SendResponse($object,$template);
     }
 
-    protected static function AssignProperties(ORMObject &$object)
+    protected static function AssignProperties(ORMObject &$object,$post)
     {
-        foreach ($_POST as $key => $value)
+        $post = empty($post)?$_POST:$post;
+
+        foreach ($post as $key => $value)
         {
+
             $object[$key] = $value;
         }
     }

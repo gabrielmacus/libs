@@ -1,19 +1,26 @@
 app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScope,$translate,CRUD,$location) {
 
+    if(!$scope.module)
+    {
+        $scope.module = $routeParams.module;
+    }
+
+
     $scope.emptyText =$translate('No results available');
 
-    CRUD.url = '/libs/api/'+$routeParams.module+'/';
+    CRUD.url = '/libs/api/'+$scope.module+'/';
 
 
-    $scope.title = $translate.instant($routeParams.module+' list');
+    $scope.title = $translate.instant($scope.module+' list');
 
     $scope.actions = [
 
         {title:'Delete element',icon:'fas fa-trash',action:function (item) {
+
             $scope.openDeleteLightbox(item);
         }},
         {title:'Edit element',icon:'fas fa-edit',action:function (item) {
-            $location.path('/'+$routeParams.module+"/save/"+item.id);
+            $location.path('/'+$scope.module+"/save/"+item.id);
         }}
     ];
 
@@ -23,7 +30,7 @@ app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScop
             title:'Create',
             icon:"fas fa-file",
             action:function () {
-            $location.path("/"+$routeParams.module+"/save");
+            $location.path("/"+$scope.module+"/save");
             }
         }
         ,
@@ -116,6 +123,7 @@ app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScop
 
     $scope.openDeleteLightbox = function (item) {
 
+
         if(item)
         {
             $scope.itemsToDelete = [item];
@@ -136,7 +144,7 @@ app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScop
         $scope.deleteLightbox = false;
     }
 
-    $controller($routeParams.module+'-list', {$scope: $scope,$routeParams:$routeParams});
+    $controller($scope.module+'-list', {$scope: $scope,$routeParams:$routeParams});
 
 
 

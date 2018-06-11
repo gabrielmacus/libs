@@ -25,6 +25,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
     public $created_at;
     public $updated_at;
     public $_related;
+    public $_relationData;
 
 
     protected $table;
@@ -109,7 +110,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
         foreach ($objectVars as $key =>$var)
         {
-            if(is_numeric($key) || empty($reflectProps[$key]) || (!$includeRelated && $key == "_related"))
+            if(is_numeric($key) || empty($reflectProps[$key]) || (!$includeRelated && ($key == "_related" || $key == "_relationData"))   )
             {
                 unset($objectVars[$key]);
             }
