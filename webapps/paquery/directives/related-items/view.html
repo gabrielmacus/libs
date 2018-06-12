@@ -6,7 +6,12 @@
 
     <div class="w3-col s12 w3-margin-top">
 
-        <div class="w3-padding  w3-light-grey">{{'No elements selected' | translate}}.</div>
+
+        <div class="w3-padding  w3-light-grey" data-ng-if="!model.length">{{'No elements selected' | translate}}.</div>
+
+
+        <ng-transclude data-ng-repeat="item in model"></ng-transclude>
+
         <div class="w3-bar w3-dark-grey">
             <a href data-ng-click="goToSelect()" class="w3-bar-item w3-button w3-mobile w3-hover-text-teal">{{'Select existant' | translate}}<i class="w3-margin-left fas fa-hand-pointer"></i></a>
             <a href data-ng-click="goToCreate()" class="w3-bar-item w3-button w3-mobile w3-hover-text-teal">{{'Create new' | translate}}<i class="w3-margin-left fas fa-file"></i>
@@ -15,6 +20,61 @@
         </div>
     </div>
 
+    <lightbox data-opened="relatedItemsLightbox">
+
+        <header class="w3-container">
+
+        <span data-ng-click="closeRelatedItemsLightbox()"
+              class="w3-button w3-display-topright">&times;</span>
+        </header>
+
+        <div class="w3-container"  >
+
+
+            <table-data data-headers="headers"
+                        data-empty-text="emptyText"
+                        data-title="title"
+                        data-pagination="pagination"
+                        data-properties="properties"
+                        data-actions="actions"
+                        data-current-page="query.p"
+                        data-rows="rows"
+                        data-status="status">
+
+
+                <a data-ng-repeat="a in multipleActions" data-ng-click="a.action()" data-ng-show="a.visible?a.visible():true" class="w3-bar-item w3-button w3-border-right">{{a.title | translate:(a.titleData)?a.titleData():{} }}&nbsp;&nbsp;<i data-ng-class="a.icon"></i></a>
+
+
+            </table-data>
+
+
+            <lightbox data-opened="deleteLightbox">
+
+
+                <header class="w3-container ">
+
+        <span data-ng-click="closeDeleteLightbox()"
+              class="w3-button w3-display-topright">&times;</span>
+                    <h4 data-ng-if="itemsToDelete.length == 1">{{'Confirm deletion' | translate}}</h4>
+                    <h4 data-ng-if="itemsToDelete.length > 1">{{'Confirm multiple deletion' | translate:{count:itemsToDelete.length} }}</h4>
+
+
+                </header>
+
+                <div class="w3-container w3-margin-top">
+                    <button type="button" class="w3-button w3-padding-small w3-teal w3-margin-bottom" data-ng-click="delete()">{{'Yes' | translate}}</button>
+
+                    <button type="button" data-ng-click="closeDeleteLightbox()" class="w3-button w3-padding-small w3-teal w3-margin-bottom">{{'No' | translate}}</button>
+
+                </div>
+
+            </lightbox>
+
+
+
+        </div>
+
+    </lightbox>
 
 
 

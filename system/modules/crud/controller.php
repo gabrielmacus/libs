@@ -190,22 +190,22 @@ class CrudController
                             }
                         }
 
-                        $relatedObject = new $RelatedObjectClass($object->PDOInstance);
-                        $relatedObject->id = $relatedObject["id"];
+                        $r = new $RelatedObjectClass($object->PDOInstance);
+                        $r["id"] = $relatedObject["id"];
 
                     switch ($relationType)
                     {
                         case 'parent':
 
                             $relation->setParent($object);
-                            $relation->setChild($relatedObject,$key,$position);
+                            $relation->setChild($r,$key,$position);
 
                             break;
 
                         case 'child':
 
                             $relation->setChild($object,$key,$position);
-                            $relation->setParent($relatedObject);
+                            $relation->setParent($r);
 
                             break;
                     }
