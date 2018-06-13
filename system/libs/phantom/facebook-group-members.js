@@ -32,12 +32,13 @@ function asyncForEach(array, done, iterator) {
     }
 }
 
+
 /**
  * -- Params --
  * 1: Group ids JSON array
  * 2: Email
  * 3: Password
- *
+ * 4: Quantity of pages to fetch
  */
 
 var args = require('system').args;
@@ -47,154 +48,106 @@ var fs = require('fs');
 var page = require('webpage').create();
 
 
-
 var groups = JSON.parse(args[1]);
 
-function logIn() {
-
-    page.evaluate(function(args){
-        document.querySelector("input[name='email']").value = args[2];
-        document.querySelector("input[name='pass']").value = args[3];
-        document.querySelector("#login_form").submit();
-        console.log("Logged in ");
-    },args);
-}
-
-function postInGroup() {
-
-
-    for(var i=1;i<=3;i++)
-    {
-        var arg = 6+i;
-        if(args[arg])
-        {
-            page.uploadFile('input[name="file'+i+'"]', args[arg]);
-        }
-
-
-    }
-
-
-    page.evaluate(function (args) {
-        document.querySelector("[name='composer_attachment_sell_title']").value=args[4];
-        document.querySelector("[name='composer_attachment_sell_price']").value=args[5];
-        document.querySelector("[name='xc_message']").value=args[6];
-        document.querySelector("[type='submit']").click();
-
-    },args);
-
-}
-
-function onConsoleMessage(msg) {
-    console.log(msg);
-};
-function sellSomething() {
-    page.evaluate(
-        function () {
-            document.querySelector("[href*='/groups/sell/']").click()
-        }
-    );
-}
-function goHome() {
-
-    var goHome= page.evaluate(function () {
-
-        if( document.querySelector("[target]"))
-        {
-            document.querySelector("[target]").click();
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    });
-
-    if(goHome)
-    {
-        page.open("https://www.facebook.com/home.php");
-    }
-
-
-}
-
-var jsonPath ='';
-function goToGroup(id) {
-
-    console.log("Going to group "+id);
-    jsonPath=id+'-members.json';
-    page.open("https://m.facebook.com/browse/group/members/?id="+id);
-
-}
-page.onConsoleMessage = onConsoleMessage;
-page.onError =function (e) {
-
-    console.error(e);
-    phantom.exit(1);
-}
-page.onCallback = function(data) {
-
-    switch (data.type)
-    {
-        case "goto":
-
-            page.open(data.url);
-
-            break;
-    }
-
-
-};
-page.settings.userAgent = 'Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko';
+page.settings.userAgent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
 
 var status = false;
 
-var membersPage = 1;
-var membersMaxPages=300;
+//https://www.facebook.com/groups/407850475895832/local_members/
+function logIn(user,password) {
+
+    page.evaluate(function (user,password) {
+
+        document.querySelector("[name='email']").value=user;
+        document.querySelector("[name='pass']").value=password;
+        document.querySelector("[type='submit']").click();
+
+    },user,password);
+
+}
+function goToGroup(id) {
+
+    results =[];
+    jsonPath ="members-"+id+".json";
+    page.open("https://www.facebook.com/groups/"+id+"/local_members/");
+}
+
+
+
+
+var prevCount = 0;
+var pageNumber = 1;
+var maxPages = parseInt(args[4]);
 var results = [];
-
-function fetchMembersPage() {
-
-
-    if(membersPage <= membersMaxPages)
-    {
-        console.log("Fetching page "+membersPage);
+var jsonPath="";
+function fetchPage() {
 
 
-        status="in-group";
-        membersPage++;
 
-        var data = page.evaluate(
-            function () {
+        // Checks for bottom div and scrolls down from time to time
+        var interval = window.setInterval(function() {
 
-                var results = [];
-                var rows = document.querySelectorAll(".ba > table > tbody > tr");
+            if(pageNumber >maxPages )
+            {
 
-                for(var i=0;i<rows.length;i++)
-                {
-                    var row = rows[i];
-                    var name = row.querySelector("h3").innerText;
-                    var link = row.querySelector("a").href;
-                    var img = row.querySelector("img").src;
-                    results.push({name:name,link:link,img:img});
-                }
+                //Saves results to json
+                fs.write(jsonPath,JSON.stringify(results),'w');
 
-                return {results:results,href:document.querySelector("#m_more_item > a").href};
+                status = 'end';
+                page.open("https://facebook.com");
+                window.clearInterval(interval);
             }
-        );
 
-        results = results.concat(data.results);
-        page.open(data.href);
+            // Checks if there is a div with class=".has-more-items"
+            // (not sure if this is the best way of doing it)
+            var count = page.evaluate(function () {
+                return document.querySelectorAll("#groupsMemberBrowser .uiList > .clearfix").length;
+            });
 
 
-    }
-    else
-    {
 
-        fs.write(jsonPath,JSON.stringify(results),'w');
-        status = 'end';
-        //page.open("https://www.facebook.com/home.php");
-     }
+
+            if(count == prevCount) { // Didn't find
+                page.evaluate(function() {
+                    // Scrolls to the bottom of page
+                    //window.document.body.scrollTop = document.body.scrollHeight;
+                    document.querySelector("a.uiMorePagerPrimary").click();
+                });
+            }
+            else { // Found
+                // Do what you want
+
+                console.log("Retrieving page "+pageNumber);
+                var items = page.evaluate(function () {
+
+                    var dom = document.querySelectorAll("#groupsMemberBrowser .uiList > .clearfix");
+                    var items = [];
+                    for(var i=0;i<dom.length;i++)
+                    {
+                        var item = {};
+                        item.img = dom[i].querySelector("img").src;
+                        item.name =  dom[i].querySelector("img").getAttribute("aria-label");
+                        item.url = dom[i].querySelector("a").href;
+                        if(dom[i].querySelector("._60rj"))
+                        {
+                            item.location_work = dom[i].querySelector("._60rj").innerText;
+                        }
+                        items.push(item);
+                    }
+
+                    return  items;
+                });
+                results = results.concat(items);
+
+
+
+                prevCount = count;
+                pageNumber++;
+
+            }
+        }, 500); // Number of milliseconds to wait between scrolls
+
 
 
 }
@@ -202,7 +155,9 @@ function fetchMembersPage() {
 
 
 asyncForEach(groups,function () {
+
     phantom.exit();
+
 },function (item,index,next) {
     var groupId = item;
 
@@ -216,33 +171,33 @@ asyncForEach(groups,function () {
 
             if(!status || typeof  status == "undefined" || status == "false")
             {
+                status="log-in";
+                page.open("https://www.facebook.com/login.php");
 
-                logIn();
-                status="onetouch-login";
             }
-            else if(status =="onetouch-login")
+            else if(status == "log-in")
             {
-
-                status="logged-in";
-                goHome();
-
-
+                status = 'logged-in';
+                logIn(args[2],args[3]);
             }
             else if(status == "logged-in")
             {
+
                 status="in-group";
-                goToGroup(groupId);
+                goToGroup(item);
 
             }
             else if(status == "in-group")
             {
 
-                fetchMembersPage();
+                status="in-group";
+                fetchPage();
+
+
             }
             else if(status=='end')
             {
                 console.log("Succesfully fetched pages");
-
                 status='logged-in';
                 next();
             }
@@ -260,6 +215,6 @@ asyncForEach(groups,function () {
         }
 
     }
-    page.open("https://m.facebook.com");
+    page.open("https://facebook.com");
 
 });
