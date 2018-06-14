@@ -32,6 +32,17 @@ function asyncForEach(array, done, iterator) {
     }
 }
 
+function JSON_to_URLEncoded(element,key,list){
+    var list = list || [];
+    if(typeof(element)=='object'){
+        for (var idx in element)
+            JSON_to_URLEncoded(element[idx],key?key+'['+idx+']':idx,list);
+    } else {
+        list.push(key+'='+encodeURIComponent(element));
+    }
+    return list.join('&');
+}
+
 
 /**
  * -- Params --
@@ -46,7 +57,7 @@ var args = require('system').args;
 var fs = require('fs');
 
 var page = require('webpage').create();
-
+var request = require('webpage').create();;
 
 var groups = JSON.parse(args[1]);
 
@@ -118,7 +129,6 @@ function fetchPage() {
             else { // Found
                 // Do what you want
 
-                console.log("Retrieving page "+pageNumber);
                 var items = page.evaluate(function () {
 
                     var dom = document.querySelectorAll("#groupsMemberBrowser .uiList > .clearfix");
@@ -138,10 +148,29 @@ function fetchPage() {
 
                     return  items;
                 });
-                results = results.concat(items);
 
 
+                console.log("Retrieving page "+pageNumber+". Retrived "+items.length+" items");
 
+                for(var k in items)
+                {
+                    var item = items[k];
+                    var settings = {
+                        operation: "POST",
+                        encoding: "utf8",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        data:  {name:'asdsad'}
+                    };
+
+                    request.open('http://localhost/libs/api/facebook-user/',settings, function(status) {
+                        console.log('Response: ' + status);
+                        // Do other things here...
+                    });
+                }
+
+                //results = results.concat(items);
                 prevCount = count;
                 pageNumber++;
 

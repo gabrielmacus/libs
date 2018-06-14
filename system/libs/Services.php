@@ -35,7 +35,6 @@ class Services
 
         $systemPath = ROOT_PATH."/system/modules/";
         $userPath =  ROOT_PATH."/user/modules/";
-
         //Loads model
         if(file_exists($userPath.$module."/{$type}.php"))
         {
@@ -49,6 +48,8 @@ class Services
             $namespace = "system\\modules\\".$module."\\";
 
         }
+
+        $namespace = str_replace("-","_",$namespace);
 
         if(empty($namespace))
         {
