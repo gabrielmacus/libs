@@ -285,7 +285,7 @@ class CrudController
         self::SendResponse($result,$template);
     }
 
-    static function Create(ORMObject $object,$params,$template = null)
+    static function Create(ORMObject $object,$params=null,$template = null)
     {
 
         self::AssignProperties($object);

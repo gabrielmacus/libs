@@ -89,7 +89,12 @@ function goToGroup(id) {
 
 var prevCount = 0;
 var pageNumber = 1;
+
+var maxTimeout = 3500;
+var elapsedTime = 0;
 var maxPages = parseInt(args[4]);
+
+
 var results = [];
 var jsonPath="";
 function fetchPage() {
@@ -99,7 +104,14 @@ function fetchPage() {
         // Checks for bottom div and scrolls down from time to time
         var interval = window.setInterval(function() {
 
-            if(pageNumber >maxPages )
+            elapsedTime+=500;
+
+            if(pageNumber==150){
+                page.render('whats.png');
+
+            }
+
+            if((maxPages> 0 && pageNumber >maxPages) || elapsedTime >= maxTimeout)
             {
 
                 //Saves results to json
@@ -121,14 +133,19 @@ function fetchPage() {
 
             if(count == prevCount) { // Didn't find
                 page.evaluate(function() {
-                    // Scrolls to the bottom of page
-                    //window.document.body.scrollTop = document.body.scrollHeight;
-                    document.querySelector("a.uiMorePagerPrimary").click();
+
+                    if( document.querySelector("a.uiMorePagerPrimary"))
+                    {
+                        // Scrolls to the bottom of page
+                        //window.document.body.scrollTop = document.body.scrollHeight;
+                        document.querySelector("a.uiMorePagerPrimary").click();
+                    }
+
                 });
             }
             else { // Found
                 // Do what you want
-
+                elapsedTime = 0;
                 var items = page.evaluate(function () {
 
                     var dom = document.querySelectorAll("#groupsMemberBrowser .uiList > .clearfix");
@@ -139,6 +156,7 @@ function fetchPage() {
                         item.img = dom[i].querySelector("img").src;
                         item.name =  dom[i].querySelector("img").getAttribute("aria-label");
                         item.url = dom[i].querySelector("a").href;
+                        item.location_work='';
                         if(dom[i].querySelector("._60rj"))
                         {
                             item.location_work = dom[i].querySelector("._60rj").innerText;
@@ -150,27 +168,10 @@ function fetchPage() {
                 });
 
 
-                console.log("Retrieving page "+pageNumber+". Retrived "+items.length+" items");
+                console.log("Retrieving page "+pageNumber);
 
-                for(var k in items)
-                {
-                    var item = items[k];
-                    var settings = {
-                        operation: "POST",
-                        encoding: "utf8",
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded"
-                        },
-                        data:  {name:'asdsad'}
-                    };
-
-                    request.open('http://localhost/libs/api/facebook-user/',settings, function(status) {
-                        console.log('Response: ' + status);
-                        // Do other things here...
-                    });
-                }
-
-                //results = results.concat(items);
+                 results = results.concat(items);
+                 console.log(results.length+" results so far...");
                 prevCount = count;
                 pageNumber++;
 
