@@ -30,19 +30,31 @@ if($group && file_exists("members-{$group}.json"))
     foreach ($contents as $content)
     {
 
-        $orm = new \user\modules\facebook_user\FacebookUser($pdo);
-        foreach ($content as $k=>$v)
-        {
-            $orm->$k =$v;
-        }
-        $id = $orm->save();
+        try{
+            $orm = new \user\modules\facebook_user\FacebookUser($pdo);
+            foreach ($content as $k=>$v)
+            {
+                if($k=="url")
+                {
+                    //Removes qs
+                    $v =  preg_replace('/\?.*/', '', $v);
+                }
 
-        if($id)
-        {
-            $count++;
+                $orm->$k =$v;
+            }
+            $id = $orm->save();
+
+            if($id)
+            {
+                $count++;
+            }
+            else{
+                echo  "Error saving item<br>";
+            }
         }
-        else{
-            echo  "Error saving item<br>";
+        catch(Exception $e)
+        {
+
         }
 
     }

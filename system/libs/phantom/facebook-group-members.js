@@ -90,11 +90,11 @@ function goToGroup(id) {
 var prevCount = 0;
 var pageNumber = 1;
 
-var maxTimeout = 3500;
+var maxTimeout = 6500;
 var elapsedTime = 0;
 var maxPages = parseInt(args[4]);
 
-
+var alreadyInArray={};
 var results = [];
 var jsonPath="";
 function fetchPage() {
@@ -106,10 +106,7 @@ function fetchPage() {
 
             elapsedTime+=500;
 
-            if(pageNumber==150){
-                page.render('whats.png');
 
-            }
 
             if((maxPages> 0 && pageNumber >maxPages) || elapsedTime >= maxTimeout)
             {
@@ -170,7 +167,16 @@ function fetchPage() {
 
                 console.log("Retrieving page "+pageNumber);
 
-                 results = results.concat(items);
+                for(var k in items)
+                {
+                    if(!alreadyInArray[items[k].url])
+                    {
+                        results.push(items[k]);
+                        alreadyInArray[items[k].url] = true;
+                    }
+
+                }
+
                  console.log(results.length+" results so far...");
                 prevCount = count;
                 pageNumber++;
@@ -197,7 +203,7 @@ asyncForEach(groups,function () {
         {
             console.log("Status: "+status);
 
-            page.render('C:\\Users\\Puers\\Pictures\\facebook\\image'+groupId+"-"+status+".png");
+           // page.render('C:\\Users\\Puers\\Pictures\\facebook\\image'+groupId+"-"+status+".png");
 
             if(!status || typeof  status == "undefined" || status == "false")
             {
@@ -221,7 +227,9 @@ asyncForEach(groups,function () {
             {
 
                 status="in-group";
-                fetchPage();
+                setTimeout(function () {
+                    fetchPage();
+                },5000);
 
 
             }
