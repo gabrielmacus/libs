@@ -1,3 +1,59 @@
+app.controller('create', function ($scope,$http,$routeParams,$controller,$rootScope,$translate,CRUD,$location) {
+
+
+    CRUD.url = '/libs/api/'+$routeParams.module+'/';
+
+    $scope.save=function () {
+
+        CRUD.create($scope.item,function (response) {
+
+            console.log(response);
+
+            $location.path('/'+$routeParams.module);
+
+        },$rootScope.errorHandler);
+
+    }
+
+
+    $scope.goToList=function () {
+
+        $location.path('/'+$routeParams.module);
+
+    }
+
+
+
+
+    $controller($routeParams.module+'-create', {$scope: $scope,$routeParams:$routeParams});
+
+
+});
+
+
+app.controller('update', function ($scope,$http,$routeParams,$controller,$rootScope,$translate,CRUD) {
+
+
+    $controller('create', {$scope: $scope,$routeParams:$routeParams});
+
+    $scope.query = {};
+
+    CRUD.url = '/libs/api/'+$routeParams.module+'/'+$routeParams.id;
+
+    $controller($routeParams.module+'-update', {$scope: $scope,$routeParams:$routeParams});
+
+    CRUD.read($scope.query,function (response) {
+
+        $scope.item = response.data;
+
+    },$rootScope.errorHandler)
+
+
+})
+
+
+
+
 app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScope,$translate,CRUD,$location) {
 
     if(!$scope.module)
@@ -30,21 +86,21 @@ app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScop
             title:'Create',
             icon:"fas fa-file",
             action:function () {
-            $location.path("/"+$scope.module+"/save");
+                $location.path("/"+$scope.module+"/save");
             }
         }
         ,
         {
             title:'Delete elements',
             visible:function () {
-            return $scope.getSelectedRows().length > 0;
+                return $scope.getSelectedRows().length > 0;
             },
             titleData:function () {
-            return {count:$scope.getSelectedRows().length};
+                return {count:$scope.getSelectedRows().length};
             },
             icon:"fas fa-trash",
             action:function () {
-            $scope.openDeleteLightbox();
+                $scope.openDeleteLightbox();
             }
         }
     ]
@@ -155,3 +211,5 @@ app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScop
 
 
 });
+
+

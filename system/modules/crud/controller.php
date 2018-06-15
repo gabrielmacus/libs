@@ -244,6 +244,11 @@ class CrudController
         else
         {
             $object->readById($params["id"]);
+
+            $results = new ORMArray([$object]);
+
+            self::ProcessPopulate($results, $object->PDOInstance,(!empty($_GET["populate"]))?$_GET["populate"]:[]);
+
             $data = (!empty($object->id))?$object:[];
         }
 

@@ -40,7 +40,16 @@ app.directive('relatedItems', function() {
                             return $scope.getSelectedRows().length > 0;
                         },
                         action:function () {
-                           $scope.model = $scope.getSelectedRows();
+
+                            var selected = $scope.getSelectedRows();
+                            if(!     $scope.model )
+                            {
+                                $scope.model=[];
+                            }
+                            for(var k in selected){
+                                $scope.model.push(selected[k]);
+                            }
+
                             $scope.closeRelatedItemsLightbox();
                         }
                     }

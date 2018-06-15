@@ -9,6 +9,7 @@ app.controller('client-list', function ($scope,$routeParams,$controller,$transla
 });
 app.controller('client-create', function ($scope,$routeParams,$controller,$translate,CRUD) {
 
+
 });
 app.controller('client-update', function ($scope,$routeParams,$controller,$translate,CRUD) {
 
