@@ -82,45 +82,50 @@ trait ORMPopulate
 
         $query = new ORMQuery();
         $query->join = "RIGHT JOIN ({$oSql}) as relations ON relations.relation_{$component_type_reverse}_id = {$object->prefix}_id";
-        $query->orderBy = "relation_{$component_type_reverse}_position DESC";
+        $query->orderBy = "relation_{$component_type_reverse}_position ASC";
+
 
         $relatedObjects=  $object->read($query,$pagination);
+
 
         foreach ($relatedObjects as $k => $v)
         {
 
-            $searchKey =  array_search($v["relation_{$component_type}_id"], array_column($objArray, "id"));
+            //TODO: Improve query to not bring empty objects
+           if(!empty($v["id"]))
+           {
+               $searchKey =  array_search($v["relation_{$component_type}_id"], array_column($objArray, "id"));
 
-            if($searchKey !== false)
-            {
-                $oKey = !empty($v["relation_{$component_type_reverse}_key"])?$v["relation_{$component_type_reverse}_key"]:$v["relation_{$component_type_reverse}_table"];
+               if($searchKey !== false)
+               {
+                   $oKey = !empty($v["relation_{$component_type_reverse}_key"])?$v["relation_{$component_type_reverse}_key"]:$v["relation_{$component_type_reverse}_table"];
 
-                if(!isset($objArray[$searchKey]->_related[$oKey]))
-                {
-                    $objArray[$searchKey]->_related[$oKey] = [];
-                }
+                   if(!isset($objArray[$searchKey]->_related[$oKey]))
+                   {
+                       $objArray[$searchKey]->_related[$oKey] = [];
+                   }
 
-                $r = new ORMRelation($relatedObjects[$k]->PDOInstance);
-                foreach ($relatedObjects[$k] as $i => $j)
-                {
-                    if(strpos($i,"relation_") !== false)
-                    {
+                   $r = new ORMRelation($relatedObjects[$k]->PDOInstance);
+                   foreach ($relatedObjects[$k] as $i => $j)
+                   {
+                       if(strpos($i,"relation_") !== false)
+                       {
 
-                        $rKey=str_replace("relation_","",$i);
-                        $r[$rKey] = $j;
+                           $rKey=str_replace("relation_","",$i);
+                           $r[$rKey] = $j;
 
-                    }
-                }
+                       }
+                   }
 
-                $relatedObjects[$k]->_relationData = $r;
-
-
-                $objArray[$searchKey]->_related[$oKey][] = $relatedObjects[$k];
+                   $relatedObjects[$k]->_relationData = $r;
 
 
-            }
+                   $objArray[$searchKey]->_related[$oKey][] = $relatedObjects[$k];
+
+
+               }
+           }
         }
-
 
 
         return $relatedObjects;

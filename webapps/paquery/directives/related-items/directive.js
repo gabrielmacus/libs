@@ -43,25 +43,30 @@ app.directive('relatedItems', function() {
                 forceFallback: true,
             };
 
+
+            $scope.setModule=function (newVal) {
+
+                if(newVal)
+                {
+                    for(var k in $scope.model)
+                    {
+                        if(!$scope.model[k]._relationData)
+                        {
+                            $scope.model[k]._relationData={};
+                        }
+                        $scope.model[k]._relationData.module = $scope.module;
+                    }
+                }
+            }
+
+
+            $scope.$watchCollection('model',$scope.setModule,true);
             $scope.goToSelect=function () {
 
                 $scope.relatedItemsLightbox = true;
 
                 $controller('list', {$scope: $scope,$routeParams:$routeParams});
 
-                $scope.$watch('model',function (newVal) {
-                    if(newVal)
-                    {
-                        for(var k in $scope.model)
-                        {
-                            if(!$scope.model[k]._relationData)
-                            {
-                                $scope.model[k]._relationData={};
-                            }
-                            $scope.model[k]._relationData.module = $scope.module;
-                        }
-                    }
-                },true);
 
 
                 $scope.multipleActions = $scope.multipleActions.concat([
