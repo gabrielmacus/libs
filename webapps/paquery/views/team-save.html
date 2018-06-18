@@ -1,3 +1,4 @@
+
 <form data-ng-submit="save()">
 
     <div class="w3-container w3-margin-top">
@@ -5,11 +6,12 @@
     </div>
 
     <div class="w3-margin-top">
-        <related-items data-label="'Players'" data-model="item._related.players" data-module="'person'" >
+        <related-items  data-label="'Players'" data-deleted="item._deletedRelations" data-model="item._related.players" data-module="'person'" >
 
-            <div class="w3-card-2 w3-light-grey w3-col s12 w3-padding w3-margin-bottom">
-                <span data-ng-click="$parent.model.splice($parent.k,1)" class="delete w3-right"><i class="fas fa-trash"></i></span>
-                <span class="move w3-left w3-margin-bottom"><i class="fas fa-arrows-alt"></i></span>
+
+            <div    class="w3-card-2 w3-light-grey w3-col s12 w3-padding w3-margin-bottom">
+                <span data-ng-click="$parent.deleteRelated($parent.k)" class="delete w3-right"><i class="fas fa-trash"></i></span>
+                <span class="move w3-left w3-margin-bottom grab-handle"><i class="fas fa-arrows-alt"></i></span>
 
                 <span class="key w3-col s12 "><b>{{'Name' | translate}}</b></span>
                 <span class="value   w3-col s12">{{$parent.item.name}}</span>

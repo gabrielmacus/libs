@@ -56,7 +56,7 @@
                     </tr>
                     <tr data-ng-repeat="row in rows">
 
-                        <td data-ng-repeat="p in properties">{{row[p] | translate}}</td>
+                        <td data-ng-repeat="p in properties">{{row[p]}}</td>
                         <td class="actions">
 
                             <a class="action" data-ng-repeat="a in actions" data-ng-click="a.action(row)" title="{{a.title | translate}}">
@@ -77,6 +77,8 @@
             <div class="w3-bar w3-border w3-margin-top w3-light-grey w3-col s12 m12 l12" >
 
                 <paginator data-pagination="pagination" data-page="currentPage" data-offset="3"></paginator>
+
+                <span class="w3-left w3-padding"><b>{{rows.length}}</b> de <b>{{pagination.total}}</b></span>
 
                 <span class="w3-right ">
                      <ng-transclude></ng-transclude>

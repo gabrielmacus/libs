@@ -90,7 +90,7 @@ function goToGroup(id) {
 var prevCount = 0;
 var pageNumber = 1;
 
-var maxTimeout = 6500;
+var maxTimeout = 10000;
 var elapsedTime = 0;
 var maxPages = parseInt(args[4]);
 

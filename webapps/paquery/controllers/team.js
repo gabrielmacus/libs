@@ -14,5 +14,6 @@ app.controller('team-create', function ($scope,$routeParams,$controller,$transla
 });
 app.controller('team-update', function ($scope,$routeParams,$controller,$translate,CRUD) {
 
+
     CRUD.url +="?populate[0][person][path]=players";
 });

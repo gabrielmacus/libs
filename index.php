@@ -52,8 +52,8 @@ if(!empty($match))
         }
         catch (Error $e)
         {
-            var_dump($e);
-            var_dump(\system\libs\orm\ORMObject::$logData);
+            \system\libs\Services::BeautyPrint($e);
+            \system\libs\Services::BeautyPrint(\system\libs\orm\ORMObject::$logData);
         }
 
 

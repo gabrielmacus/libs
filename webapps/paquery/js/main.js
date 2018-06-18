@@ -8,7 +8,7 @@ var checkTplUrl = function(url) {
 /** End functions **/
 
 
-var app = angular.module("app", ["ngRoute",'pascalprecht.translate']);
+var app = angular.module("app", ["ngRoute",'pascalprecht.translate','ng-sortable']);
 
 
 app.config(function($routeProvider) {
@@ -33,13 +33,13 @@ app.config(function($routeProvider) {
             templateUrl : function (params) {
                 return 'views/'+params.module+"-save.html";
             },
-            controller: "create"
+            controller: "save"
         })
         .when("/:module/save/:id",{
             templateUrl : function (params) {
                 return 'views/'+params.module+"-save.html";
             },
-            controller: "update"
+            controller: "save"
         })
         .otherwise({
             //TODO: 404

@@ -41,7 +41,6 @@ class CrudController
         $query->fields = (!empty($params["fields"]))?$params["fields"]:null;
         $query->groupBy = (!empty($params["group"]))?$params["group"]:null;
 
-
         if(!empty($query->orderBy))
         {
             $orderBy = [];
@@ -83,9 +82,50 @@ class CrudController
 
             $query->groupBy = implode(",",$query->groupBy);
         }
+        if(!empty($params["filter"]) && is_array($params["filter"]))
+        {
+            //TODO: make possible the use of operators (<,>,NOT, etc)
+            foreach ($params["filter"] as $key => $param)
+            {
+                if(!empty($param))
+                {
+                    $key ="{$object->prefix}_$key";
+                    if(empty($query->where))
+                    {
+                        $query->where =" ";
+                    }
+                    else{
+                        $query->where.=" AND ";
+                    }
+
+
+                    $query->where.=" {$key} LIKE ? ";
+
+
+                    if(empty($query->params))
+                    {
+                        $query->params=[];
+                    }
+
+                    //Correspondences
+                    $param = str_replace("~","%",$param);
+
+                    //Put values to search inside wildcards ('%{value}%')
+                    if(!empty($params["filter_any"]))
+                    {
+                        $param = str_replace('%',"",$param);
+                        $param = "%{$param}%";
+                    }
+
+                    $query->params[] = $param;
+                }
+
+            }
+        }
 
         return $query;
     }
+
 
     /**
      * Process params (generally from query string) to achieve array population
@@ -161,6 +201,22 @@ class CrudController
 
         $relationsSaved = [];
 
+        if(!empty($post["_deletedRelations"]) && is_array($post["_deletedRelations"]))
+        {
+            foreach ($post["_deletedRelations"] as $deleted)
+            {
+
+                if(!empty($deleted["_relationData"]["id"]) && is_numeric($deleted["_relationData"]["id"]))
+                {
+                    $relation = new ORMRelation($object->PDOInstance);
+                    $relation->readById($deleted["_relationData"]["id"]);
+
+                    $relation->delete();
+                }
+
+            }
+        }
+
         if(!empty($post["_related"]) && is_array($post["_related"]))
         {
             foreach ($post["_related"] as $key => $relatedArray)
@@ -169,22 +225,32 @@ class CrudController
                 {
 
 
-                    if(!empty($relatedObject["module"]) && !empty($relatedObject["id"]) && is_numeric($relatedObject["id"]) &&   $RelatedObjectClass = Services::LoadClass($relatedObject["module"],CLASS_TYPE_MODEL))
+                    if(!empty($relatedObject["_relationData"]["module"]) && !empty($relatedObject["id"]) && is_numeric($relatedObject["id"]) &&   $RelatedObjectClass = Services::LoadClass($relatedObject["_relationData"]["module"],CLASS_TYPE_MODEL))
                     {
 
                         $relation = new ORMRelation($object->PDOInstance);
                         $relationType = 'parent';
 
 
-                        if(!empty($relatedObject["_relatedData"]))
+                        if(!empty($relatedObject["_relationData"]))
                         {
-                            if(!empty($relatedObject["_relatedData"]["id"]))
+                            if(!empty($relatedObject["_relationData"]["id"]) && is_numeric($relatedObject["_relationData"]["id"]))
                             {
-                                $relation->id = $relatedObject["_relatedData"]["id"];
-                            }
-                            //TODO: set extra relation data
+                                $relation->id = $relatedObject["_relationData"]["id"];
 
-                            if(!empty($relatedObject["_relatedData"]['type']) && $relatedObject["_relatedData"]['type'] == 'child')
+                            }
+
+                            foreach ($relatedObject["_relationData"] as $k=>$v)
+                            {
+                                //Sets extra data
+                                if(strpos($k,"extra_") !== false)
+                                {
+                                    $relation[$k] = $v;
+                                }
+
+                            }
+
+                            if(!empty($relatedObject["_relationData"]['type']) && $relatedObject["_relationData"]['type'] == 'child')
                             {
                                 $relationType = 'child';
                             }
@@ -263,10 +329,11 @@ class CrudController
 
         self::AssignProperties($object);
 
-
         $object->save();
 
         $object->readById($object->id);
+
+        self::SaveRelations($object);
 
         self::SendResponse($object,$template);
     }
@@ -292,6 +359,8 @@ class CrudController
 
     static function Create(ORMObject $object,$params=null,$template = null)
     {
+
+
 
         self::AssignProperties($object);
 

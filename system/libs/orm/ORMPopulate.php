@@ -82,7 +82,7 @@ trait ORMPopulate
 
         $query = new ORMQuery();
         $query->join = "RIGHT JOIN ({$oSql}) as relations ON relations.relation_{$component_type_reverse}_id = {$object->prefix}_id";
-        $query->orderBy = "relation_{$component_type_reverse}_position";
+        $query->orderBy = "relation_{$component_type_reverse}_position DESC";
 
         $relatedObjects=  $object->read($query,$pagination);
 
@@ -112,7 +112,7 @@ trait ORMPopulate
                     }
                 }
 
-                $relatedObjects[$k]->_relationData[] = $r;
+                $relatedObjects[$k]->_relationData = $r;
 
 
                 $objArray[$searchKey]->_related[$oKey][] = $relatedObjects[$k];

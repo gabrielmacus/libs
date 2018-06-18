@@ -16,10 +16,13 @@
             <div class="w3-padding  w3-light-grey">{{'No elements selected' | translate}}.</div>
         </div>
 
-        <div class="w3-row-padding ">
+        <ul  data-ng-sortable="sortableConf" class="w3-row-padding ">
 
-            <ng-transclude data-ng-repeat="(k,item) in model" class="w3-col s12 m6 " ></ng-transclude>
-        </div>
+            <li  style="list-style: none" draggable="false" data-ng-repeat="(k,item) in model" class="w3-col s12 m6 " >
+                <ng-transclude ></ng-transclude>
+            </li>
+
+        </ul>
 
         <div class="w3-container">
             <div class="w3-bar w3-dark-grey ">

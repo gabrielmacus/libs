@@ -5,7 +5,8 @@ app.directive('field', function() {
         scope: {
             model:'=',
             label:'=',
-            inputType:'=?'
+            inputType:'=?',
+            placeholder:'=?'
         },
         transclude:true,
         templateUrl: 'directives/field/view.html',

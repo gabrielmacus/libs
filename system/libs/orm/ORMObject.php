@@ -310,10 +310,16 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
         }
 
 
-        $this->log("Counting records for pagination");
+        $countSql ="SELECT count(*) as 'total' FROM ({$oSql}) as t";
+        $this->log("Counting records for pagination",$countSql);
+        $countStatement = $this->PDOInstance->prepare($countSql);
+        $countResult = $countStatement->execute($params);
 
-
-        $pagination->total = $this->PDOInstance->query("SELECT count(*) as 'total' FROM ({$oSql}) as t")->fetchAll(\PDO::FETCH_ASSOC)[0]['total'];
+        if(!$countResult)
+        {
+          throw new ORMException("Error counting records. Error info: ".implode($countStatement->errorInfo(),","));
+        }
+        $pagination->total = $countStatement->fetchAll(\PDO::FETCH_ASSOC)[0]['total'];
 
         $this->log("End counting records for pagination",$pagination->total);
 

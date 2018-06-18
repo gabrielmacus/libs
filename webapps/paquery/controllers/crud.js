@@ -1,7 +1,6 @@
-app.controller('create', function ($scope,$http,$routeParams,$controller,$rootScope,$translate,CRUD,$location) {
+app.controller('save', function ($scope,$http,$routeParams,$controller,$rootScope,$translate,CRUD,$location) {
 
-
-    CRUD.url = '/libs/api/'+$routeParams.module+'/';
+    var CRUD = new CRUD('/libs/api/'+$routeParams.module+'/');
 
     $scope.save=function () {
 
@@ -23,10 +22,13 @@ app.controller('create', function ($scope,$http,$routeParams,$controller,$rootSc
     }
 
 
+    $controller($routeParams.module+'-create', {$scope: $scope,$routeParams:$routeParams,CRUD:CRUD});
 
+    if($routeParams.id)
+    {
 
-    $controller($routeParams.module+'-create', {$scope: $scope,$routeParams:$routeParams});
-
+        $controller('update', {$scope: $scope,$routeParams:$routeParams,CRUD:CRUD});
+    }
 
 });
 
@@ -34,13 +36,10 @@ app.controller('create', function ($scope,$http,$routeParams,$controller,$rootSc
 app.controller('update', function ($scope,$http,$routeParams,$controller,$rootScope,$translate,CRUD) {
 
 
-    $controller('create', {$scope: $scope,$routeParams:$routeParams});
 
-    $scope.query = {};
+    CRUD.url  = '/libs/api/'+$routeParams.module+'/'+$routeParams.id;
 
-    CRUD.url = '/libs/api/'+$routeParams.module+'/'+$routeParams.id;
-
-    $controller($routeParams.module+'-update', {$scope: $scope,$routeParams:$routeParams});
+    $controller($routeParams.module+'-update', {$scope: $scope,$routeParams:$routeParams,CRUD:CRUD});
 
     CRUD.read($scope.query,function (response) {
 
@@ -64,7 +63,7 @@ app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScop
 
     $scope.emptyText ='No results available';
 
-    CRUD.url = '/libs/api/'+$scope.module+'/';
+    CRUD = new CRUD('/libs/api/'+$scope.module+'/');
 
 
     $scope.title = $translate.instant($scope.module+' list');
@@ -163,7 +162,9 @@ app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScop
 
     $scope.$watch('query',function (newVal,oldVal) {
 
-        if(newVal != oldVal)
+
+        //Page search
+        if(newVal.p && newVal.p != oldVal.p)
         {
             $scope.read();
         }
@@ -201,7 +202,7 @@ app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScop
         $scope.deleteLightbox = false;
     }
 
-    $controller($scope.module+'-list', {$scope: $scope,$routeParams:$routeParams});
+    $controller($scope.module+'-list', {$scope: $scope,$routeParams:$routeParams,CRUD:CRUD});
 
 
 
