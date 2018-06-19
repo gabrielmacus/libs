@@ -17,4 +17,5 @@ class FacebookUser extends ORMObject
     public $url;
     public $location_work;
 
+
 }

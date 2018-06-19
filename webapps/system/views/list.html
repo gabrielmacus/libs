@@ -1,0 +1,47 @@
+
+<form data-ng-submit="read()" class="search w3-row-padding "  data-ng-include="'views/'+module+'-search.html'">
+
+</form>
+
+<table-data data-headers="headers"
+            data-empty-text="emptyText"
+            data-title="title"
+            data-pagination="pagination"
+            data-properties="properties"
+            data-actions="actions"
+            data-current-page="query.p"
+            data-rows="rows"
+            data-status="status"
+            data-process="process"
+            data-pages-offset="pagesOffset"
+>
+
+
+        <a data-ng-repeat="a in multipleActions" data-ng-click="a.action()" data-ng-show="a.visible?a.visible():true" class="w3-bar-item w3-button w3-border-right">{{a.title | translate:(a.titleData)?a.titleData():{} }}&nbsp;&nbsp;<i data-ng-class="a.icon"></i></a>
+
+
+</table-data>
+
+
+
+<lightbox data-opened="deleteLightbox">
+
+
+    <header class="w3-container ">
+
+        <span data-ng-click="closeDeleteLightbox()"
+              class="w3-button w3-display-topright">&times;</span>
+        <h4 data-ng-if="itemsToDelete.length == 1">{{'Confirm deletion' | translate}}</h4>
+        <h4 data-ng-if="itemsToDelete.length > 1">{{'Confirm multiple deletion' | translate:{count:itemsToDelete.length} }}</h4>
+
+
+    </header>
+
+    <div class="w3-container w3-margin-top">
+        <button class="w3-button w3-padding-small w3-teal w3-margin-bottom" data-ng-click="delete()">{{'Yes' | translate}}</button>
+
+        <button data-ng-click="closeDeleteLightbox()" class="w3-button w3-padding-small w3-teal w3-margin-bottom">{{'No' | translate}}</button>
+
+    </div>
+
+</lightbox>

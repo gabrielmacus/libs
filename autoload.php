@@ -6,22 +6,27 @@
  * Time: 22:02
  */
 
-include "vendor/autoload.php";
-include  "system/libs/orm/autoload.php";
-include "system/libs/Services.php";
-/*
-spl_autoload_register(function ($class) {
+include_once "vendor/autoload.php";
+include_once  "system/libs/orm/autoload.php";
+include_once "system/libs/Services.php";
 
-    $systemPath = __DIR__."/system/modules/";
-    $userPath = __DIR__."/system/modules/";
-    $resource= "model";
-    $class = str_replace('-', '', ucwords($_COOKIE, '-'));
-    if(strpos($class,"Controller"))
-    {
-        $resource="controller";
-    }
-    if(file_exists($systemPath."{}/{$resource}.php"))
-    {
 
+define('ROOT_PATH',__DIR__);
+
+//Includes envs
+$envs =
+    [
+        "production",
+        "development"
+    ];
+
+foreach ($envs as $env)
+{
+    if(file_exists(ROOT_PATH."/user/enviroments/{$env}.env.php"))
+    {
+        include_once ROOT_PATH."/user/enviroments/{$env}.env.php";
     }
-});*/
+
+}
+
+

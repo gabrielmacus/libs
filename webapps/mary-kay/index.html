@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Paquery</title>
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.18.1/angular-translate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.18.1/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
+
+    <script src="../system/js/Sortable.min.js"></script>
+    <script src="../system/js/angular-legacy-sortable.js"></script>
+
+    <script src="../system/js/main.js"></script>
+    <script src="../system/js/asyncForEach.js"></script>
+
+    <!-- Directives -->
+    <script src="../system/directives/sidenav/directive.js"></script>
+    <script src="../system/directives/table-data/directive.js"></script>
+    <script src="../system/directives/paginator/directive.js"></script>
+    <script src="../system/directives/lightbox/directive.js"></script>
+    <script src="../system/directives/field/directive.js"></script>
+    <script src="../system/directives/related-items/directive.js"></script>
+    <!-- Directives End -->
+
+    <!-- Controllers -->
+    <!-- system -->
+    <script src="../system/controllers/main.js"></script>
+    <script src="../system/controllers/crud.js"></script>
+    <!-- system end-->
+
+    <script src="controllers/facebook-user.js"></script>
+    <!-- Controllers End -->
+
+    <script src="../system/js/factories.js"></script>
+    <script src="../system/js/jquery-param.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.5.2/qs.min.js"></script>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+</head>
+<body  data-ng-app="app" data-ng-controller="main">
+
+
+<sidenav data-menu-items="[{text:'Facebook users',href:'#!/facebook-user'}]"></sidenav>
+
+
+<div class="w3-main" style="margin-left:350px">
+    <div class="w3-teal">
+        <button class="w3-button w3-teal w3-xlarge w3-hide-large" >&#9776;</button>
+        <div class="w3-container">
+            <h1 class="w3-xlarge w3-right">{{'Mary kay control panel' | translate}}</h1>
+        </div>
+    </div>
+
+
+
+    <div  data-ng-view>
+
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+</html>

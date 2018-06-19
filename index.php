@@ -21,7 +21,7 @@ $router->map( 'POST', '/api/[*:module]/','Create');
 // match current request
 $match = $router->match();
 
-define('ROOT_PATH',__DIR__);
+
 
 if(!empty($match))
 {
@@ -43,7 +43,7 @@ if(!empty($match))
         try{
 
 
-            $pdo =  new PDO("mysql:host=localhost;dbname=libs","root","");
+            $pdo =  new PDO($_ENV["db"]["string"] ,$_ENV["db"]["user"] ,$_ENV["db"]["pass"] );
             $model = new $Model($pdo);
             $Controller::$Action($model,$match["params"]);
 

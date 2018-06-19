@@ -1,0 +1,29 @@
+
+<form data-ng-submit="save()">
+
+    <div class="w3-container w3-margin-top">
+        <field data-label="'Name'" data-model="item.name"  ></field>
+    </div>
+
+    <div class="w3-margin-top">
+        <related-items  data-label="'Players'" data-deleted="item._deletedRelations" data-model="item._related.players" data-module="'person'" >
+
+
+                <span class="key w3-col s12 "><b>{{'Name' | translate}}</b></span>
+                <span class="value   w3-col s12">{{$parent.item.name}}</span>
+
+                <span class="key  w3-col s12 w3-margin-top"><b>{{'Surname' | translate}}</b></span>
+                <span class="value  w3-col s12">{{$parent.item.surname}}</span>
+
+        </related-items>
+    </div>
+
+
+
+    <div class="w3-bar w3-margin-top  w3-right-align  w3-col s12 m12 l12 w3-container">
+
+        <button type="button" class="w3-button w3-teal" data-ng-click="goToList()">{{'Cancel' | translate}}</button>
+        <button type="submit" class="w3-button w3-teal ">{{'Accept' | translate}}</button>
+    </div>
+
+</form>
