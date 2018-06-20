@@ -3,23 +3,20 @@
 <div class="w3-row">
 
 
-    <div class="w3-container">
+    <label>{{label | translate}}</label>
 
-        <label>{{label | translate}}</label>
-    </div>
-
-    <div class="w3-col s12 w3-margin-top">
+    <div class="w3-col s12 w3-light-grey w3-margin-top">
 
 
-        <div class="w3-container"  data-ng-if="!model.length">
+        <div   data-ng-if="!model.length">
 
             <div class="w3-padding  w3-light-grey">{{'No elements selected' | translate}}.</div>
         </div>
 
-        <ul  data-ng-sortable="sortableConf" class="w3-row-padding ">
+        <ul  data-ng-sortable="sortableConf" class="w3-row-padding"  >
 
             <li  style="list-style: none" draggable="false" data-ng-repeat="(k,item) in model" class="w3-col s12 m6 " >
-                <div    class="w3-card-2 w3-light-grey w3-col s12 w3-padding w3-margin-bottom">
+                <div    class="w3-card-2 w3-white w3-col s12 w3-padding w3-margin-bottom">
 
                     <span data-ng-click="deleteRelated(k)" class="delete w3-right"><i class="fas fa-trash"></i></span>
                     <span class="move w3-left w3-margin-bottom grab-handle"><i class="fas fa-arrows-alt"></i></span>
@@ -34,13 +31,11 @@
 
         </ul>
 
-        <div class="w3-container">
-            <div class="w3-bar w3-dark-grey ">
-                <a href data-ng-click="goToSelect()" class="w3-bar-item w3-button w3-mobile w3-hover-text-teal">{{'Select existant' | translate}}<i class="w3-margin-left fas fa-hand-pointer"></i></a>
-                <a href data-ng-click="goToCreate()" class="w3-bar-item w3-button w3-mobile w3-hover-text-teal">{{'Create new' | translate}}<i class="w3-margin-left fas fa-file"></i>
+        <div class="w3-bar w3-dark-grey ">
+            <a href data-ng-click="goToSelect()" class="w3-bar-item w3-button w3-mobile w3-hover-text-teal">{{'Select existant' | translate}}<i class="w3-margin-left fas fa-hand-pointer"></i></a>
+            <a href data-ng-click="goToCreate()" class="w3-bar-item w3-button w3-mobile w3-hover-text-teal">{{'Create new' | translate}}<i class="w3-margin-left fas fa-file"></i>
 
-                </a>
-            </div>
+            </a>
         </div>
     </div>
 

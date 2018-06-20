@@ -6,12 +6,17 @@ app.directive('relatedItems', function() {
             model:'=',
             label:'=',
             module:'=',
-            deleted:'='
+            deleted:'=',
+            relationType:'=?'
         },
         transclude:true,
         templateUrl: '../system/directives/related-items/view.html',
         controller:function ($scope,$http,CRUD,$location,$routeParams,$controller) {
 
+            if(!$scope.relationType)
+            {
+                $scope.relationType = 'parent';
+            }
 
 
             $scope.goToCreate=function () {
@@ -55,6 +60,7 @@ app.directive('relatedItems', function() {
                             $scope.model[k]._relationData={};
                         }
                         $scope.model[k]._relationData.module = $scope.module;
+                        $scope.model[k]._relationData.type = $scope.relationType;
                     }
                 }
             }
