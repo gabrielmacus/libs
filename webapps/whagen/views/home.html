@@ -1,0 +1,24 @@
+<form  data-ng-submit="generateMessage()" class="whatsapp-generator">
+
+
+    <h2>{{'Enviá tu mensaje' | translate}}</h2>
+
+    <div class="form-field float-left">
+        <input data-ng-model="message.phone"   class="float-left">
+
+        <label class="float-left">{{'Teléfono' | translate}}</label>
+        <p class="bottom-message">
+            {{'Recordá que debes incluir código de país y código de area' | translate}}
+        </p>
+    </div>
+
+    <div class="form-field float-left">
+        <textarea data-ng-model="message.text" rows="3" class="float-left"></textarea>
+        <label class="float-left">{{'Mensaje (opcional)' | translate}}</label>
+    </div>
+
+    <div class="form-field submit float-left">
+        <button type="submit">{{'Enviar' | translate}}</button>
+    </div>
+
+</form>

@@ -8,6 +8,40 @@
 
 include "autoload.php";
 
+$pdo =  new PDO($_ENV["db"]["string"] ,$_ENV["db"]["user"] ,$_ENV["db"]["pass"] );
+
+
+include ROOT_PATH."/user/modules/team/model.php";
+include ROOT_PATH."/user/modules/team/controller.php";
+
+include ROOT_PATH."/user/modules/person/model.php";
+include ROOT_PATH."/user/modules/person/controller.php";
+
+$player = New \user\modules\person\Person($pdo);
+$player->read();
+
+$team = new \user\modules\team\Team($pdo);
+$team->readById(1);
+
+
+
+
+\system\libs\Services::BeautyPrint($player);
+\system\libs\Services::BeautyPrint($team);
+
+/*
+$relation = new \system\libs\orm\ORMRelation($pdo);
+$relation->setParent($team);
+$relation->setChild($player,"players");
+$relation->save();*/
+
+
+
+
+
+
+exit();
+
 $router = new AltoRouter();
 
 $router->setBasePath('/libs');

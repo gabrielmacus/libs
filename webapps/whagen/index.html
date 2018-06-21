@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.18.1/angular-translate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.18.1/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
+
+    <script>
+
+
+        var app = angular.module("app", ['ngSanitize',"ngRoute",'pascalprecht.translate']);
+
+        app.config(function($routeProvider) {
+            $routeProvider
+                .when("/", {
+                    templateUrl : "views/home.html",
+                    controller:"controller"
+                })
+
+
+
+        });
+        app.config(['$translateProvider', function ($translateProvider, $translatePartialLoaderProvider) {
+            $translateProvider.useStaticFilesLoader({
+                files: [
+                    {
+                        prefix: 'lang/',
+                        suffix: '.json'
+                    }]
+            });
+            $translateProvider.preferredLanguage('es');
+        }]);
+
+
+        app.controller('controller', function($scope) {
+
+            $scope.generateMessage=function () {
+
+                $scope.message.text = (!$scope.message.text)?"":$scope.message.text;
+                var url = "https://api.whatsapp.com/send?phone="+$scope.message.phone+"&text="+encodeURIComponent($scope.message.text);
+
+                window.open(url);
+
+
+            }
+
+        });
+
+    </script>
+
+    <title>Whagen</title>
+
+
+</head>
+<body data-ng-app="app">
+
+<nav class="float-left">
+    <a class="logo">
+        <!--
+        <img src="https://png.pngtree.com/element_our/md/20180301/md_5a9797d574aa7.png">-->
+    </a>
+    <a class="logo-title">Whagen</a>
+    <a class="logo-slogan">
+        <p>{{'Enviá Whatsapps sin agendar contactos' | translate}}</p>
+    </a>
+</nav>
+
+
+
+<main  data-ng-view>
+
+
+
+</main>
+
+
+</body>
+</html>
