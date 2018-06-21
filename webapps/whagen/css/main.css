@@ -17,9 +17,9 @@ body,html
     display: flex;
     flex-wrap: wrap;
     align-items:center;
-    background: #396afc;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #2948ff, #396afc);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #2948ff, #396afc); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #5C258D;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #4389A2, #5C258D);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #4389A2, #5C258D); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
     height: 100%;
     width: 100%;
@@ -103,9 +103,18 @@ nav a{
         align-items: inherit;
 
     }
+    [data-ng-view]
+    {
+        height: calc(100% - 40px);
+    }
+    .whatsapp-generator h2
+    {
+       display: none;
+    }
     nav
     {
         position: static;
+        height: 40px;
     }
     .bottom-message
     {
@@ -135,11 +144,11 @@ nav a{
 }
 .form-field input:focus,.form-field textarea:focus
 {
-    color:#2948ff;
-    border-bottom-color: #2948ff;
+    color: #6441A5;
+    border-bottom-color: #6441A5;
 }
 .form-field input:focus + label,.form-field textarea:focus + label{
-    color: #2948ff;
+    color:  #6441A5;
 }
 
 
@@ -168,7 +177,7 @@ nav a{
 .submit button
 {
     color: white;
-    background: #396afc;
+    background:  #6441A5;
     width: 100%;
     transition: all 0.150s;
     float: right;
@@ -181,7 +190,7 @@ nav a{
 .submit button:hover
 {
 
-    background: #2948ff;
+    background: #4389A2;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 .submit button:active
@@ -193,7 +202,7 @@ nav a{
     font-size: 16px;
     font-weight: 400;}
 
-input:focus + label + .bottom-message
+input:hover + label + .bottom-message,button:hover  + .bottom-message
 {
     opacity: 1;
 }
@@ -209,4 +218,9 @@ input:focus + label + .bottom-message
     right: 10%;
     color: white;
     padding: 5px;
+}
+button[disabled]
+{
+
+    opacity: 0.5;
 }

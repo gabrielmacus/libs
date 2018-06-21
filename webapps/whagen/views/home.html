@@ -18,7 +18,10 @@
     </div>
 
     <div class="form-field submit float-left">
-        <button type="submit">{{'Enviar' | translate}}</button>
+        <button  data-ng-disabled="!message.phone" type="submit">{{'Enviar' | translate}}</button>
+        <p class="bottom-message">
+            {{'Completá el teléfono' | translate}}
+        </p>
     </div>
 
 </form>

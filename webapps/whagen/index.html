@@ -47,7 +47,13 @@
             $scope.generateMessage=function () {
 
                 $scope.message.text = (!$scope.message.text)?"":$scope.message.text;
-                var url = "https://api.whatsapp.com/send?phone="+$scope.message.phone+"&text="+encodeURIComponent($scope.message.text);
+                var apiUrl = 'https://api.whatsapp.com/send';
+
+                if(window.innerWidth > 800){
+                    apiUrl = 'https://web.whatsapp.com/send';
+                }
+
+                var url = apiUrl+"?phone="+$scope.message.phone+"&text="+encodeURIComponent($scope.message.text);
 
                 window.open(url);
 
