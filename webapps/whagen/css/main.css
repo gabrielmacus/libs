@@ -224,3 +224,54 @@ button[disabled]
 
     opacity: 0.5;
 }
+.bottom-menu
+{
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    text-decoration: underline;
+    letter-spacing: 0.05em;
+    color: #7E57C2;
+    font-weight: 500;
+    
+}
+.bottom-menu a{
+    cursor: pointer;
+}
+.list
+{
+    margin-top: 20px;
+}
+.list .list-item
+{
+    line-height: 23px;
+    border-bottom: 1px solid #9E9E9E;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+}
+.list .list-item:last-of-type {
+
+    padding: 0;
+    border-bottom: 0;
+    margin-bottom: 0;
+
+}
+.list-item-phone
+{
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 15px;
+    float: left;
+}
+.list-item-time
+{
+    font-size: 15px;
+    color: #5C258D;
+    float: right;
+}
+.no-messages
+{
+    font-weight: 300;
+    margin-top: 20px;
+    text-align: center;
+}

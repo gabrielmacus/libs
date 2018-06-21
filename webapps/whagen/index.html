@@ -26,7 +26,10 @@
                     templateUrl : "views/home.html",
                     controller:"controller"
                 })
-
+                .when("/sent-messages", {
+                    templateUrl : "views/sent-messages.html",
+                    controller:"controller"
+                })
 
 
         });
@@ -42,20 +45,36 @@
         }]);
 
 
-        app.controller('controller', function($scope) {
+        app.controller('controller', function($scope,$window) {
+
+            $scope.loadMessages=function () {
+                return ($window.localStorage.getItem("whagen_messages"))?JSON.parse($window.localStorage.getItem("whagen_messages")):[];
+            };
+
+            $scope.saveMessage=function (message) {
+
+                $scope.sentMessages.push(message);
+                $window.localStorage.setItem("whagen_messages",JSON.stringify($scope.sentMessages));
+
+            }
+
+            $scope.sentMessages = $scope.loadMessages();
 
             $scope.generateMessage=function () {
 
                 $scope.message.text = (!$scope.message.text)?"":$scope.message.text;
+                $scope.message.time = new Date();
                 var apiUrl = 'https://api.whatsapp.com/send';
 
-                if(window.innerWidth > 800){
+                if($window.innerWidth > 800){
                     apiUrl = 'https://web.whatsapp.com/send';
                 }
 
                 var url = apiUrl+"?phone="+$scope.message.phone+"&text="+encodeURIComponent($scope.message.text);
 
-                window.open(url);
+                $scope.saveMessage($scope.message);
+
+                $window.open(url);
 
 
             }

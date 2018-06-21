@@ -4,5 +4,10 @@
   "Teléfono":"Phone number",
   "Mensaje (opcional)":"Message (optional)",
   "Enviá tu mensaje":"Send your message",
-  "Enviar":"Send"
+  "Enviar":"Send",
+  "Completá el teléfono":"Fill your phone",
+  "Ver mensajes enviados":"Show sent messages",
+  "Mensajes enviados":"Sent messages",
+  "Enviar mensajes":"Send messages",
+  "No hay mensajes enviados":"No messages sent"
 }

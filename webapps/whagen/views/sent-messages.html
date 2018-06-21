@@ -1,0 +1,32 @@
+<div class="whatsapp-generator">
+ 
+<h2>{{'Mensajes enviados' | translate}}</h2>
+
+    <p class="no-messages" data-ng-if="!sentMessages.length">
+        {{'No hay mensajes enviados' | translate}}
+    </p>
+
+
+    <ul class="list" data-ng-if="sentMessages.length">
+        <li data-ng-repeat="(k,message) in sentMessages track by k" class="list-item">
+
+            <div class="float-left">
+                <span class="list-item-phone">
+               {{message.phone}}
+            </span>
+                <time class="list-item-time">{{message.time}}</time>
+            </div>
+
+
+            <p>
+                {{message.text}}
+            </p>
+
+        </li>
+
+
+    </ul>
+    <div class="float-left bottom-menu">
+        <a href="#!/">{{'Enviar mensaje' | translate}}</a>
+    </div>
+</div>
