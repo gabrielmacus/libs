@@ -9,26 +9,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
 
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-route.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.18.1/angular-translate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.18.1/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
 
     <script>
 
 
-        var app = angular.module("app", ['ngSanitize',"ngRoute",'pascalprecht.translate']);
+        var app = angular.module("app", ['ngSanitize',"ngRoute",'pascalprecht.translate','ngAnimate']);
 
         app.config(function($routeProvider) {
             $routeProvider
                 .when("/", {
                     templateUrl : "views/home.html",
-                    controller:"controller"
+                    controller:"home-controller"
                 })
                 .when("/sent-messages", {
                     templateUrl : "views/sent-messages.html",
-                    controller:"controller"
+                    controller:"home-controller"
+                })
+                .when("/contact-me", {
+                    templateUrl : "views/contact-me.html",
+                    controller:"contact-me-controller"
                 })
 
 
@@ -44,21 +51,42 @@
             $translateProvider.preferredLanguage('es');
         }]);
 
+        var max_messages = 150;
 
-        app.controller('controller', function($scope,$window) {
+        app.controller('home-controller', function($scope,$window) {
+
 
             $scope.loadMessages=function () {
-                return ($window.localStorage.getItem("whagen_messages"))?JSON.parse($window.localStorage.getItem("whagen_messages")):[];
+                var messages= ($window.localStorage.getItem("whagen_messages"))?JSON.parse($window.localStorage.getItem("whagen_messages")):[];
+
+                return messages;
             };
 
             $scope.saveMessage=function (message) {
 
+
                 $scope.sentMessages.push(message);
+
+                if($scope.sentMessages.length > max_messages)
+                {
+                    $scope.sentMessages=   $scope.sentMessages.slice(1,$scope.sentMessages.length);
+                }
+
+
                 $window.localStorage.setItem("whagen_messages",JSON.stringify($scope.sentMessages));
 
             }
 
             $scope.sentMessages = $scope.loadMessages();
+
+
+            $scope.deleteMessage=function (message) {
+
+               $scope.sentMessages.splice($scope.sentMessages.indexOf(message),1);
+
+
+                $window.localStorage.setItem("whagen_messages",JSON.stringify($scope.sentMessages));
+            }
 
             $scope.generateMessage=function () {
 
@@ -72,7 +100,7 @@
 
                 var url = apiUrl+"?phone="+$scope.message.phone+"&text="+encodeURIComponent($scope.message.text);
 
-                $scope.saveMessage($scope.message);
+                $scope.saveMessage(angular.copy($scope.message));
 
                 $window.open(url);
 
@@ -80,6 +108,38 @@
             }
 
         });
+
+
+        app.controller('contact-me-controller',function ($scope,$http) {
+
+            $scope.sendContact=function () {
+
+                var contact= angular.copy($scope.contact);
+                var data  = Object.keys(contact).map(function(k) {
+                    return encodeURIComponent(k) + '=' + encodeURIComponent(contact[k])
+                }).join('&');
+
+                $http.post('contact-me.php',data,{
+                    headers : {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+                    }
+                })
+                    .then(function (response) {
+
+                        $scope.formSent =true;
+
+                    },function (response) {
+                        console.log(response);
+                    })
+
+            }
+
+        })
+
+
+
+
+
 
     </script>
 
@@ -102,11 +162,13 @@
 
 
 
-<main  data-ng-view>
+<main  data-ng-view class="fade">
 
 
 
 </main>
+
+
 
 
 </body>

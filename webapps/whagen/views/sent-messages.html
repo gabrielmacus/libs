@@ -8,19 +8,27 @@
 
 
     <ul class="list" data-ng-if="sentMessages.length">
-        <li data-ng-repeat="(k,message) in sentMessages track by k" class="list-item">
+        <li data-ng-repeat="(k,message) in sentMessages| orderBy:'-time'" class="list-item float-left">
 
             <div class="float-left">
                 <span class="list-item-phone">
                {{message.phone}}
             </span>
-                <time class="list-item-time">{{message.time}}</time>
+                <time class="list-item-time">{{message.time | date:'dd/MM/yyyy - HH:mm'}}</time>
             </div>
 
 
-            <p>
+            <p data-ng-if="message.text">
                 {{message.text}}
             </p>
+
+            <p data-ng-if="!message.text" class="no-text">
+                {{'Sin texto' | translate}}
+            </p>
+
+            <span class="delete" data-ng-click="deleteMessage(message)">
+                <img src="images/trash.svg">
+            </span>
 
         </li>
 
@@ -30,3 +38,8 @@
         <a href="#!/">{{'Enviar mensaje' | translate}}</a>
     </div>
 </div>
+
+<a  href="#!/contact-me" class="contact-button">
+    <img src="images/email.svg">
+    {{'Contactame' | translate}}
+</a>

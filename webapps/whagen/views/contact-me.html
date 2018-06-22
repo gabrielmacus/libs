@@ -1,0 +1,32 @@
+<form  data-ng-submit="sendContact()" class="whatsapp-generator">
+
+
+    <h2>{{'Contactame' | translate}}</h2>
+
+    <div data-ng-show="!formSent">
+        <div class="form-field float-left">
+            <input data-ng-model="contact.email"  class="float-left">
+            <label class="float-left">{{'Email o Whatsapp' | translate}}</label>
+        </div>
+        <div class="form-field float-left">
+            <input data-ng-model="contact.text" class="float-left">
+            <label class="float-left">{{'Mensaje' | translate}}</label>
+        </div>
+
+        <div class="form-field submit float-left">
+            <button  data-ng-disabled="!contact.email || !contact.text" type="submit">{{'Enviar' | translate}}</button>
+
+        </div>
+    </div>
+
+    <div class="form-sent-message" data-ng-show="formSent">
+        <p>{{'Gracias por contactarte conmigo. En breve me voy estar respondiendo tu mensaje...' | translate}}</p>
+    </div>
+
+    <div class="float-left bottom-menu">
+            <a href onclick="window.history.back();">{{'Volver' | translate}}</a>
+    </div>
+
+
+
+</form>
