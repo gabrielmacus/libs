@@ -125,8 +125,15 @@
                     }
                 })
                     .then(function (response) {
+                        if(response.data == "false")
+                        {
+                            alert($scope.$eval("'Error al enviar el formulario de contacto. Intentalo más tarde.' | translate"));
+                        }
+                        else
+                        {
+                            $scope.formSent =true;
+                        }
 
-                        $scope.formSent =true;
 
                     },function (response) {
                         console.log(response);
