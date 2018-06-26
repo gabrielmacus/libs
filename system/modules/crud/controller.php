@@ -23,6 +23,11 @@ class CrudController
 
     static $paginationLimit = 100;
 
+    protected static function Validate(ORMObject $object)
+    {
+
+    }
+
     protected static function SendResponse($data,$template = null)
     {
         if(empty($template))
@@ -335,8 +340,10 @@ class CrudController
 
         static::checkAuthorization(true);
 
-
         static::AssignProperties($object);
+
+        static::Validate($object);
+
         static::BeforeCreate($object,$params,$template);
 
         $id = $object->save();
@@ -400,8 +407,9 @@ class CrudController
 
         static::AssignProperties($object);
 
-        static::BeforeUpdate($object,$params,$template);
+        static::Validate($object);
 
+        static::BeforeUpdate($object,$params,$template);
 
         $object->save();
 

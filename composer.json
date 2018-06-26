@@ -8,6 +8,7 @@
     ],
     "require": {
         "altorouter/altorouter": "1.1.0",
-        "firebase/php-jwt": "^5.0"
+        "firebase/php-jwt": "^5.0",
+        "rakit/validation": "^0.17.0"
     }
 }

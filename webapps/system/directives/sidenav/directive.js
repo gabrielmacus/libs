@@ -4,7 +4,8 @@ app.directive('sidenav', function() {
         restrict: 'E',
         replace:true,
         scope: {
-            menuItems: '='
+            menuItems: '=',
+            open:'='
         },
         templateUrl: '../system/directives/sidenav/view.html',
         controller:function ($scope,$location,$rootScope) {

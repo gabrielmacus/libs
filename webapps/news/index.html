@@ -51,12 +51,12 @@
 <body  data-ng-app="app" data-ng-controller="main">
 
 
-<sidenav data-menu-items="[{text:'Posts',href:'#!/post'}]"></sidenav>
+<sidenav data-open="sidenavOpen" data-menu-items="[{text:'Posts',href:'#!/post'}]"></sidenav>
 
 
 <div class="w3-main" style="margin-left:350px">
     <div class="w3-teal">
-        <button class="w3-button w3-teal w3-xlarge w3-hide-large" >&#9776;</button>
+        <button class="w3-button w3-teal w3-xlarge w3-hide-large" data-ng-click="sidenavOpen = !sidenavOpen" >&#9776;</button>
         <div class="w3-container">
             <h1 class="w3-xlarge w3-right">Test App</h1>
         </div>
