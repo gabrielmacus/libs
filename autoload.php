@@ -6,9 +6,12 @@
  * Time: 22:02
  */
 
+
+
 include_once "vendor/autoload.php";
 include_once  "system/libs/orm/autoload.php";
 include_once "system/libs/Services.php";
+include_once  "system/libs/Auth.php";
 
 
 define('ROOT_PATH',__DIR__);
@@ -22,9 +25,10 @@ $envs =
 
 foreach ($envs as $env)
 {
-    if(file_exists(ROOT_PATH."/user/enviroments/{$env}.env.php"))
+    $envPath = ROOT_PATH."/app/enviroments/{$env}.env.php";
+    if(file_exists($envPath))
     {
-        include_once ROOT_PATH."/user/enviroments/{$env}.env.php";
+        include_once ($envPath);
     }
 
 }

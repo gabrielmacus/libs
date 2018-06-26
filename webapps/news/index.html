@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Paquery</title>
+    <title>News Panel</title>
 
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
@@ -33,12 +33,12 @@
 
     <!-- Controllers -->
     <!-- system -->
+    <script src="../system/controllers/login.js"></script>
     <script src="../system/controllers/main.js"></script>
     <script src="../system/controllers/crud.js"></script>
     <!-- system end-->
 
-    <script src="controllers/team.js"></script>
-    <script src="controllers/person.js"></script>
+    <script src="controllers/post.js"></script>
     <!-- Controllers End -->
 
     <script src="../system/js/factories.js"></script>
@@ -51,7 +51,7 @@
 <body  data-ng-app="app" data-ng-controller="main">
 
 
-<sidenav data-menu-items="[{text:'Players',href:'#!/person'},{text:'Teams',href:'#!/team'}]"></sidenav>
+<sidenav data-menu-items="[{text:'Posts',href:'#!/post'}]"></sidenav>
 
 
 <div class="w3-main" style="margin-left:350px">

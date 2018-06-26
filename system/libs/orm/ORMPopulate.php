@@ -16,7 +16,7 @@ define("CHILD_RELATION_COMPONENT",2);
 
 trait ORMPopulate
 {
-    function &populate(&$objectToPopulate,ORMObject $object,string $path = "",ORMPagination $pagination=null,$type = PARENT_RELATION_COMPONENT)
+    function &populate(&$objectToPopulate,ORMObject $object,string $path = "",ORMPagination $pagination=null,$type = CHILD_RELATION_COMPONENT)
     {
 
         if(empty($objectToPopulate))
@@ -40,9 +40,9 @@ trait ORMPopulate
 
         $pagination = !(empty($pagination))?$pagination:new ORMPagination();
 
-        $component_type = ($type == CHILD_RELATION_COMPONENT)?"child":"parent";
+        $component_type = ($type == CHILD_RELATION_COMPONENT)?"parent":"child";//"child":"parent";
 
-        $component_type_reverse = ($type == CHILD_RELATION_COMPONENT)?"parent":"child";
+        $component_type_reverse = ($type == CHILD_RELATION_COMPONENT)?"child":"parent";//"parent":"child";
 
 
         $whereArray = [];

@@ -14,6 +14,45 @@ define("CLASS_TYPE_CONTROLLER",2);
 class Services
 {
 
+    static function getRequestHeaders()
+    {
+        //getallheaders polyfill for nginx
+        if (!function_exists('getallheaders'))
+        {
+            function getallheaders()
+            {
+                $headers = [];
+                foreach ($_SERVER as $name => $value)
+                {
+                    if (substr($name, 0, 5) == 'HTTP_')
+                    {
+                        $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+                    }
+                }
+                return $headers;
+            }
+        }
+
+        return getallheaders();
+
+    }
+    static function Aud()
+    {
+        $aud = '';
+
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $aud = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $aud = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $aud = $_SERVER['REMOTE_ADDR'];
+        }
+
+        $aud .= @$_SERVER['HTTP_USER_AGENT'];
+        $aud .= gethostname();
+
+        return sha1($aud);
+    }
     static function LoadClass(string $module,int $type)
     {
         $suffix = '';
@@ -34,7 +73,7 @@ class Services
         }
 
         $systemPath = ROOT_PATH."/system/modules/";
-        $userPath =  ROOT_PATH."/user/modules/";
+        $userPath =  ROOT_PATH."/app/modules/";
         //Loads model
         if(file_exists($userPath.$module."/{$type}.php"))
         {

@@ -8,6 +8,7 @@
 
 namespace system\modules\crud;
 
+use system\libs\Auth;
 use system\libs\orm\ORMArray;
 use system\libs\orm\ORMObject;
 use system\libs\orm\ORMPagination;
@@ -18,6 +19,7 @@ use user\modules\person\Person;
 
 class CrudController
 {
+    use Auth;
 
     static $paginationLimit = 100;
 
@@ -146,7 +148,7 @@ class CrudController
                 foreach ($arr as $module => $data)
                 {
 
-                    $type = (!empty( $data["type"]))? $data["type"]:"parent";
+                    $type = (!empty( $data["type"]))? $data["type"]:"child";
                     switch ($type)
                     {
                         case "parent":
@@ -229,7 +231,7 @@ class CrudController
                     {
 
                         $relation = new ORMRelation($object->PDOInstance);
-                        $relationType = 'parent';
+                        $relationType = 'child';
 
 
                         if(!empty($relatedObject["_relationData"]))
@@ -245,33 +247,44 @@ class CrudController
                                 //Sets extra data
                                 if(strpos($k,"extra_") !== false)
                                 {
-                                    $relation[$k] = $v;
+
+                                    $relation->$k = $v;
                                 }
 
                             }
 
-                            if(!empty($relatedObject["_relationData"]['type']) && $relatedObject["_relationData"]['type'] == 'child')
+                            if(!empty($relatedObject["_relationData"]['type']) && $relatedObject["_relationData"]['type'] == 'parent')
                             {
-                                $relationType = 'child';
+                                $relationType = 'parent';
                             }
                         }
 
                         $r = new $RelatedObjectClass($object->PDOInstance);
                         $r["id"] = $relatedObject["id"];
 
+                    if($key == $relatedObject["_relationData"]["module"])
+                    {
+                        $key ="";
+                    }
+
                     switch ($relationType)
                     {
                         case 'parent':
 
-                            $relation->setParent($object);
-                            $relation->setChild($r,$key,$position);
+                            $childKey = (!empty($relatedObject["_relationData"]["childKey"]))?$relatedObject["_relationData"]["childKey"]:"";
+
+                            $relation->setChild($object,$childKey);
+                            $relation->setParent($r,$key,$position);
 
                             break;
 
                         case 'child':
 
-                            $relation->setChild($object,$key,$position);
-                            $relation->setParent($r);
+                            $parentKey = (!empty($relatedObject["_relationData"]["parentKey"]))?$relatedObject["_relationData"]["parentKey"]:"";
+
+                            $relation->setParent($object,$parentKey);
+                            $relation->setChild($r,$key,$position);
+
 
                             break;
                     }
@@ -289,19 +302,73 @@ class CrudController
 
     }
 
+    protected static function BeforeCreate(ORMObject &$object,&$params=null,&$template = null)
+    {
+    }
+
+    protected static function AfterCreate(ORMObject &$object,&$params=null,&$template = null)
+    {
+
+    }
+
+    protected static function BeforeUpdate(ORMObject &$object,&$params=null,&$template = null)
+    {
+
+    }
+
+    protected static function AfterUpdate(ORMObject &$object,&$params=null,&$template = null)
+    {
+
+    }
+
+    protected static function BeforeDelete(ORMObject &$object,&$params=null,&$template = null)
+    {
+
+    }
+    protected static function AfterDelete(ORMObject &$object,&$params=null,&$template = null)
+    {
+
+    }
+
+    static function Create(ORMObject $object,$params=null,$template = null)
+    {
+
+        static::checkAuthorization(true);
+
+
+        static::AssignProperties($object);
+        static::BeforeCreate($object,$params,$template);
+
+        $id = $object->save();
+
+        $object->readById($id);
+
+        static::SaveRelations($object);
+
+
+        static::AfterCreate($object,$params,$template);
+
+        static::SendResponse($object,$template);
+
+
+    }
+
     static function Read(ORMObject $object,$params,$template = null)
     {
-        $query =self::ProcessQuery($_GET,$object);
+
+        static::checkAuthorization(true);
+
+        $query =static::ProcessQuery($_GET,$object);
 
         $pagination = new ORMPagination();
-        $pagination->offset = (!empty($_GET["p"]) && is_numeric($_GET["p"]))?$_GET["p"]-1:0;
+        $pagination->offset = (!empty($_GET["p"]) && is_numeric($_GET["p"]) && $_GET["p"]>0)?$_GET["p"]-1:0;
         $pagination->limit = static::$paginationLimit;
 
         if(empty($params["id"]))
         {
 
             $results = $object->read($query,$pagination);
-            self::ProcessPopulate($results, $object->PDOInstance,(!empty($_GET["populate"]))?$_GET["populate"]:[]);
+            static::ProcessPopulate($results, $object->PDOInstance,(!empty($_GET["populate"]))?$_GET["populate"]:[]);
 
 
 
@@ -313,30 +380,62 @@ class CrudController
 
             $results = new ORMArray([$object]);
 
-            self::ProcessPopulate($results, $object->PDOInstance,(!empty($_GET["populate"]))?$_GET["populate"]:[]);
+            static::ProcessPopulate($results, $object->PDOInstance,(!empty($_GET["populate"]))?$_GET["populate"]:[]);
 
             $data = (!empty($object->id))?$object:[];
         }
 
 
-        self::SendResponse($data,$template);
+        static::SendResponse($data,$template);
 
     }
 
     static function Update(ORMObject $object,$params,$template = null)
     {
+
+        static::checkAuthorization(true);
+
+
         $object->id = (!empty($params["id"]))?$params["id"]:null;
 
-        self::AssignProperties($object);
+        static::AssignProperties($object);
+
+        static::BeforeUpdate($object,$params,$template);
+
 
         $object->save();
 
         $object->readById($object->id);
 
-        self::SaveRelations($object);
+        static::SaveRelations($object);
 
-        self::SendResponse($object,$template);
+
+
+        static::AfterUpdate($object,$params,$template);
+
+        static::SendResponse($object,$template);
     }
+
+    static function Delete(ORMObject $object,$params,$template=null)
+    {
+        static::checkAuthorization(true);
+
+
+        $object->id = (!empty($params["id"]))?$params["id"]:null;
+
+        static::BeforeDelete($object,$params,$template);
+
+
+
+        $result = $object->delete();
+
+
+
+        static::AfterDelete($object,$params,$template);
+
+        static::SendResponse($result,$template);
+    }
+
 
     protected static function AssignProperties(ORMObject &$object,$post = null)
     {
@@ -349,30 +448,5 @@ class CrudController
         }
     }
 
-    static function Delete(ORMObject $object,$params,$template=null)
-    {
-        $object->id = (!empty($params["id"]))?$params["id"]:null;
-        $result = $object->delete();
-
-        self::SendResponse($result,$template);
-    }
-
-    static function Create(ORMObject $object,$params=null,$template = null)
-    {
-
-
-
-        self::AssignProperties($object);
-
-        $id = $object->save();
-
-        $object->readById($id);
-
-        self::SaveRelations($object);
-
-        self::SendResponse($object,$template);
-
-
-    }
 
 }

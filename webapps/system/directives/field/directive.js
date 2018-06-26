@@ -6,7 +6,8 @@ app.directive('field', function() {
             model:'=',
             label:'=',
             inputType:'=?',
-            placeholder:'=?'
+            placeholder:'=?',
+            data:'=?'
         },
         transclude:true,
         templateUrl: '../system/directives/field/view.html',
@@ -16,6 +17,15 @@ app.directive('field', function() {
             {
                 $scope.inputType ='text';
 
+            }
+
+            $scope.formatDate=function (date) {
+
+                date = date.split("-");
+                var d = new Date();
+                d.setFullYear(date[0],date[1] - 1,date[2]);
+
+                return d.toLocaleDateString();
             }
 
 
@@ -32,6 +42,9 @@ app.directive('field', function() {
 
                     case 'textarea':
                         return '../system/directives/field/textarea-field.html';
+                        break;
+                    case 'date':
+                        return'../system/directives/field/date-field.html';
                         break;
 
                 }

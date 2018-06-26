@@ -16,10 +16,7 @@ use system\libs\Services;
 
 abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 {
-    use ORMPopulate
-    {
-        populate as _populate;
-    }
+
     use \Magic;
     public $id;
     public $created_at;

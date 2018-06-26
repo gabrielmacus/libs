@@ -8,13 +8,10 @@ app.controller('team-list', function ($scope,$routeParams,$controller,$translate
 });
 app.controller('team-create', function ($scope,$routeParams,$controller,$translate,CRUD) {
 
-    //populate[0][person][path]=players
-
 
 });
 app.controller('team-update', function ($scope,$routeParams,$controller,$translate,CRUD) {
 
 
     $scope.query = {populate:[{person:{path:"players"}}]};
-    //CRUD.url +="?populate[0][person][path]=players";
 });

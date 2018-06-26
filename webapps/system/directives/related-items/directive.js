@@ -7,7 +7,9 @@ app.directive('relatedItems', function() {
             label:'=',
             module:'=',
             deleted:'=',
-            relationType:'=?'
+            relationType:'=?',
+            parentKey:'=?',
+            childKey:'=?'
         },
         transclude:true,
         templateUrl: '../system/directives/related-items/view.html',
@@ -15,7 +17,7 @@ app.directive('relatedItems', function() {
 
             if(!$scope.relationType)
             {
-                $scope.relationType = 'parent';
+                $scope.relationType = 'child';
             }
 
 
@@ -61,6 +63,17 @@ app.directive('relatedItems', function() {
                         }
                         $scope.model[k]._relationData.module = $scope.module;
                         $scope.model[k]._relationData.type = $scope.relationType;
+
+                        if($scope.relationType == 'child')
+                        {
+                            $scope.model[k]._relationData.parentKey = ($scope.parentKey)?$scope.parentKey:"";
+                        }
+                        else if($scope.relationType == 'parent')
+                        {
+                            $scope.model[k]._relationData.childKey = ($scope.childKey)?$scope.childKey:"";
+                        }
+
+
                     }
                 }
             }

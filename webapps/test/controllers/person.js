@@ -11,5 +11,5 @@ app.controller('person-create', function ($scope,$routeParams,$controller,$trans
 });
 app.controller('person-update', function ($scope,$routeParams,$controller,$translate,CRUD) {
 
-    $scope.query = {populate:[{team:{type:"child"}}]};
+    $scope.query = {populate:[{team:{type:"parent",path:"teams"}}]};
 });

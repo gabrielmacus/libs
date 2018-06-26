@@ -304,7 +304,7 @@ class ORMTest extends PHPUnit_Framework_TestCase
 
         $players->populate($team,"teams");
         $this->assertAttributeEmpty("_related",$players[0]);
-        $players->populate($team,"",null,CHILD_RELATION_COMPONENT);
+        $players->populate($team,"",null,PARENT_RELATION_COMPONENT);
 
         $this->assertAttributeNotEmpty('_related', $players[0]);
         $this->assertArrayHasKey('team', $players[0]->_related);
@@ -318,7 +318,7 @@ class ORMTest extends PHPUnit_Framework_TestCase
         $league = new League($this->pdo);
         $teams->populate($league,"leagues");
         $this->assertAttributeEmpty('_related', $teams[0]);
-        $teams->populate($league,"leagues",null,CHILD_RELATION_COMPONENT);
+        $teams->populate($league,"leagues",null,PARENT_RELATION_COMPONENT);
         $this->assertAttributeNotEmpty('_related', $teams[0]);
         $this->assertCount(1, $teams[0]->_related["leagues"]);
         $this->assertCount(1, $teams[1]->_related["leagues"]);

@@ -26,6 +26,9 @@ class ORMRelation extends ORMObject implements \ArrayAccess
     public $extra_1;
     public $extra_2;
     public $extra_3;
+    public $extra_4;
+    public $extra_5;
+    public $extra_6;
 
     function __construct(\PDO $PDOInstance )
     {
@@ -33,18 +36,18 @@ class ORMRelation extends ORMObject implements \ArrayAccess
     }
 
 
-    public function setParent(ORMObject $parent,string $key = "",int $position = 0)
+    public function setParent(ORMObject $parent,string $key = "",int $position = null)
     {   $this->log("Setting parent");
         $this->setComponent($parent,PARENT_RELATION_COMPONENT,$key,$position);
     }
-    public function setChild(ORMObject $child,string $key = "",int $position = 0)
+    public function setChild(ORMObject $child,string $key = "",int $position = null)
     {
         $this->log("Setting child");
         $this->setComponent($child,CHILD_RELATION_COMPONENT,$key,$position);
     }
 
 
-    protected function setComponent(ORMObject $component,int $type,string $key = "",int $position = 0)
+    protected function setComponent(ORMObject $component,int $type,string $key = "",int $position = null)
     {
         if(empty($component->id)) {
             throw new ORMException("Relation component should exist in database");
@@ -55,7 +58,11 @@ class ORMRelation extends ORMObject implements \ArrayAccess
         $this[$component_type."_id"] = $component->id;
         $this[$component_type."_table"] = $component->table;
         $this[$component_type."_key"] = $key;
-        $this[$component_type."_position"] = $position;
+        if(isset($position))
+        {
+            $this[$component_type."_position"] = $position;
+        }
+
 
     }
 

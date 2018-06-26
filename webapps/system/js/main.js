@@ -8,7 +8,7 @@ var checkTplUrl = function(url) {
 /** End functions **/
 
 
-var app = angular.module("app", ['ngSanitize',"ngRoute",'pascalprecht.translate','ng-sortable']);
+var app = angular.module("app", ['ngSanitize',"ngRoute",'pascalprecht.translate','ng-sortable','720kb.datepicker']);
 
 
 app.config(function($routeProvider) {
@@ -16,6 +16,35 @@ app.config(function($routeProvider) {
         .when("/", {
             templateUrl : "views/home.html"
         })
+        .when('/login',
+            {
+                templateUrl : function (params) {
+
+                    var tpl = 'views/login.html';
+
+                    if(!checkTplUrl(tpl))
+                    {
+                        tpl = '../system/views/login.html';
+                    }
+                    return tpl;
+                },
+                controller:'login'
+            })
+        .when('/404',
+            {
+                templateUrl:function (params) {
+
+
+                    var tpl = 'views/404.html';
+
+                    if(!checkTplUrl(tpl))
+                    {
+                        tpl = '../system/views/404.html';
+                    }
+                    return tpl;
+
+                }
+            })
         .when("/:module",{
             templateUrl : function (params) {
 
@@ -41,9 +70,10 @@ app.config(function($routeProvider) {
             },
             controller: "save"
         })
+
         .otherwise({
             //TODO: 404
-            redirectTo: '/route1/default-book/default-page'
+            redirectTo: '/404'
         });
 
 });
@@ -59,8 +89,22 @@ app.config(['$translateProvider', function ($translateProvider, $translatePartia
 }]);
 
 
-app.controller('controller', function($scope) {
-    $scope.start=function () {
-        alert('a');
-    }
+
+app.run(function ($rootScope, $location, Authorization) {
+
+    // Register listener to watch route changes.
+    $rootScope.$on('$routeChangeStart', function (event, next, current) {
+
+        var isLoggedIn = Authorization.isLoggedIn();
+        if (!isLoggedIn && $location.$$url != '/login') {
+
+            event.preventDefault();
+            $location.path("/login");
+
+        }
+        else if (isLoggedIn && $location.$$url == '/login'){
+            $location.path("/");
+        }
+    });
+
 });

@@ -1,0 +1,13 @@
+
+
+<div class="field-container ">
+    <label>{{$parent.label | translate}}</label>
+
+    <input data-ng-click="showDatepicker = !showDatepicker" class="w3-input" readonly value="{{formatDate($parent.model)}}" >
+
+    <datepicker data-date-format="yyyy-MM-dd" data-datepicker-show="{{showDatepicker}}">
+
+        <input style="display: none" class="w3-input" data-ng-model="$parent.model" type="text"/>
+    </datepicker>
+
+</div>
