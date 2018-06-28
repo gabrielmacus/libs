@@ -7,15 +7,18 @@ app.directive('field', function() {
             label:'=',
             inputType:'=?',
             placeholder:'=?',
-            data:'=?'
+            inputData:'=?'
         },
         transclude:true,
         templateUrl: '../system/directives/field/view.html',
         controller:function ($scope,$http) {
 
+
+
+
             if(typeof $scope.inputType === 'undefined')
             {
-                $scope.inputType ='text';
+                $scope.inputType ='';
 
             }
 
@@ -30,15 +33,8 @@ app.directive('field', function() {
 
 
             $scope.getInclude=function () {
-
-
-
                 switch ($scope.inputType)
                 {
-                    default:
-
-                    return '../system/directives/field/input-field.html';
-                        break;
 
                     case 'textarea':
                         return '../system/directives/field/textarea-field.html';
@@ -46,6 +42,12 @@ app.directive('field', function() {
                     case 'date':
                         return'../system/directives/field/date-field.html';
                         break;
+
+                    default:
+
+                        return '../system/directives/field/input-field.html';
+                        break;
+
 
                 }
             }

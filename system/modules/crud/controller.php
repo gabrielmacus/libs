@@ -8,6 +8,9 @@
 
 namespace system\modules\crud;
 
+use Rakit\Validation\ErrorBag;
+use Rakit\Validation\Validation;
+use Rakit\Validation\Validator;
 use system\libs\Auth;
 use system\libs\orm\ORMArray;
 use system\libs\orm\ORMObject;
@@ -23,8 +26,44 @@ class CrudController
 
     static $paginationLimit = 100;
 
-    protected static function Validate(ORMObject $object)
+
+    protected static function Validate(ORMObject $object, $rules  = null,$messages=[],$aliases = [])
     {
+
+        if(!empty($rules))
+        {
+            if(is_array($rules))
+            {
+
+                $validator =  new Validator();
+                $validation = $validator->make((array)$object,$rules,$messages);
+                //$validation = $validator->validate((array)$object,$rules,$messages);
+                $validation->setAliases($aliases);
+                $validation->validate();
+
+            }
+            else if(is_a($rules,Validator::class))
+            {
+
+                $validation = $rules->validate();
+            }
+
+            /**
+             * @var $validation Validation
+             */
+            if($validation->fails())
+            {
+
+                http_response_code(400);
+                return $validation->errors();
+            }
+
+
+
+        }
+
+        return true;
+
 
     }
 
@@ -342,21 +381,32 @@ class CrudController
 
         static::AssignProperties($object);
 
-        static::Validate($object);
+        if(($validationResult = static::Validate($object)) === true)
+        {
+            static::BeforeCreate($object,$params,$template);
 
-        static::BeforeCreate($object,$params,$template);
+            $id = $object->save();
 
-        $id = $object->save();
+            $object->readById($id);
 
-        $object->readById($id);
-
-        static::SaveRelations($object);
+            static::SaveRelations($object);
 
 
-        static::AfterCreate($object,$params,$template);
+            static::AfterCreate($object,$params,$template);
+
+
+        }
+        else
+        {
+            /**
+             * @var $validationResult ErrorBag
+             */
+            $object = $validationResult->toArray();
+        }
+
+
 
         static::SendResponse($object,$template);
-
 
     }
 

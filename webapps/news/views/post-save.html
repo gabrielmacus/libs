@@ -1,12 +1,14 @@
-<form data-ng-submit="save()">
+<form data-ng-submit="save()" class="w3-row-padding w3-container">
 
 
-    <field class="w3-container w3-margin-top" data-label="'Name'" data-model="item.name"  ></field>
+    <field class=" w3-margin-top w3-col  " data-label="'Title'" data-model="item.title"  ></field>
 
 
-    <field class="w3-container w3-margin-top"  data-label="'Surname'" data-model="item.surname" ></field>
+    <field class=" w3-margin-top w3-col "  data-input-type="'textarea'" data-label="'Text'"  data-model="item.text" ></field>
 
-    <div class="w3-bar w3-margin-top  w3-right-align  w3-col s12 m12 l12 w3-container">
+
+
+    <div class="w3-bar w3-margin-top  w3-right-align  w3-col ">
 
         <button type="button" class="w3-button w3-teal" data-ng-click="goToList()">{{'Cancel' | translate}}</button>
         <button type="submit" class="w3-button w3-teal ">{{'Accept' | translate}}</button>

@@ -72,8 +72,22 @@ app.factory('Authorization', function ($http,$rootScope) {
             },$rootScope.errorHandler);
 
         },
-        isLoggedIn:function () {
-            return this.user;
+        isLoggedIn:function (callback) {
+
+            var factory = this;
+            $http.get('/libs/api/user/logged/')
+                .then(function (response) {
+
+                    if(response.data)
+                    {
+                        factory.user = response.data.user;
+                        factory.token = response.data.token;
+                    }
+
+                    callback(factory.user);
+
+                },$rootScope.errorHandler);
+
         }
 
     };

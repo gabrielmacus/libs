@@ -14,7 +14,7 @@ use PHPUnit\Runner\Exception;
 
 trait Auth
 {
-    static function checkAuthorization($sendResponse=false)
+    static function checkAuthorization($sendResponse=false,&$getToken = null)
     {
         $decoded = false;
         $token = false;
@@ -24,10 +24,13 @@ trait Auth
             $token = $_COOKIE["_token"];
         }
 
+
         $requestHeaders = Services::getRequestHeaders();
+
         if(!empty($requestHeaders["Authorization"]) && strpos($requestHeaders["Authorization"],"Bearer ") !== false)
         {
-            $token  = str_replace("Bearer ","",$requestHeaders["Authorization"]);
+            $t = str_replace("Bearer ","",$requestHeaders["Authorization"]);
+            $token  = ($t != "false")?$t:$token;
         }
 
 
@@ -50,6 +53,7 @@ trait Auth
                 $decoded =JWT::decode($token,$_ENV["app"]["jwt"]["key"],['HS256']);
                 $decoded = json_decode(json_encode($decoded->data),true);
 
+                $getToken = $token;
 
             }
             catch (\DomainException $e)

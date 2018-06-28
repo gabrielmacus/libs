@@ -8,7 +8,7 @@ var checkTplUrl = function(url) {
 /** End functions **/
 
 
-var app = angular.module("app", ['ngSanitize',"ngRoute",'pascalprecht.translate','ng-sortable','720kb.datepicker']);
+var app = angular.module("app", ['ngCookies','ngSanitize',"ngRoute",'pascalprecht.translate','ng-sortable','720kb.datepicker']);
 
 
 app.config(function($routeProvider) {
@@ -94,17 +94,26 @@ app.run(function ($rootScope, $location, Authorization) {
 
     // Register listener to watch route changes.
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
+        console.clear();
 
-        var isLoggedIn = Authorization.isLoggedIn();
-        if (!isLoggedIn && $location.$$url != '/login') {
+       Authorization.isLoggedIn(function (isLoggedIn) {
 
-            event.preventDefault();
-            $location.path("/login");
 
-        }
-        else if (isLoggedIn && $location.$$url == '/login'){
-            $location.path("/");
-        }
+
+           if (!isLoggedIn && $location.$$url != '/login') {
+
+               event.preventDefault();
+               $location.path("/login");
+
+           }
+           else if (isLoggedIn && $location.$$url == '/login'){
+               $location.path("/");
+           }
+
+        });
+
+
+
     });
 
 });

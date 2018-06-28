@@ -10,10 +10,30 @@ namespace user\modules\post;
 
 require_once(ROOT_PATH . '/system/modules/crud/controller.php');
 
+use Rakit\Validation\Validation;
+use Rakit\Validation\Validator;
+use system\libs\orm\ORMObject;
+use system\libs\Services;
 use system\modules\crud\CrudController;
 
 class PostController extends CrudController
 {
     static $paginationLimit = 20;
+
+    protected static function Validate(ORMObject $object,$rules = null,$messages=[],$aliases =[])
+    {
+
+        $rules = [
+            "title"=>"required"
+        ];
+        $messages =[
+            "required"=>":attribute es requerido"
+        ];
+        $aliases = [
+         //   "title"=>"Título"
+        ];
+        return parent::Validate($object, $rules,$messages,$aliases);
+    }
+
 
 }
