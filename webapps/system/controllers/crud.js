@@ -1,16 +1,29 @@
 app.controller('save', function ($scope,$http,$routeParams,$controller,$rootScope,$translate,CRUD,$location) {
 
+
+
     var CRUD = new CRUD('/libs/api/'+$routeParams.module+'/');
 
     $scope.save=function () {
+        $scope.validationErrors ={};
 
         CRUD.create($scope.item,function (response) {
 
-            console.log(response);
-
             $location.path('/'+$routeParams.module);
 
-        },$rootScope.errorHandler);
+        },function (error) {
+
+
+            if(error.status == 400)
+            {
+                 $scope.validationErrors =error.data;
+            }
+            else
+            {
+                $rootScope.errorHandler(error);
+            }
+
+        });
 
     }
 

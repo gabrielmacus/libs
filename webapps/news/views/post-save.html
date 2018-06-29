@@ -1,10 +1,10 @@
 <form data-ng-submit="save()" class="w3-row-padding w3-container">
 
 
-    <field class=" w3-margin-top w3-col  " data-label="'Title'" data-model="item.title"  ></field>
 
+    <field class=" w3-margin-top w3-col  " data-validation-errors="validationErrors.title" data-label="'Title'" data-model="item.title"  ></field>
 
-    <field class=" w3-margin-top w3-col "  data-input-type="'textarea'" data-label="'Text'"  data-model="item.text" ></field>
+    <field class=" w3-margin-top w3-col "   data-validation-errors="validationErrors.body" data-input-type="'textarea'" data-label="'Text'"  data-model="item.body" ></field>
 
 
 

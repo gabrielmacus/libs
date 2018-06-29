@@ -7,12 +7,18 @@ app.directive('field', function() {
             label:'=',
             inputType:'=?',
             placeholder:'=?',
-            inputData:'=?'
+            inputData:'=?',
+            validationErrors:'=?'
+
         },
         transclude:true,
         templateUrl: '../system/directives/field/view.html',
-        controller:function ($scope,$http) {
+        link:function(scope, element, attrs) {
 
+            var s = attrs.model.split(".");
+            scope.key = (s.length == 1)?s[0]:s[1];
+        },
+        controller:function ($scope,$http) {
 
 
 

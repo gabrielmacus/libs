@@ -1,3 +1,10 @@
 
 
 <div  data-ng-include="getInclude()"></div>
+
+
+<div  data-ng-show="validationErrors" class="w3-bar">
+   <span class="w3-text-red" data-ng-repeat="(k,error) in validationErrors"  >
+       <b>{{error}}</b>
+   </span>
+</div>
