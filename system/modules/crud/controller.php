@@ -478,16 +478,13 @@ class CrudController
     {
         static::checkAuthorization(true);
 
+        $object->readById((!empty($params["id"]))?$params["id"]:null);
 
-        $object->id = (!empty($params["id"]))?$params["id"]:null;
+       // $object->id = (!empty($params["id"]))?$params["id"]:null;
 
         static::BeforeDelete($object,$params,$template);
 
-
-
         $result = $object->delete();
-
-
 
         static::AfterDelete($object,$params,$template);
 

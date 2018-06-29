@@ -5,14 +5,18 @@ app.controller('save', function ($scope,$http,$routeParams,$controller,$rootScop
     var CRUD = new CRUD('/libs/api/'+$routeParams.module+'/');
 
     $scope.save=function () {
+
+        $scope.status = 'saving';
         $scope.validationErrors ={};
 
         CRUD.create($scope.item,function (response) {
 
-            $location.path('/'+$routeParams.module);
+            $scope.status = 'saved';
+                $location.path('/'+$routeParams.module);
 
         },function (error) {
 
+            $scope.status = 'error';
 
             if(error.status == 400)
             {

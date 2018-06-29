@@ -8,10 +8,16 @@
 
 
 
+
     <div class="w3-bar w3-margin-top  w3-right-align  w3-col ">
 
-        <button type="button" class="w3-button w3-teal" data-ng-click="goToList()">{{'Cancel' | translate}}</button>
-        <button type="submit" class="w3-button w3-teal ">{{'Accept' | translate}}</button>
+        <button type="button" class="w3-button w3-teal" data-ng-click="goToList()">
+            {{'Cancel' | translate}}
+        </button>
+        <button type="{{(status == 'saving')?'button':'submit'}}"  class="w3-button w3-teal ">
+            <span data-ng-if="status != 'saving'">{{'Accept' | translate}}</span>
+            <span data-ng-if="status == 'saving'"><i class="w3-spin fas fa-spinner"></i></span>
+        </button>
     </div>
 
 </form>

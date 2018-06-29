@@ -105,4 +105,18 @@ class Services
         print_r($data);
         echo "</pre>";
     }
+
+    static function JoinPath($a,$b)
+    {
+        $a  = rtrim($a,"/");
+        $b = ltrim($b,"/");
+        return $a."/".$b;
+    }
+    static function GetFileExtension($filename){
+
+        $ext = explode(".",$filename);
+
+        return end($ext);
+
+    }
 }
