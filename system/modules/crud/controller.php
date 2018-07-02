@@ -374,6 +374,11 @@ class CrudController
 
     }
 
+    protected static function AfterRead(&$results,ORMObject &$object,&$params=null,&$template = null)
+    {
+
+    }
+
     static function Create(ORMObject $object,$params=null,$template = null)
     {
 
@@ -442,18 +447,22 @@ class CrudController
             $data = (!empty($object->id))?$object:[];
         }
 
+        static::AfterRead($results,$object,$params,$template);
 
         static::SendResponse($data,$template);
 
     }
+
+
 
     static function Update(ORMObject $object,$params,$template = null)
     {
 
         static::checkAuthorization(true);
 
+        $object->readById((!empty($params["id"]))?$params["id"]:null);
 
-        $object->id = (!empty($params["id"]))?$params["id"]:null;
+        //$object->id = (!empty($params["id"]))?$params["id"]:null;
 
         static::AssignProperties($object);
 

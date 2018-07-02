@@ -11,6 +11,6 @@ app.controller('post-create', function ($scope,$routeParams,$controller,$transla
 
 });
 app.controller('post-update', function ($scope,$routeParams,$controller,$translate,CRUD) {
-
+    $scope.query = {populate:[{file:{type:"child",path:"images"}}]};
 
 });

@@ -7,6 +7,17 @@
     <field class=" w3-margin-top w3-col "   data-validation-errors="validationErrors.body" data-input-type="'textarea'" data-label="'Text'"  data-model="item.body" ></field>
 
 
+    <related-items data-relation-type="'child'" data-parent-key="'posts'" class="w3-margin-top w3-col s12 "  data-label="'Imágenes'" data-deleted="item._deletedRelations" data-model="item._related.images" data-module="'file'" >
+
+         <media-preview data-src="$parent.item.src"></media-preview>
+
+        <b class="w3-col w3-margin-top">{{$parent.item.name}}</b>
+
+          <field data-label="'Pie de foto'" class="w3-col w3-margin-top" data-model="$parent.item._relationData.extra_1"></field>
+
+
+    </related-items>
+
 
 
     <div class="w3-bar w3-margin-top  w3-right-align  w3-col ">

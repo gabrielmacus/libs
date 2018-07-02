@@ -87,6 +87,17 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
     }
 
+
+    /**
+     * Is called when processing every element read
+     * @param ORMObject $item
+     */
+    protected function onProcess(ORMObject &$item)
+    {
+
+    }
+
+
     protected function getObjectVars($includeRelated=false)
     {
 
@@ -253,6 +264,9 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
         if($row = $statement->fetch())
         {
             $this->makeObject($row,$this);
+
+            $this->onProcess($this);
+
             $this->log("End reading record by id",$this);
             return true;
         }
@@ -336,10 +350,14 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
         while ($row = $statement->fetch())
         {
-            $this->results[]=$this->makeObject($row);
+            $obj  = $this->makeObject($row);
+
+            $this->onProcess($obj);
+
+            $this->results[]=$obj;
         }
 
-        $this->log("End reading records",$this->results);
+        $this->log("End reading records");
 
         return $this->results;//["objects"=>$results,"limit"=>$limit,"offset"=>$offset];
 
@@ -430,8 +448,16 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
     public function jsonSerialize()
     {
         $json = [];
+        foreach ($this as $key=>$value)
+        {
+            if(!is_numeric($key) && $key != "results" && $key != "table" && $key !="prefix" && $key !="PDOInstance")
+            {
 
-        $objectVars = $this->getObjectVars(true);
+                $json[$key] = $value;
+            }
+
+        }
+  /*      $objectVars = $this->getObjectVars(true);
 
 
         foreach ($objectVars as $key=>$value)
@@ -439,7 +465,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
             $json[$key] = $value;
 
         }
-
+*/
         return $json;
 
     }

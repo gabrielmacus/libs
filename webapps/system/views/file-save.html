@@ -1,0 +1,62 @@
+
+<form data-ng-show="item.id" data-ng-submit="save()" class="w3-row-padding w3-container">
+
+
+    <field class=" w3-margin-top w3-col "   data-validation-errors="validationErrors.file" data-input-type="'file'" data-label="'File'"  data-model="item.file" ></field>
+
+
+    <media-preview class="w3-margin-top w3-col" data-src="item.src"></media-preview>
+
+    <field class=" w3-margin-top w3-col  " data-validation-errors="validationErrors.name" data-label="'Name'" data-model="item.name"  ></field>
+
+    <field class=" w3-margin-top w3-col "   data-validation-errors="validationErrors.description" data-input-type="'textarea'" data-label="'Description'"  data-model="item.description" ></field>
+
+
+    <div class="w3-bar w3-margin-top  w3-right-align  w3-col ">
+
+        <button type="button" class="w3-button w3-teal" data-ng-click="goToList()">
+            {{'Cancel' | translate}}
+        </button>
+        <button type="{{(status == 'saving')?'button':'submit'}}"  class="w3-button w3-teal ">
+            <span data-ng-if="status != 'saving'">{{'Accept' | translate}}</span>
+            <span data-ng-if="status == 'saving'"><i class="w3-spin fas fa-spinner"></i></span>
+        </button>
+    </div>
+
+
+</form>
+
+
+
+
+<form style="    display: flex;
+    flex-wrap: wrap;" data-ng-show="!item" data-ng-submit="save()" class="w3-row-padding w3-container">
+
+
+    <field class=" w3-margin-top w3-col " data-input-data="{multiple:true}"  data-validation-errors="validationErrors.files" data-input-type="'file'" data-label="'Files'"  data-model="files" ></field>
+
+    <div class="file-upload w3-col  s12 m6 l4 " data-ng-repeat="(k,upload) in uploads">
+
+        <media-preview   class="w3-margin-top w3-col" data-src="upload.src"></media-preview>
+
+        <field class=" w3-margin-top w3-col  " data-validation-errors="validationErrors[k].name" data-label="'Name'" data-model="upload.name"  ></field>
+
+        <field class=" w3-margin-top w3-col "   data-validation-errors="validationErrors[k].description" data-input-type="'textarea'" data-label="'Description'"  data-model="upload.description" ></field>
+
+     </div>
+
+
+    <div class="w3-bar w3-margin-top  w3-right-align  w3-col">
+
+        <button type="button" class="w3-button w3-teal" data-ng-click="goToList()">
+            {{'Cancel' | translate}}
+        </button>
+        <button type="{{(status == 'saving')?'button':'submit'}}"  class="w3-button w3-teal ">
+            <span data-ng-if="status != 'saving'">{{'Accept' | translate}}</span>
+            <span data-ng-if="status == 'saving'"><i class="w3-spin fas fa-spinner"></i></span>
+        </button>
+    </div>
+
+
+</form>
+

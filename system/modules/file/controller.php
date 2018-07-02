@@ -18,7 +18,7 @@ use system\modules\crud\CrudController;
 class FileController extends CrudController
 {
     static $paginationLimit = 15;
-    static $path = "/media/";
+    static $path ="/media/";
 
     protected static function Validate(ORMObject $object, $rules = null, $messages = [], $aliases = [])
     {
@@ -32,28 +32,82 @@ class FileController extends CrudController
      */
     protected static function BeforeCreate(ORMObject &$object, &$params = null, &$template = null)
     {
+        Services::NormalizeFiles();
+
         //TODO: may be set galleries or file groups
-        $file = reset($_FILES);
-        $object->extension = Services::GetFileExtension($file["name"]);
-        $filename = mt_rand(10000,99999)."_".$file["name"];
-        $dir = Services::JoinPath(static::$path,date("Y/m/d"));
-        $path = Services::JoinPath($dir,$filename);
-        mkdir($dir,0777,true);
-        if(!copy($file["tmp_name"],Services::JoinPath(ROOT_PATH,$path)))
+        if(!empty($_FILES))
         {
-            throw new ORMException("Error copying file");
+            $file = reset($_FILES);
+
+
+
+            $object->extension = Services::GetFileExtension($file["name"]);
+            $filename = mt_rand(10000,99999)."_".$file["name"];
+            $dir = Services::JoinPath(static::$path,date("Y/m/d"));
+            $path = Services::JoinPath($dir,$filename);
+
+            @mkdir(Services::JoinPath(ROOT_PATH,$dir),0777,true);
+
+            if(!copy($file["tmp_name"],Services::JoinPath(ROOT_PATH,$path)))
+            {
+                throw new ORMException("Error copying file");
+            }
+            $object->size = $file["size"];
+            $object->path = $path;
         }
-        $object->size = $file["size"];
-        $object->path = $dir;
     }
+
+    protected static function BeforeUpdate(ORMObject &$object, &$params = null, &$template = null)
+    {
+
+        if(!empty($_FILES))
+        {   Services::NormalizeFiles();
+
+            //Deletes old file. Uploads new file
+            static::BeforeDelete($object, $params, $template);
+            static::BeforeCreate($object,$params,$template);
+        }
+
+
+    }
+
+
     /**
      * @var $object File
      */
     protected static function BeforeDelete(ORMObject &$object, &$params = null, &$template = null)
     {
 
-        if(!unlink(Services::JoinPath(ROOT_PATH,$object->path)));
+        if(!empty($object["path"]))
+        {
+            $deletePath = Services::JoinPath(ROOT_PATH,$object->path);
+            if(file_exists($deletePath))
+            {
+                if( !unlink($deletePath))
+                {
+                    throw new ORMException("Error deleting file");
+                }
+            }
 
+        }
+
+
+    }
+
+    protected static function AfterRead(&$results, ORMObject &$object, &$params = null, &$template = null)
+    {
+
+        /*
+         *        //TODO:may be load base url from gallery or file group
+         * foreach ($results as $k=>$v)
+        {
+            if(!empty($v["path"])){
+
+                $v->src = Services::JoinPath($_ENV["app"]["url"],$v["path"]);
+
+                $results[$k] = $v;
+            }
+        }*/
     }
 
 

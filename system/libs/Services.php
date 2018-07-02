@@ -13,7 +13,32 @@ define("CLASS_TYPE_CONTROLLER",2);
 
 class Services
 {
+   static function NormalizeFiles()
+    {
+        foreach ($_FILES as $k => $file)
+        {
+            if(is_array($file["name"]))
+            {
+                $normalizedArray = [];
 
+                foreach ($file as $j => $property)
+                {
+                    foreach ($property as $i => $v)
+                    {
+                        $normalizedArray[$i][$j] =$v;
+                    }
+                }
+
+                $_FILES[$k] = $normalizedArray;
+            }
+        }
+    }
+
+    static function GetFiles()
+    {
+        static::NormalizeFiles();
+        return $_FILES;
+    }
     static function getRequestHeaders()
     {
         //getallheaders polyfill for nginx

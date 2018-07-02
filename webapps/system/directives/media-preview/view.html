@@ -1,0 +1,9 @@
+
+<div class="media-preview w3-col w3-center w3-display-container w3-light-grey" >
+
+    <img data-ng-if="FileType(src) == 'image'" style="max-width: 100%;object-fit: scale-down"  data-ng-src="{{src}}">
+    <video controls data-ng-if="FileType(src) == 'video'" style="max-width: 100%;object-fit: scale-down"  data-ng-src="{{src}}"></video>
+    <audio controls data-ng-if="FileType(src) == 'audio'" style="max-width: 100%;object-fit: scale-down"  data-ng-src="{{src}}"></audio>
+    <iframe  data-ng-if="FileType(src) == 'document'" style="max-width: 100%;object-fit: scale-down;    height: 60vh;" data-ng-src="{{'https://docs.google.com/viewer?url='+src+'&embedded=true'}}"  frameborder='0'>
+    </iframe>
+</div>

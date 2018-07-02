@@ -10,6 +10,7 @@ namespace system\modules\file;
 
 
 use system\libs\orm\ORMObject;
+use system\libs\Services;
 
 class File extends ORMObject
 {
@@ -22,7 +23,16 @@ class File extends ORMObject
     public $extra_2;
     public $path;
 
+    protected function onProcess(ORMObject &$item)
+    {
 
+        //TODO:may be load base url from associated gallery or file group
+        if(!empty($item["path"])){
+
+            $item->src = Services::JoinPath($_ENV["app"]["url"],$item["path"]);
+
+        }
+    }
 
 
 }

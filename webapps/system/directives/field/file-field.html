@@ -1,0 +1,7 @@
+<div class="field-container " data-ng-init="fileFieldLoaded()">
+    <label>{{$parent.label | translate}}</label>
+    <!--
+    data-ng-model="$parent.model"-->
+
+    <input type="file"   data-ng-click="$parent.validationErrors = {}" placeholder="{{$parent.placeholder | translate}}" class="w3-input"  >
+</div>

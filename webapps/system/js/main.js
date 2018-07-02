@@ -10,7 +10,9 @@ var checkTplUrl = function(url) {
 
 var app = angular.module("app", ['ngCookies','ngSanitize',"ngRoute",'pascalprecht.translate','ng-sortable','720kb.datepicker']);
 
-
+app.config(function($sceProvider) {
+    $sceProvider.enabled(false);
+});
 app.config(function($routeProvider) {
     $routeProvider
         .when("/", {
@@ -60,13 +62,30 @@ app.config(function($routeProvider) {
         })
         .when("/:module/save",{
             templateUrl : function (params) {
-                return 'views/'+params.module+"-save.html";
+
+                var tpl = 'views/'+params.module+"-save.html";
+
+                if(!checkTplUrl(tpl))
+                {
+                    tpl = '../system/views/'+params.module+"-save.html";
+                }
+
+                return tpl;
             },
             controller: "save"
         })
         .when("/:module/save/:id",{
             templateUrl : function (params) {
-                return 'views/'+params.module+"-save.html";
+
+                var tpl = 'views/'+params.module+"-save.html";
+
+                if(!checkTplUrl(tpl))
+                {
+                    tpl = '../system/views/'+params.module+"-save.html";
+                }
+
+                return tpl;
+
             },
             controller: "save"
         })
