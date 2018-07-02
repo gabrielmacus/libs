@@ -9,7 +9,8 @@ app.directive('relatedItems', function() {
             deleted:'=',
             relationType:'=?',
             parentKey:'=?',
-            childKey:'=?'
+            childKey:'=?',
+            query:'=?'
         },
         transclude:true,
         templateUrl: '../system/directives/related-items/view.html',
@@ -19,6 +20,7 @@ app.directive('relatedItems', function() {
             {
                 $scope.relationType = 'child';
             }
+
 
 
             $scope.goToCreate=function () {
@@ -79,7 +81,19 @@ app.directive('relatedItems', function() {
             }
 
 
-            $scope.$watchCollection('model',$scope.setModule,true);
+            $scope.$watchCollection('model',function (newVal) {
+
+                if($scope.query)
+                {
+                    if(! $scope.query.filter)
+                    {
+                        $scope.query.filter = {};
+                    }
+                }
+
+                $scope.setModule(newVal);
+
+            },true);
             $scope.goToSelect=function () {
 
                 $scope.relatedItemsLightbox = true;

@@ -150,7 +150,9 @@ app.controller('list', function ($scope,$http,$routeParams,$controller,$rootScop
 
     $scope.itemsToDelete = [];
 
-    $scope.query=  {p:1};
+    $scope.query=  (!$scope.query)?{p:1}:$scope.query;
+
+    
 
     $scope.read = function () {
 
