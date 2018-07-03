@@ -83,13 +83,26 @@ app.directive('relatedItems', function() {
 
             $scope.$watchCollection('model',function (newVal) {
 
-                if($scope.query)
+                if(newVal)
                 {
+                    if(!$scope.query)
+                    {
+                        $scope.query = {};
+                    }
+
                     if(! $scope.query.filter)
                     {
                         $scope.query.filter = {};
                     }
+
+                    //Excludes already selected items
+                    $scope.query.filter.id = {not:$scope.model.map(function (item) {
+                        return item.id;
+                    })};
+
                 }
+
+
 
                 $scope.setModule(newVal);
 
@@ -100,6 +113,7 @@ app.directive('relatedItems', function() {
 
                 $controller('list', {$scope: $scope,$routeParams:$routeParams});
 
+                $scope.multipleActions.splice(0,1);
 
 
                 $scope.multipleActions = $scope.multipleActions.concat([

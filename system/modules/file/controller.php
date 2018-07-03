@@ -41,7 +41,7 @@ class FileController extends CrudController
 
 
 
-            $object->extension = Services::GetFileExtension($file["name"]);
+            $object->extension = strtolower(Services::GetFileExtension($file["name"]));
             $filename = mt_rand(10000,99999)."_".$file["name"];
             $dir = Services::JoinPath(static::$path,date("Y/m/d"));
             $path = Services::JoinPath($dir,$filename);

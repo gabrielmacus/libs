@@ -13,25 +13,38 @@ $router = new AltoRouter();
 $router->setBasePath('/libs');
 
 /**
+ * API
+ */
+
+/**
  * Action
  */
-$router->map( 'GET|POST', '/api/[*:module]/[a:action]/','');
-$router->map( 'GET|POST', '/api/[*:module]/[i:id]/[a:action]','');
+$router->map( 'GET|POST', '/[api:mode]/[*:module]/[a:action]/','');
+$router->map( 'GET|POST', '/[api:mode]/[*:module]/[i:id]/[a:action]','');
 
 
 /**
  * CRUD
  */
-$router->map( 'POST', '/api/[*:module]/','Create');
-$router->map( 'GET', '/api/[*:module]/','Read');
-$router->map( 'GET', '/api/[*:module]/[i:id]','Read');
-$router->map( 'POST', '/api/[*:module]/[i:id]','Update');
-$router->map( 'DELETE', '/api/[*:module]/[i:id]','Delete');
+$router->map( 'POST', '/[api:mode]/[*:module]/','Create');
+$router->map( 'GET', '/[api:mode]/[*:module]/','Read');
+$router->map( 'GET', '/[api:mode]/[*:module]/[i:id]','Read');
+$router->map( 'POST', '/[api:mode]/[*:module]/[i:id]','Update');
+$router->map( 'DELETE', '/[api:mode]/[*:module]/[i:id]','Delete');
+
+/**
+ * Template
+ */
+$router->map( 'GET', '/[*:module]/','Read');
+
+
 
 
 // match current request
 $match = $router->match();
 
+\system\libs\Services::BeautyPrint($match);
+exit();
 
 if(!empty($match))
 {
@@ -39,8 +52,14 @@ if(!empty($match))
 
     $Action  = (!empty($match["target"]))?$match["target"]:$match["params"]["action"];
     $Module = $match["params"]["module"];
+    $Template = "";
     $namespace = "";
 
+    if(empty($match["params"]["mode"]) || $match["params"]["mode"] == "template")
+    {
+
+    }
+    //Loads template
     //Loads controller
     $Controller = \system\libs\Services::LoadClass($Module,CLASS_TYPE_CONTROLLER);
     //Model controller

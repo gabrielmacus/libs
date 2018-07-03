@@ -113,13 +113,12 @@ class Services
 
         }
 
-        $namespace = str_replace("-","_",$namespace);
 
         if(empty($namespace))
         {
             return false;
         }
-
+        $namespace = str_replace("-","_",$namespace);
         return $namespace.str_replace('-', '', ucwords($module, '-'))."{$suffix}";
 
     }
