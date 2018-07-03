@@ -43,8 +43,7 @@ $router->map( 'GET', '/[*:module]/','Read');
 // match current request
 $match = $router->match();
 
-\system\libs\Services::BeautyPrint($match);
-exit();
+
 
 if(!empty($match))
 {
@@ -52,13 +51,24 @@ if(!empty($match))
 
     $Action  = (!empty($match["target"]))?$match["target"]:$match["params"]["action"];
     $Module = $match["params"]["module"];
-    $Template = "";
+    $Template = null;
     $namespace = "";
 
     if(empty($match["params"]["mode"]) || $match["params"]["mode"] == "template")
     {
 
+        if(empty($match["params"]["template"]))
+        {
+            $Template = "index";
+        }
+        else{
+            $Template = $match["params"]["template"];
+        }
+
+
     }
+
+
     //Loads template
     //Loads controller
     $Controller = \system\libs\Services::LoadClass($Module,CLASS_TYPE_CONTROLLER);
@@ -79,10 +89,10 @@ if(!empty($match))
                 {
                     $pdo =  new PDO($_ENV["db"]["string"] ,$_ENV["db"]["user"] ,$_ENV["db"]["pass"] );
                     $model = new $Model($pdo);
-                    $Controller::$Action($model,$match["params"]);
+                    $Controller::$Action($model,$match["params"],$Template);
                 }
                 else{
-                    $Controller::$Action($match["params"]);
+                    $Controller::$Action($match["params"],$Template);
                 }
 
 
