@@ -130,10 +130,10 @@ class CrudController
         }
         if(!empty($params["filter"]) && is_array($params["filter"]))
         {
-            //TODO: make possible the use of operators (<,>,NOT, etc)
+            //TODO: refactor this mess :c
             foreach ($params["filter"] as $key => $param)
             {
-                if(!empty($param))
+                if(!empty($param) && !is_array($param))
                 {
                     $key ="{$object->prefix}_$key";
                     if(empty($query->where))
@@ -164,6 +164,27 @@ class CrudController
                     }
 
                     $query->params[] = $param;
+                }
+                elseif(is_array($param))
+                {
+
+                    if(!empty($param["not"]) && is_array($param["not"]))
+                    {
+                        $not = [];
+
+                        if(empty($query->where))
+                        {
+                            $query->where =" ";
+                        }
+                        else{
+                            $query->where.=" AND ";
+                        }
+
+
+                        $query->where.= "{$object->prefix}_{$key} NOT IN (".implode(",",array_map(function($el){return "'".$el."'";},$param["not"])).")";
+
+
+                    }
                 }
 
             }

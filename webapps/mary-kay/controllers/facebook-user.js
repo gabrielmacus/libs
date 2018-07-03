@@ -17,6 +17,7 @@ app.controller('facebook-user-list', function ($window,$scope,$routeParams,$cont
         $window.open(item.url)
     }})
     $scope.pagesOffset = 6;
+    $scope.searchTemplate = '../mary-kay/views/facebook-user-search.html';
 
 });
 app.controller('facebook-user-create', function ($scope,$routeParams,$controller,$translate,CRUD) {

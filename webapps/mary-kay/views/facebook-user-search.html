@@ -1,0 +1,16 @@
+<h2  class="w3-large w3-margin-top w3-col s12" ><b>{{'Search box' | translate}}</b></h2>
+
+
+<field class="w3-col s10 m5" data-label="'Location_Work'"  data-model="query.filter.location_work"  ></field>
+
+<field class="w3-col s10 m5" data-label="'Name'"  data-model="query.filter.name"  ></field>
+
+<!--
+<field class="w3-col s10 m5" data-label="'Ir a página'" data-placeholder="'Ir a página'" data-input-type="'number'" data-model="query.p"  ></field>
+-->
+<button type="submit"  class="w3-button w3-teal ">
+    <i class="fas fa-search"></i>
+</button>
+<button type="button" data-ng-click="query.filter = {};read();"  class="w3-button w3-teal ">
+    <i class="fas fa-undo"></i>
+</button>
