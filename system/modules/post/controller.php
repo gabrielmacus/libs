@@ -6,7 +6,7 @@
  * Time: 12:14 PM
  */
 
-namespace user\modules\post;
+namespace system\modules\post;
 
 require_once(ROOT_PATH . '/system/modules/crud/controller.php');
 

@@ -6,7 +6,7 @@
  * Time: 21:58
  */
 
-namespace user\modules\post;
+namespace system\modules\post;
 
 use system\libs\orm\ORMObject;
 

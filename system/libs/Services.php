@@ -10,9 +10,11 @@
 namespace system\libs;
 define("CLASS_TYPE_MODEL",1);
 define("CLASS_TYPE_CONTROLLER",2);
-
 class Services
 {
+
+
+
    static function NormalizeFiles()
     {
         foreach ($_FILES as $k => $file)
@@ -92,6 +94,7 @@ class Services
                 $type ='controller';
                 $suffix = 'Controller';
                 break;
+
             default:
                 return false;
                 break;
@@ -99,6 +102,7 @@ class Services
 
         $systemPath = ROOT_PATH."/system/modules/";
         $userPath =  ROOT_PATH."/app/modules/";
+
         //Loads model
         if(file_exists($userPath.$module."/{$type}.php"))
         {
@@ -119,6 +123,9 @@ class Services
             return false;
         }
         $namespace = str_replace("-","_",$namespace);
+
+
+
         return $namespace.str_replace('-', '', ucwords($module, '-'))."{$suffix}";
 
     }

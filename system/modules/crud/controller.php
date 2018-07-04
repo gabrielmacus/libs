@@ -67,15 +67,63 @@ class CrudController
 
     }
 
-    protected static function SendResponse($data,$template = null)
+    protected static function ProcessView($data,$template,$params)
     {
+
+        $arr = ["system","user"];
+        $arr2 = ["layout","left","right","header","footer"];
+        foreach ($arr as $value)
+        {
+            foreach ($arr2 as $value2)
+            {
+
+                //base elements
+                if(file_exists(Services::JoinPath(ROOT_PATH,"{$value}/modules/base/{$value2}.tpl.php")))
+                {
+                    $$value2 = Services::JoinPath(ROOT_PATH,"{$value}/modules/base/{$value2}.tpl.php");
+                }
+
+                if(file_exists(Services::JoinPath(ROOT_PATH,"{$value}/modules/base/{$template}.{$value2}.tpl.php")))
+                {
+                    $$value2 = Services::JoinPath(ROOT_PATH,"{$value}/modules/base/{$template}.{$value2}.tpl.php");
+                }
+
+
+
+                //custom elements (example: post.left.tpl.php)
+
+                if(file_exists(Services::JoinPath(ROOT_PATH,"{$value}/modules/{$params["module"]}/{$value2}.tpl.php")))
+                {
+                    $$value2 = Services::JoinPath(ROOT_PATH,"{$value}/modules/{$params["module"]}/{$value2}.tpl.php");
+                }
+
+
+                if(file_exists(Services::JoinPath(ROOT_PATH,"{$value}/modules/{$params["module"]}/{$template}.{$value2}.tpl.php")))
+                {
+                    $$value2  = Services::JoinPath(ROOT_PATH,"{$value}/modules/{$params["module"]}/{$template}.{$value2}.tpl.php");
+                }
+            }
+        }
+
+
+        ob_start();
+        include ($layout);
+        $html = ob_get_contents();
+        ob_end_clean();
+        return $html;
+    }
+    protected static function SendResponse($data,$template = null,$params)
+    {
+
         if(empty($template))
         {
             echo json_encode($data,JSON_NUMERIC_CHECK);
         }
         else
         {
-            include $template;
+            echo static::ProcessView($data,$template,$params);
+
+           // include $template;
         }
     }
 
@@ -448,7 +496,7 @@ class CrudController
 
 
 
-        static::SendResponse($object,$template);
+        static::SendResponse($object,$template,$params);
 
     }
 
@@ -486,7 +534,7 @@ class CrudController
 
         static::AfterRead($results,$object,$params,$template);
 
-        static::SendResponse($data,$template);
+        static::SendResponse($data,$template,$params);
 
     }
 
@@ -517,7 +565,7 @@ class CrudController
 
         static::AfterUpdate($object,$params,$template);
 
-        static::SendResponse($object,$template);
+        static::SendResponse($object,$template,$params);
     }
 
     static function Delete(ORMObject $object,$params,$template=null)
@@ -534,7 +582,7 @@ class CrudController
 
         static::AfterDelete($object,$params,$template);
 
-        static::SendResponse($result,$template);
+        static::SendResponse($result,$template,$params);
     }
 
 

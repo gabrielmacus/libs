@@ -75,6 +75,9 @@ app.directive('field', function() {
                     case 'file':
                         return'../system/directives/field/file-field.html';
                         break;
+                    case 'richtext':
+                        return '../system/directives/field/richtext-field.html';
+                        break;
                     default:
 
                         return '../system/directives/field/input-field.html';
