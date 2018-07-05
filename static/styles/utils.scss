@@ -1,0 +1,50 @@
+//Default font
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700');
+
+body{
+  font-family: 'Raleway', sans-serif;
+
+}
+
+@mixin display-flex()
+{
+  display:-webkit-box;
+  display:-ms-flexbox;
+  display:flex;
+}
+@mixin flex-wrap($value){
+  -ms-flex-wrap:$value;
+  flex-wrap:$value;
+}
+
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
+}
+
+[data-align='center']
+{
+  align-items: center;
+}
+
+[data-position='relative']
+{
+  position: relative;
+}
+[data-margin-left='auto']
+{
+  margin-left: auto;
+}
+[data-full-height]
+{
+  height: 100%;
+}
+
+.image
+{
+  width: 100%;
+  object-fit: cover;
+}

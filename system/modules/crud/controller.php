@@ -70,24 +70,24 @@ class CrudController
     protected static function ProcessView($data,$template,$params)
     {
 
-        $arr = ["system","user"];
-        $arr2 = ["layout","left","right","header","footer"];
+
+        $arr = ["system","app"];
+        $arr2 = ["layout","main","left","right","header","footer","head"];
         foreach ($arr as $value)
         {
             foreach ($arr2 as $value2)
             {
 
                 //base elements
-                if(file_exists(Services::JoinPath(ROOT_PATH,"{$value}/modules/base/{$value2}.tpl.php")))
+                if(file_exists(Services::JoinPath(ROOT_PATH,"{$value}/modules/root-templates/{$value2}.tpl.php")))
                 {
-                    $$value2 = Services::JoinPath(ROOT_PATH,"{$value}/modules/base/{$value2}.tpl.php");
+                    $$value2 = Services::JoinPath(ROOT_PATH,"{$value}/modules/root-templates/{$value2}.tpl.php");
                 }
 
-                if(file_exists(Services::JoinPath(ROOT_PATH,"{$value}/modules/base/{$template}.{$value2}.tpl.php")))
+                if(file_exists(Services::JoinPath(ROOT_PATH,"{$value}/modules/root-templates/{$template}.{$value2}.tpl.php")))
                 {
-                    $$value2 = Services::JoinPath(ROOT_PATH,"{$value}/modules/base/{$template}.{$value2}.tpl.php");
+                    $$value2 = Services::JoinPath(ROOT_PATH,"{$value}/modules/root-templates/{$template}.{$value2}.tpl.php");
                 }
-
 
 
                 //custom elements (example: post.left.tpl.php)
@@ -112,7 +112,7 @@ class CrudController
         ob_end_clean();
         return $html;
     }
-    protected static function SendResponse($data,$template = null,$params)
+    protected static function SendResponse($data,$template = null,$params=null)
     {
 
         if(empty($template))

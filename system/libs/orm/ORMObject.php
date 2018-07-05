@@ -82,9 +82,17 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
 
         $class= new \ReflectionClass($this);
         $this->PDOInstance = $PDOInstance;
-        $this->table = (!empty($table))?$table:strtolower($class->getShortName());
-        $this->prefix  =  (!empty($prefix))?$prefix:$this->table;
 
+        $this->table = (!empty( $this->table))? $this->table:strtolower($class->getShortName());
+        if((!empty($table)))
+        {
+            $this->table = $table;
+        }
+        $this->prefix = (!empty( $this->prefix))? $this->prefix:$this->table;
+        if((!empty($prefix)))
+        {
+            $this->prefix = $prefix;
+        }
     }
 
 

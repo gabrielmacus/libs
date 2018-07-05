@@ -107,7 +107,7 @@ class Services
         if(file_exists($userPath.$module."/{$type}.php"))
         {
             include_once ($userPath.$module."/{$type}.php");
-            $namespace = "user\\modules\\".$module."\\";
+            $namespace = "app\\modules\\".$module."\\";
 
         }
         else if(file_exists($systemPath.$module."/{$type}.php"))

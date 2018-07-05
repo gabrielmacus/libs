@@ -1,0 +1,46 @@
+[data-row] {
+  width: 100%;
+  @include display-flex();
+  @include flex-wrap(wrap);
+}
+
+@mixin grid($columns, $suffix, $gutter,$maxColsInRow) {
+  @for $layout from 1 through $columns {
+    @for $column from 1 through $columns {
+      @if ($layout <= $maxColsInRow)
+      {
+        [data-row-#{$suffix}='#{$layout}'][data-row-gutter='#{$gutter}'] {
+          $gutterColumns: (($layout - 1)*$gutter);
+          $availableWidth: 100% - $gutterColumns;
+          &>[data-col-#{$suffix}='#{$column}'] {
+            width: calc(#{$availableWidth} * #{$column}/#{$columns});
+            margin-right: $gutter;
+            margin-bottom: $gutter;
+            @if($column==$columns) {
+              width: 100%;
+              margin-right: 0px;
+            }
+          }
+          &>[data-col-#{$suffix}='#{$column}']:nth-child(#{$layout}n) {
+            margin-right: 0%;
+          }
+          @for $i from 1 through $layout {
+            &>[data-col-#{$suffix}='#{$column}']:nth-last-child(#{$i}) {
+              margin-bottom: 0%;
+            }
+          }
+        }
+      }
+
+    }
+  }
+}
+
+
+
+//Debug styles
+/*[data-row]>* {
+  height: 200px;
+  background: blue;
+}
+*/
