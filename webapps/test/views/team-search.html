@@ -1,0 +1,13 @@
+<h2  class="w3-large w3-margin-top w3-col s12" ><b>{{'Search box' | translate}}</b></h2>
+
+
+<field class="w3-col s12 m5 w3-margin-bottom" data-placeholder="'Nombre'" data-model="query.filter.name"  ></field>
+
+<div class="w3-col s12 m7 ">
+    <button type="submit"  class="w3-button w3-teal ">
+        <i class="fas fa-search"></i>
+    </button>
+    <button type="button" data-ng-click="query.filter = {};read();"  class="w3-button w3-teal ">
+        <i class="fas fa-undo"></i>
+    </button>
+</div>

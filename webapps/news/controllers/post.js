@@ -3,7 +3,7 @@ app.controller('post-list', function ($scope,$routeParams,$controller,$translate
     $scope.headers = ['ID','Title'];
     $scope.properties = ['id','title'];
     $scope.query.fields = "id,title";
-
+    $scope.searchTemplate = '../news/views/post-search.html';
 
 });
 app.controller('post-create', function ($scope,$routeParams,$controller,$translate,CRUD) {

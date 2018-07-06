@@ -6,7 +6,7 @@
  * Date: 07/06/2018
  * Time: 04:31 PM
  */
-namespace user\modules\league;
+namespace app\modules\league;
 
 class League extends \system\libs\orm\ORMObject
 {

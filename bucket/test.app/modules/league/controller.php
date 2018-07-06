@@ -6,7 +6,7 @@
  * Time: 12:14 PM
  */
 
-namespace user\modules\league;
+namespace app\modules\league;
 
 require_once(ROOT_PATH . '/system/modules/crud/controller.php');
 

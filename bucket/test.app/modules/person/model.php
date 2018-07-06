@@ -6,7 +6,7 @@
  * Time: 21:58
  */
 
-namespace user\modules\person;
+namespace app\modules\person;
 
 use system\libs\orm\ORMObject;
 

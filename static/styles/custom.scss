@@ -90,3 +90,12 @@ body > main
   order: 3;
   padding: #{$padding-a}px;
  }
+.post-list .media
+{
+  height: 230px;
+}
+.post-list .post img
+{
+  position:absolute;
+  bottom:0;
+}

@@ -6,7 +6,7 @@
  * Time: 21:58
  */
 
-namespace user\modules\client;
+namespace app\modules\client;
 
 use system\libs\orm\ORMObject;
 

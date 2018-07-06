@@ -6,7 +6,7 @@
  * Time: 22:42
  */
 
-namespace user\modules\facebook_user;
+namespace app\modules\facebook_user;
 
 use system\libs\orm\ORMObject;
 

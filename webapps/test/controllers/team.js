@@ -4,7 +4,7 @@ app.controller('team-list', function ($scope,$routeParams,$controller,$translate
     $scope.properties = ['id','name'];
     $scope.query.fields = "id,name";
 
-
+    $scope.searchTemplate = '../test/views/team-search.html';
 });
 app.controller('team-create', function ($scope,$routeParams,$controller,$translate,CRUD) {
 

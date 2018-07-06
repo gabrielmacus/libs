@@ -6,7 +6,7 @@
  * Time: 12:14 PM
  */
 
-namespace user\modules\client;
+namespace app\modules\client;
 
 require_once(ROOT_PATH . '/system/modules/crud/controller.php');
 
