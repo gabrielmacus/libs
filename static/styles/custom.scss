@@ -1,11 +1,22 @@
 @import "utils";
 @import "menu";
 
+
+
+//Default font
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700');
+
+body{
+  font-family: 'Raleway', sans-serif;
+
+}
+
 $posts-gap:1.5%;
 body > header
 {
   grid-column: 1 / span 2;
 }
+
 
 body
 {
@@ -15,18 +26,14 @@ body
 }
 .main-post-list
 {
-  @include grid(2.5fr 1fr,false,$posts-gap);
+  @include grid(repeat(3,1fr),false,$posts-gap);
 
 }
 .main-post-list .post:nth-child(1)
 {
   @include grid-row(1 / span 2);
+  @include grid-column(1/span 2);
 }
-.main-post-list .post:nth-child(3)
-{
-  @include grid-column(2);
-}
-
 
 .post-list
 {

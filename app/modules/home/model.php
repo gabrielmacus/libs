@@ -14,7 +14,6 @@ require_once ROOT_PATH."/system/modules/post/model.php";
 
 class Home extends Post
 {
-    protected $table = 'post';
-    protected $prefix = 'post';
+
 
 }

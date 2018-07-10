@@ -1,11 +1,6 @@
 @import "prefixes";
-//Default font
-@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700');
 
-body{
-  font-family: 'Raleway', sans-serif;
 
-}
 
 
 @function strip-unit($number) {
