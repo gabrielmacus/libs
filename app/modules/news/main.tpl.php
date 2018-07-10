@@ -9,6 +9,10 @@
                 <?= $result["title"]; ?>
             </h2>
 
+            <h3 class="subtitle">
+                <?= $result["subtitle"];?>
+            </h3>
+
 
             <?php if(!empty($result["_related"]["images"])): ?>
                 <figure class="media">

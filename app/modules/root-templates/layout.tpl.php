@@ -6,34 +6,30 @@
         <?php include ($head);?>
     <?php endif; ?>
 </head>
-<body >
+<body  class="<?= (!empty($bodyClasses))?implode(" ",$bodyClasses):""; ?>">
 
 
 <?php if(!empty($header)): ?>
-    <header data-row>
+    <header >
         <?php include ($header);?>
     </header>
 <?php endif;?>
 
 
 
-<div data-row data-row-l="2" data-row-gutter="1%">
+<?php if(!empty($left)): ?>
+    <aside    id="left-bar"><?php include ($left); ?></aside>
+<?php endif; ?>
 
-    <?php if(!empty($left)): ?>
-        <aside    id="left-bar"><?php include ($left); ?></aside>
-    <?php endif; ?>
+<main data-col-l="9">
+    <?php if(!empty($main)): ?>
+        <?php include ($main);?>
+    <?php endif;?>
+</main>
 
-    <main data-col-l="9">
-        <?php if(!empty($main)): ?>
-            <?php include ($main);?>
-        <?php endif;?>
-    </main>
-
-    <?php if(!empty($right)): ?>
-        <aside  data-col-l="3"  id="right-bar"><?php include ($right); ?></aside>
-    <?php endif; ?>
-
-</div>
+<?php if(!empty($right)): ?>
+    <aside  data-col-l="3"  id="right-bar"><?php include ($right); ?></aside>
+<?php endif; ?>
 
 
 <?php if(!empty($footer)): ?>

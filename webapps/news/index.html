@@ -1,11 +1,14 @@
 <!doctype html>
-<html lang="es">
+<html lang="es"   >
 <head>
+
+    <!--- COMMON -->
+
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>News Panel</title>
+
 
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
@@ -34,14 +37,12 @@
     <!-- Directives End -->
 
     <!-- Controllers -->
-    <!-- system -->
+
     <script src="../system/controllers/login.js"></script>
     <script src="../system/controllers/main.js"></script>
     <script src="../system/controllers/crud.js"></script>
     <script src="../system/controllers/file.js"></script>
-    <!-- system end-->
 
-    <script src="controllers/post.js"></script>
     <!-- Controllers End -->
 
     <script src="../system/js/factories.js"></script>
@@ -49,17 +50,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.5.2/qs.min.js"></script>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <!--- COMMON END -->
 
+
+    <title>News Panel</title>
+    <script src="controllers/post.js"></script>
 </head>
-<body  data-ng-app="app" data-ng-controller="main">
+<body data-ng-app="app" data-ng-controller="main">
 
 
-<sidenav data-open="sidenavOpen" data-menu-items="[{text:'Posts',href:'#!/post'}]"></sidenav>
+<sidenav data-open="$root.sidenavOpen" data-menu-items="[{text:'Posts',href:'#!/post'},{text:'Archivos',href:'#!/file'}]"></sidenav>
 
 
 <div class="w3-main" style="margin-left:350px">
     <div class="w3-teal">
-        <button class="w3-button w3-teal w3-xlarge w3-hide-large" data-ng-click="sidenavOpen = !sidenavOpen" >&#9776;</button>
+        <button class="w3-button w3-teal w3-xlarge w3-hide-large" data-ng-click="$root.sidenavOpen = !$root.sidenavOpen" >&#9776;</button>
         <div class="w3-container">
             <h1 class="w3-xlarge w3-right">Test App</h1>
         </div>

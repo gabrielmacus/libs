@@ -1,5 +1,17 @@
 
-<div class="w3-sidebar w3-bar-block w3-collapse w3-card w3-animate-left w3-light-gray" data-ng-class="{'w3-show':open}" style="width:350px;" id="mySidebar">
+<div class="w3-sidebar w3-bar-block w3-collapse w3-card w3-show w3-animate-left w3-light-gray"  data-ng-style="{'left':(open)?0:'-350px'}" style="width:350px;transition: all 0.2s"  >
+
+    <style>
+        @media screen and (min-width:993px ) {
+
+            .w3-sidebar
+            {
+                display: block!important;
+                left: 0!important;
+            }
+
+        }
+    </style>
     <button class="w3-bar-item w3-button w3-large w3-hide-large" data-ng-click="open=!open">&times;</button>
 
 

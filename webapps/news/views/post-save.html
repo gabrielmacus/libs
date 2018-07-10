@@ -3,7 +3,16 @@
 
     <field class=" w3-margin-top w3-col  " data-validation-errors="validationErrors.title" data-label="'Title'" data-model="item.title"  ></field>
 
+    <!--
     <field class=" w3-margin-top w3-col "   data-validation-errors="validationErrors.body" data-input-type="'textarea'" data-label="'Text'"  data-model="item.body" ></field>
+-->
+    <field class=" w3-margin-top w3-col "   data-validation-errors="validationErrors.subtitle" data-input-type="'textarea'" data-label="'Bajada'"  data-model="item.subtitle" ></field>
+
+    <field class=" w3-margin-top w3-col "   data-validation-errors="validationErrors.body" data-input-type="'richtext'" data-label="'Text'"  data-model="item.body" ></field>
+
+
+
+
 
 
     <related-items data-relation-type="'child'" data-query="{filter:{extension:{in:['jpg','png','svg','jpeg','gif']}}}" data-parent-key="'posts'" class="w3-margin-top w3-col s12 "  data-label="'Imágenes'" data-deleted="item._deletedRelations" data-model="item._related.images" data-module="'file'" >
@@ -16,7 +25,6 @@
 
 
     </related-items>
-
 
 
     <div class="w3-bar w3-margin-top  w3-right-align  w3-col ">

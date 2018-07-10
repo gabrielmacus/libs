@@ -1,10 +1,92 @@
 
 
 
-<div class="field-container">
-    <label>{{$parent.label | translate}}</label>
+<div class="field-container" data-ng-init="richTextFieldLoaded()">
 
-    <div style="min-height: 170px;"  contenteditable="true" class="w3-input richtext" data-ng-focus="$parent.validationErrors = {}" placeholder="{{$parent.placeholder | translate}}"  class="w3-input" data-ng-model="$parent.model">
+
+    <style>
+       [data-ng-click*="modifyRichText"]
+        {
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+        }
+    </style>
+
+    <label >{{$parent.label | translate}}</label>
+
+    <a data-ng-click="modifyRichText('italic')">Italic</a>
+
+    <a  data-ng-click="modifyRichText('bold')">Bold</a>
+
+    <a  data-ng-click="modifyRichText('clear')">Clear</a>
+
+    <a  data-ng-click="modifyRichText('image')">Image</a>
+
+    <div data-ng-click="selectText()" data-ng-keyup="changedRichText($event)" style="min-height: 170px;"  contenteditable="true" class="w3-input richtext" data-ng-focus="$parent.validationErrors = {}" placeholder="{{$parent.placeholder | translate}}"  class="w3-input" data-ng-model="$parent.model">
 
     </div>
+
+
+    <lightbox data-opened="relatedItemsLightbox">
+
+        <header class="w3-container">
+
+        <span data-ng-click="closeRelatedItemsLightbox()"
+              class="w3-button w3-display-topright">&times;</span>
+        </header>
+
+        <div class="w3-container"  >
+
+
+            <table-data data-headers="headers"
+                        data-empty-text="emptyText"
+                        data-title="title"
+                        data-pagination="pagination"
+                        data-properties="properties"
+                        data-actions="actions"
+                        data-current-page="query.p"
+                        data-rows="rows"
+                        data-status="status">
+
+
+                <a data-ng-repeat="a in multipleActions" data-ng-click="a.action()" data-ng-show="a.visible?a.visible():true" class="w3-bar-item w3-button w3-border-right">{{a.title | translate:(a.titleData)?a.titleData():{} }}&nbsp;&nbsp;<i data-ng-class="a.icon"></i></a>
+
+
+            </table-data>
+
+
+            <lightbox data-opened="deleteLightbox">
+
+
+                <header class="w3-container ">
+
+        <span data-ng-click="closeDeleteLightbox()"
+              class="w3-button w3-display-topright">&times;</span>
+                    <h4 data-ng-if="itemsToDelete.length == 1">{{'Confirm deletion' | translate}}</h4>
+                    <h4 data-ng-if="itemsToDelete.length > 1">{{'Confirm multiple deletion' | translate:{count:itemsToDelete.length} }}</h4>
+
+
+                </header>
+
+                <div class="w3-container w3-margin-top">
+                    <button type="button" class="w3-button w3-padding-small w3-teal w3-margin-bottom" data-ng-click="delete()">{{'Yes' | translate}}</button>
+
+                    <button type="button" data-ng-click="closeDeleteLightbox()" class="w3-button w3-padding-small w3-teal w3-margin-bottom">{{'No' | translate}}</button>
+
+                </div>
+
+            </lightbox>
+
+
+
+        </div>
+
+    </lightbox>
+
+
 </div>

@@ -58,9 +58,24 @@
 
                         <td data-ng-repeat="p in properties" >
 
-                            <span class="data" data-ng-if="!isFunction(p)">{{row[p]}}</span>
+
+                            <span class="data" data-ng-if="!isFunction(p) && !isObject(p)">{{row[p]}}</span>
 
                             <span class="data" data-ng-if="isFunction(p)" data-ng-bind-html="p(row)"></span>
+
+                            <span class="data" data-ng-if="isObject(p)">
+
+
+                                <media-preview  style="float: left;max-width: 200px;max-height: 200px;overflow: hidden" data-ng-if="p.type=='file'" data-src="row[p.property]"></media-preview>
+
+                                <div data-ng-if="p.type!='file'">{{row[p.property]}}</div>
+
+
+                            </span>
+
+
+
+
                         </td>
 
 

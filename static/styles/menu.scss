@@ -1,0 +1,28 @@
+$menu-item-padding: 20px;
+$menu-color:#212121;
+$menu-logo-size:40px;
+
+
+.main-menu
+{
+  background-color: $menu-color;
+  color: lighten($menu-color, 100%);
+}
+.main-menu > .menu-items
+{
+  margin-left: auto;
+}
+.main-menu > .menu-items > .menu-item
+{
+  display: inline-block;
+  padding: $menu-item-padding;
+}
+
+.main-menu .menu-logo > .logo
+{
+  width: $menu-logo-size;
+  height: 100%;
+  @include display-flex();
+  @include align-items(center);
+  padding-left: $menu-item-padding;
+}

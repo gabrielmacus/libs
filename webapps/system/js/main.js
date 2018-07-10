@@ -114,7 +114,7 @@ app.run(function ($rootScope, $location, Authorization) {
     // Register listener to watch route changes.
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
         console.clear();
-
+        $rootScope.sidenavOpen=false;
        Authorization.isLoggedIn(function (isLoggedIn) {
 
 

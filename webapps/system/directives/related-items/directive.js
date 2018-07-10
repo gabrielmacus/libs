@@ -25,8 +25,12 @@ app.directive('relatedItems', function() {
 
             $scope.goToCreate=function () {
 
-                $location.path('/'+$scope.module+'/save');
+                $scope.createItemLightbox=true;
+               // $location.path('/'+$scope.module+'/save');
 
+            }
+            $scope.closeCreateItemLightbox=function () {
+                $scope.createItemLightbox=false;
             }
             $scope.closeRelatedItemsLightbox=function () {
                 $scope.relatedItemsLightbox = false;
@@ -114,7 +118,6 @@ app.directive('relatedItems', function() {
                 $controller('list', {$scope: $scope,$routeParams:$routeParams});
 
                 $scope.multipleActions.splice(0,1);
-
 
                 $scope.multipleActions = $scope.multipleActions.concat([
                     {

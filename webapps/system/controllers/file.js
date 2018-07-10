@@ -1,16 +1,18 @@
-app.controller('file-list', function ($scope,$routeParams,$controller,$translate,CRUD,BytesConverter,FileType) {
+app.controller('file-list', function ($sce,$parse,$scope,$routeParams,$controller,$translate,CRUD,BytesConverter,FileType,$compile) {
 
 
-    $scope.headers = ['Name','Size'];
+    $scope.headers = ['','Name','Size'];
 
     function sizeProcess(item) {
         return BytesConverter(item.size);
     }
 
-    $scope.properties = ['name',sizeProcess];
-    $scope.query.fields = "id,name,size,path";
+    $scope.properties = [{type:'file',property:'src'},'name',sizeProcess];
+    $scope.query.fields = "id,name,size,path,created_at";
+    $scope.query.sort ="-created_at";
+    $scope.query.filter= (!$scope.query.filter)?{}:$scope.query.filter;
 
-    $scope.query.filter_any=true;
+    $scope.query.filter.filter_any={name:true};
     $scope.searchTemplate = '../system/views/file-search.html';
 
     /*

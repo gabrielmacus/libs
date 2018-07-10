@@ -14,5 +14,6 @@ class Post extends ORMObject
 {
     public $title;
     public $body;
+    public $subtitle;
 
 }

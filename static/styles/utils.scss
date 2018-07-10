@@ -1,3 +1,4 @@
+@import "prefixes";
 //Default font
 @import url('https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700');
 
@@ -6,16 +7,6 @@ body{
 
 }
 
-@mixin display-flex()
-{
-  display:-webkit-box;
-  display:-ms-flexbox;
-  display:flex;
-}
-@mixin flex-wrap($value){
-  -ms-flex-wrap:$value;
-  flex-wrap:$value;
-}
 
 @function strip-unit($number) {
   @if type-of($number) == 'number' and not unitless($number) {
@@ -24,23 +15,32 @@ body{
 
   @return $number;
 }
+@mixin grid($columns,$rows,$gap)
+{
 
-[data-align='center']
-{
-  align-items: center;
+  @include display-grid();
+  grid-gap: $gap;
+
+  @if($columns)
+  {
+    @include grid-template($columns,'columns');
+  }
+
+  @if ($rows)
+  {
+    @include grid-template($rows,'rows');
+  }
+
+
 }
 
-[data-position='relative']
+
+
+.flex
 {
-  position: relative;
-}
-[data-margin-left='auto']
-{
-  margin-left: auto;
-}
-[data-full-height]
-{
-  height: 100%;
+  @include display-flex();
+  @include flex-wrap(wrap);
+
 }
 
 .image

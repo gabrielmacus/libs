@@ -105,6 +105,7 @@ class CrudController
             }
         }
 
+        $bodyClasses[] = $params["module"];
 
         ob_start();
         include ($layout);
@@ -143,12 +144,10 @@ class CrudController
 
             foreach ($explode as $k=>$v)
             {
-                if($asc = strpos($v,"+") === 0 || $desc = strpos($v,"-") === 0 )
-                {
-                    $orderBy[$k] = $object->prefix."_".str_replace("-","",str_replace("+","",$v)). " ";
-                    $orderBy[$k] .= (isset($asc))?"ASC":"DESC";
 
-                }
+                $desc = strpos($v,"-") === 0 ;
+                $orderBy[$k] = $object->prefix."_".str_replace("-","",str_replace("+","",$v)). " ";
+                $orderBy[$k] .= (isset($desc) && $desc !== false)?"DESC":"ASC";
                 $query->orderBy = implode(",",$orderBy);
             }
         }
@@ -201,15 +200,18 @@ class CrudController
                         $query->params=[];
                     }
 
+
                     //Correspondences
-                    $param = str_replace("~","%",$param);
+                    //$param = str_replace("~","%",$param);
 
                     //Put values to search inside wildcards ('%{value}%')
-                    if(!empty($params["filter_any"]))
+
+                    if(!empty($params["filter"]["filter_any"][str_replace($object->prefix."_","",$key)]))
                     {
                         $param = str_replace('%',"",$param);
                         $param = "%{$param}%";
                     }
+
 
                     $query->params[] = $param;
                 }

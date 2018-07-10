@@ -24,7 +24,9 @@ app.directive('tableData', function() {
             $scope.isFunction=function (e) {
                 return (typeof e === "function");
             }
-
+            $scope.isObject=function (e) {
+                return (typeof e == "object");
+            }
             $scope.$watch('select.all',function (newVal,oldVal) {
 
                 for(var k in $scope.rows)

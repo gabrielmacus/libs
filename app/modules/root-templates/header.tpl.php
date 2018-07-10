@@ -1,10 +1,11 @@
-<nav class="main-menu" data-row data-align="center"  >
+<nav class="main-menu flex" data-row data-align="center"  >
 
-    <a class="menu-item logo" >
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1024px-Python-logo-notext.svg.png">
-    </a>
-
-    <div data-margin-left="auto" data-full-height>
+    <div class="menu-logo">
+        <a class="logo">
+            <img class="image" src="https://autoprefixer.github.io/assets/logo.png">
+        </a>
+    </div>
+    <div class="menu-items">
         <a class="menu-item" >HOLA</a>
 
         <a class="menu-item">Como</a>
