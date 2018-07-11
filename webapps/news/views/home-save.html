@@ -1,0 +1,29 @@
+<form data-ng-submit="save()" class="w3-row-padding w3-container">
+
+
+
+    <related-items data-relation-type="'child'"  data-parent-key="'homes'" class="w3-margin-top w3-col s12 "  data-label="'Bloque principal'" data-query="{filter:{},populate:[{file:{path:'images'}}]}" data-deleted="item._deletedRelations" data-model="item._related.mainBlock" data-module="'post'" >
+
+        <b class="w3-col w3-margin-bottom">{{$parent.item.title}}</b>
+
+        <media-preview data-src="$parent.item._related.images[0].src"></media-preview>
+
+    </related-items>
+
+
+
+    <field data-true-value="1" data-false-value="0" class=" w3-margin-top w3-col  " data-input-type="'checkbox'" data-validation-errors="validationErrors.selected" data-label="'Portada activa'" data-model="item.selected"  ></field>
+
+
+    <div class="w3-bar w3-margin-top  w3-right-align  w3-col ">
+
+        <button type="button" class="w3-button w3-teal" data-ng-click="goToList()">
+            {{'Cancel' | translate}}
+        </button>
+        <button type="{{(status == 'saving')?'button':'submit'}}"  class="w3-button w3-teal ">
+            <span data-ng-if="status != 'saving'">{{'Accept' | translate}}</span>
+            <span data-ng-if="status == 'saving'"><i class="w3-spin fas fa-spinner"></i></span>
+        </button>
+    </div>
+
+</form>

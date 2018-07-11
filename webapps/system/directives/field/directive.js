@@ -4,12 +4,13 @@ app.directive('field', function() {
         restrict: 'E',
         scope: {
             model:'=',
-            label:'=',
+            label:'=?',
             inputType:'=?',
             placeholder:'=?',
             inputData:'=?',
-            validationErrors:'=?'
-
+            validationErrors:'=?',
+            trueValue:'=?',
+            falseValue:'=?'
 
         },
         transclude:true,
@@ -215,6 +216,9 @@ app.directive('field', function() {
                         break;
                     case 'richtext':
                         return '../system/directives/field/richtext-field.html';
+                        break;
+                    case 'checkbox':
+                        return  '../system/directives/field/checkbox-field.html';
                         break;
                     default:
 

@@ -8,12 +8,12 @@
 
 namespace app\modules\home;
 
+use system\libs\orm\ORMObject;
 use system\modules\post\Post;
 
-require_once ROOT_PATH."/system/modules/post/model.php";
 
-class Home extends Post
+class Home extends ORMObject
 {
-
+  public $selected;
 
 }
