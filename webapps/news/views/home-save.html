@@ -1,5 +1,6 @@
 <form data-ng-submit="save()" class="w3-row-padding w3-container">
 
+    <field class=" w3-margin-top w3-col  " data-validation-errors="validationErrors.name" data-label="'Nombre'" data-model="item.name"  ></field>
 
 
     <related-items data-relation-type="'child'"  data-parent-key="'homes'" class="w3-margin-top w3-col s12 "  data-label="'Bloque principal'" data-query="{filter:{},populate:[{file:{path:'images'}}]}" data-deleted="item._deletedRelations" data-model="item._related.mainBlock" data-module="'post'" >

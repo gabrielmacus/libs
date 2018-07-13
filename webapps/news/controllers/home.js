@@ -1,8 +1,8 @@
 app.controller('home-list', function ($scope,$routeParams,$controller,$translate,CRUD) {
 
-    $scope.headers = ['ID'];
-    $scope.properties = ['id'];
-    $scope.query.fields = "id";
+    $scope.headers = ['ID','Nombre'];
+    $scope.properties = ['id','name'];
+    $scope.query.fields = "id,name";
 
 });
 app.controller('home-create', function ($scope,$routeParams,$controller,$translate,CRUD) {

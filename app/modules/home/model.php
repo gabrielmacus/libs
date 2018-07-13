@@ -15,5 +15,6 @@ use system\modules\post\Post;
 class Home extends ORMObject
 {
   public $selected;
+  public $name;
 
 }
