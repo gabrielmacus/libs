@@ -16,6 +16,7 @@ use system\modules\post\PostController;
 
 class NewsController extends PostController
 {
+
     static function Read(ORMObject $object, $params, $template = null)
     {
         $imagesPopulate["file"]["path"] = "images";
