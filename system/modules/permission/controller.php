@@ -6,7 +6,7 @@
  * Time: 12:14 PM
  */
 
-namespace system\modules\post;
+namespace system\modules\permission;
 
 require_once(ROOT_PATH . '/system/modules/crud/controller.php');
 
@@ -16,14 +16,29 @@ use system\libs\orm\ORMObject;
 use system\libs\Services;
 use system\modules\crud\CrudController;
 
-class PostController extends CrudController
+class PermissionController extends CrudController
 {
     static $paginationLimit = 20;
+
+
+    /**
+     * Reads modules to assign permissions to them
+     * @param $object
+     * @param $params
+     * @param $template
+     */
+    public static function Modules($object, $params, $template)
+    {
+
+        static::SendResponse(Services::GetModules(["crud","root-templates","post"]));
+
+    }
 
     protected static function Validate(ORMObject $object,$rules = null,$messages=[],$aliases =[])
     {
 
 
+        /*
         $rules = [
             "title"=>"required",
             "body"=>"required",
@@ -39,6 +54,7 @@ class PostController extends CrudController
             "body"=>"Texto",
             "_related.images"=>"Imágenes"
         ];
+        */
 
 
         return parent::Validate($object, $rules,$messages,$aliases);

@@ -48,6 +48,9 @@ class CrudController
                 $validation = $rules->validate();
             }
 
+
+
+
             /**
              * @var $validation Validation
              */
@@ -473,6 +476,7 @@ class CrudController
 
         static::AssignProperties($object);
 
+
         if(($validationResult = static::Validate($object)) === true)
         {
             static::BeforeCreate($object,$params,$template);
@@ -495,6 +499,7 @@ class CrudController
              */
             $object = $validationResult->toArray();
         }
+
 
 
 
@@ -553,19 +558,30 @@ class CrudController
 
         static::AssignProperties($object);
 
-        static::Validate($object);
 
-        static::BeforeUpdate($object,$params,$template);
+        if(($validationResult = static::Validate($object)) === true)
+        {
+            //Validation success
+            static::Validate($object);
 
-        $object->save();
+            static::BeforeUpdate($object,$params,$template);
 
-        $object->readById($object->id);
+            $object->save();
 
-        static::SaveRelations($object);
+            $object->readById($object->id);
 
+            static::SaveRelations($object);
 
+            static::AfterUpdate($object,$params,$template);
+        }
+        else
+        {
+            /**
+             * @var $validationResult ErrorBag
+             */
+            $object = $validationResult->toArray();
+        }
 
-        static::AfterUpdate($object,$params,$template);
 
         static::SendResponse($object,$template,$params);
     }

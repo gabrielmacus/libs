@@ -6,7 +6,7 @@
  * Time: 12:14 PM
  */
 
-namespace system\modules\post;
+namespace system\modules\role;
 
 require_once(ROOT_PATH . '/system/modules/crud/controller.php');
 
@@ -16,7 +16,7 @@ use system\libs\orm\ORMObject;
 use system\libs\Services;
 use system\modules\crud\CrudController;
 
-class PostController extends CrudController
+class RoleController extends CrudController
 {
     static $paginationLimit = 20;
 
@@ -24,6 +24,7 @@ class PostController extends CrudController
     {
 
 
+        /*
         $rules = [
             "title"=>"required",
             "body"=>"required",
@@ -39,6 +40,7 @@ class PostController extends CrudController
             "body"=>"Texto",
             "_related.images"=>"Imágenes"
         ];
+        */
 
 
         return parent::Validate($object, $rules,$messages,$aliases);

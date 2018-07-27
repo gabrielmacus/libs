@@ -148,6 +148,35 @@ class Services
 
         return sha1($aud);
     }
+    static function GetModules($exclude = [])
+    {
+        $systemPath = ROOT_PATH."/system/modules/";
+        $userPath =  ROOT_PATH."/app/modules/";
+        $modules =[];
+        $dirs =[$systemPath,$userPath];
+        foreach ($dirs as $dir)
+        {
+            if($scan = scandir($dir))
+            {
+                foreach ($scan as $item)
+                {
+                    if($item != ".." && $item !=".")
+                    {
+                        if(!in_array($item,$exclude))
+                        {
+                            $modules[]=$item;
+
+                        }
+                    }
+                }
+            }
+        }
+        return $modules;
+
+
+
+
+    }
     static function LoadClass(string $module,int $type)
     {
         $suffix = '';
