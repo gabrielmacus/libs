@@ -14,6 +14,8 @@ class User extends \system\libs\orm\ORMObject
 
     public $username;
     public $password;
+    public $name;
+    public $surname;
 
 
 

@@ -24,14 +24,22 @@ class PostController extends CrudController
     {
 
         $rules = [
-            "title"=>"required"
+            "title"=>"required",
+            "body"=>"required"
         ];
         $messages =[
             "required"=>":attribute es requerido"
         ];
         $aliases = [
-         //   "title"=>"Título"
+            "title"=>"Título",
+            "body"=>"Texto"
         ];
+
+
+
+
+
+
         return parent::Validate($object, $rules,$messages,$aliases);
     }
 
