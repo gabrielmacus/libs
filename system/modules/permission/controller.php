@@ -30,7 +30,7 @@ class PermissionController extends CrudController
     public static function Modules($object, $params, $template)
     {
 
-        static::SendResponse(Services::GetModules(["crud","root-templates","post"]));
+        static::SendResponse(Services::GetModules(["crud","root-templates","post","permission","role"]));
 
     }
 

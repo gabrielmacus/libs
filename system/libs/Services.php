@@ -8,6 +8,8 @@
  */
 
 namespace system\libs;
+
+
 define("CLASS_TYPE_MODEL",1);
 define("CLASS_TYPE_CONTROLLER",2);
 class Services
@@ -148,13 +150,25 @@ class Services
 
         return sha1($aud);
     }
-    static function GetModules($exclude = [])
+    static  function DashesToCamelCase($string, $capitalizeFirstCharacter = false)
+    {
+
+        $str = str_replace('-', '', ucwords($string, '-'));
+
+        if (!$capitalizeFirstCharacter) {
+            $str = lcfirst($str);
+        }
+
+        return $str;
+    }
+
+    static function GetModules($exclude = [],$loadActions = false)
     {
         $systemPath = ROOT_PATH."/system/modules/";
         $userPath =  ROOT_PATH."/app/modules/";
         $modules =[];
-        $dirs =[$systemPath,$userPath];
-        foreach ($dirs as $dir)
+        $dirs =["system"=>$systemPath,"app"=>$userPath];
+        foreach ($dirs as $k=> $dir)
         {
             if($scan = scandir($dir))
             {
@@ -162,9 +176,31 @@ class Services
                 {
                     if($item != ".." && $item !=".")
                     {
+
+                        if($loadActions && file_exists(static::JoinPath($dir,"{$item}/controller.php")))
+                        {
+                            include_once (static::JoinPath($dir,"{$item}/controller.php"));
+                            $actions = [];
+                            $Class = "{$k}\\modules\\{$item}\\".self::DashesToCamelCase($item,true)."Controller";
+
+                            if(method_exists($Class,"GetModuleActions"))
+                            {
+                                $actions = $Class::GetModuleActions();
+                            }
+
+                        }
+
+
                         if(!in_array($item,$exclude))
                         {
-                            $modules[]=$item;
+                            if($loadActions)
+                            {
+                                $modules[]=["module"=>$item,"actions"=>$actions];
+                            }
+                            else{
+                                $modules[]=$item;
+                            }
+
 
                         }
                     }

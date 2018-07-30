@@ -26,6 +26,14 @@ class CrudController
 
     static $paginationLimit = 100;
 
+    /**
+     * Functions executed by module in api. Used to assign permissions
+     * @return array
+     */
+    static function GetModuleActions()
+    {
+        return ["Create","Read","Update","Delete"];
+    }
 
     protected static function Validate(ORMObject $object, $rules  = null,$messages=[],$aliases = [])
     {
