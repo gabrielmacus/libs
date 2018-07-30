@@ -28,6 +28,7 @@ class UserController extends CrudController
 
     protected static function BeforeCreate(ORMObject &$object, &$params = null, &$template = null)
     {
+        unset($object->root);
 
         if(!empty($object->password))
         {
@@ -38,6 +39,7 @@ class UserController extends CrudController
 
     protected static function BeforeUpdate(ORMObject &$object, &$params = null, &$template = null)
     {
+        unset($object->root);
         unset($object->password);
     }
 

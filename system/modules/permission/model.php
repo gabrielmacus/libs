@@ -14,6 +14,5 @@ class Permission extends ORMObject
 {
     public $module;
     public $action;
-    public $level;
 
 }

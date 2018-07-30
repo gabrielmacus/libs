@@ -16,6 +16,11 @@ class User extends \system\libs\orm\ORMObject
     public $password;
     public $name;
     public $surname;
+    /**
+     * Can be only one root user per system
+     * @var
+     */
+    public $root;
 
 
 
