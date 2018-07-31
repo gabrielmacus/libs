@@ -5,7 +5,7 @@
  * Date: 28/04/2018
  * Time: 21:37
  */
-
+$_ENV["enviroments"] = ["testing"];
 include "../autoload.php";
 
 include "../Person.php";
@@ -266,6 +266,15 @@ class ORMTest extends PHPUnit_Framework_TestCase
         $leagues = $league->read(null,$pagination);
         $player = new \system\libs\orm\Person($pdo);
 
+
+
+        //Tries to read inexistent nested relation (Shouldn't throw exception)
+        $person = new \system\libs\orm\Person($league->PDOInstance);
+        $leagues2 =$league->read(null,$pagination);
+        $leagues2->populate($team,"teams")->populate($person,"inexistent");
+        $this->addToAssertionCount(1);
+
+
         //Before populate
 
         $this->assertArrayNotHasKey('teams', $leagues[0]);
@@ -293,6 +302,8 @@ class ORMTest extends PHPUnit_Framework_TestCase
         $this->assertCount(2, $leagues[1]->_related["teams"][0]->_related["players"]);
 
         $this->assertCount(2, $leagues[1]->_related["teams"][1]->_related["players"]);
+
+
 
 
         //Population in child

@@ -19,9 +19,11 @@ trait ORMPopulate
     function &populate(&$objectToPopulate,ORMObject $object,string $path = "",ORMPagination $pagination=null,$type = CHILD_RELATION_COMPONENT)
     {
 
-        if(empty($objectToPopulate))
+
+        if(empty($objectToPopulate) || count($objectToPopulate) == 0)
         {
-            return false;
+            $ref =new ORMArray();
+            return $ref;
         }
 
         if(!is_a($objectToPopulate,ORMArray::class) && !is_a($objectToPopulate,ORMObject::class))
@@ -48,9 +50,15 @@ trait ORMPopulate
         $whereArray = [];
         foreach ($objArray as $item)
         {
-            $whereArray[$item->table][] =$item->id;
+            //TODO: Besides from doing this comprobation, i should delete inconsistent relations
+            if(!empty($item->id))
+            {
+                $whereArray[$item->table][] =$item->id;
+            }
         }
         $where="";
+
+
         foreach ($whereArray as $table => $items)
         {
 

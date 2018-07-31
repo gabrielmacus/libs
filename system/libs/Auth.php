@@ -14,7 +14,44 @@ use PHPUnit\Runner\Exception;
 
 trait Auth
 {
-    static function checkAuthorization($sendResponse=false,&$getToken = null)
+    static function checkAuth($params,$sendResponse)
+    {
+        $decoded = static::checkAuthentication($sendResponse,$params);
+        return static::checkAuthorization($decoded,$sendResponse,$params);
+
+    }
+    static function checkAuthorization($user,$sendResponse=false,$params=null)
+    {
+
+        if(!empty($params) && !$user["root"])
+        {
+
+            $foundPermissions = array_filter($user["permissions"],  function ($var) use ($params){
+
+
+                return $params["module"] == $var["module"] && $var["action"] == Services::DashesToCamelCase($params["action"],true);
+
+            });
+            if(empty($foundPermissions))
+            {
+                if($sendResponse)
+                {
+                    http_response_code(403);
+                    echo json_encode("Action not authorized");
+                    exit();
+                }
+                else{
+                   return  false;
+                }
+
+            }
+
+        }
+
+        return true;
+
+    }
+    static function checkAuthentication($sendResponse=false, $params=null, &$getToken = null)
     {
         $decoded = false;
         $token = false;
@@ -52,8 +89,8 @@ trait Auth
                  */
                 $decoded =JWT::decode($token,$_ENV["app"]["jwt"]["key"],['HS256']);
                 $decoded = json_decode(json_encode($decoded->data),true);
-
                 $getToken = $token;
+
 
             }
             catch (\DomainException $e)
@@ -66,26 +103,19 @@ trait Auth
 
         }
 
-        if(!$sendResponse)
+
+
+        if(!$decoded && $sendResponse)
         {
-
-            return $decoded;
-        }
-
-        if($decoded)
-        {
-            //http_response_code(200);
-           // echo json_encode($decoded);
-
-        }
-        else{
-
 
             http_response_code(401);
             echo json_encode("User not authenticated");
             exit();
+
         }
 
+
+        return $decoded;
 
 
 

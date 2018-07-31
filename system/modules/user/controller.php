@@ -17,6 +17,8 @@ use system\libs\orm\ORMPagination;
 use system\libs\orm\ORMQuery;
 use system\libs\Services;
 use system\modules\crud\CrudController;
+use system\modules\module\Module;
+use system\modules\role\Role;
 
 class UserController extends CrudController
 {
@@ -54,6 +56,7 @@ class UserController extends CrudController
             $query->where = "{$object->prefix}_username = ?";
             $query->params[] =$_POST["username"];
             $pagination = new ORMPagination();
+
             /**
              * @var $object User
              */
@@ -63,9 +66,30 @@ class UserController extends CrudController
             {
                 if(password_verify($_POST["password"],$user[0]->password))
                 {
+                    $Role =  Services::LoadClass("role",CLASS_TYPE_MODEL);
+                    $Module =  Services::LoadClass("module",CLASS_TYPE_MODEL);
+                    $role = new $Role($object->PDOInstance);
+                    $module = new $Module($object->PDOInstance);
+
+                    $user->populate($role)->populate($module,"permissions");
+
+
                     $status = 200;
                     $result = $user[0];
 
+
+                    if(empty($result["root"]))
+                    {
+                        $result["role"] = $result["_related"]["role"][0]["name"];
+                        $result["permissions"] = array_map(function($el){
+
+                            return ["module"=>$el["name"],"action"=>$el["_relationData"]["extra_2"],"level"=>$el["_relationData"]["extra_1"]];
+
+                        },$result["_related"]["role"][0]["_related"]["permissions"]);
+                    }
+
+
+                    unset($result["_related"]);
                     unset($result["password"]);
 
                     $time = time();
@@ -77,6 +101,8 @@ class UserController extends CrudController
                         'data' => $result
                     );
                     $jwt = JWT::encode($token, $key);
+
+
                     $result = ["token"=>$jwt,"user"=>$result];
 
 
@@ -95,7 +121,7 @@ class UserController extends CrudController
     static function Logged(ORMObject &$object, &$params = null, &$template = null)
     {
 
-        $user = static::checkAuthorization(false,$token);
+        $user = static::checkAuthentication(false,null,$token);
         $isLoggedIn = ["user"=>$user,"token"=>$token];
         static::SendResponse($isLoggedIn);
 

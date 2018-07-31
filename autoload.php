@@ -17,13 +17,9 @@ include_once  "system/libs/Auth.php";
 define('ROOT_PATH',__DIR__);
 
 //Includes envs
-$envs =
-    [
-        "production",
-        "development"
-    ];
+$_ENV["enviroments"] = empty($_ENV["enviroments"])?["production", "development"]:$_ENV["enviroments"];
 
-foreach ($envs as $env)
+foreach ($_ENV["enviroments"] as $env)
 {
     $envPath = ROOT_PATH."/app/enviroments/{$env}.env.php";
     if(file_exists($envPath))

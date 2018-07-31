@@ -27,6 +27,21 @@ class CrudController
     static $paginationLimit = 100;
 
     /**
+     * Indicates if crud actions requiere authentication or not for the current module
+     * @return array
+     */
+    static function CrudAuthentication()
+    {
+        return [
+            "Create"=>true,
+            "Read"=>true,
+            "Update"=>true,
+            "Delete"=>true
+        ];
+    }
+
+
+    /**
      * Functions executed by module in api. Used to assign permissions
      * @return array
      */
@@ -480,7 +495,10 @@ class CrudController
     static function Create(ORMObject $object,$params=null,$template = null)
     {
 
-        static::checkAuthorization(true);
+        if(static::CrudAuthentication()["Create"])
+        {
+            static::checkAuth($params + ["action"=>"Create"],true);
+        }
 
         static::AssignProperties($object);
 
@@ -518,7 +536,11 @@ class CrudController
     static function Read(ORMObject $object,$params,$template = null)
     {
 
-        static::checkAuthorization(true);
+        if(static::CrudAuthentication()["Read"])
+        {
+
+            static::checkAuth($params + ["action"=>"Read"],true);
+        }
 
         $query =static::ProcessQuery($_GET,$object);
 
@@ -558,7 +580,12 @@ class CrudController
     static function Update(ORMObject $object,$params,$template = null)
     {
 
-        static::checkAuthorization(true);
+        if(static::CrudAuthentication()["Update"])
+        {
+
+            static::checkAuth($params + ["action"=>"Update"],true);
+
+        }
 
         $object->readById((!empty($params["id"]))?$params["id"]:null);
 
@@ -596,8 +623,11 @@ class CrudController
 
     static function Delete(ORMObject $object,$params,$template=null)
     {
-        static::checkAuthorization(true);
+        if(static::CrudAuthentication()["Delete"])
+        {
+            static::checkAuth($params + ["action"=>"Delete"],true);
 
+        }
         $object->readById((!empty($params["id"]))?$params["id"]:null);
 
        // $object->id = (!empty($params["id"]))?$params["id"]:null;

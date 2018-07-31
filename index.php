@@ -6,6 +6,8 @@
  * Time: 19:41
  */
 
+$_ENV["enviroments"] = ["production", "development"];
+
 include "autoload.php";
 
 $router = new AltoRouter();
@@ -103,6 +105,11 @@ if(!empty($match))
 
         }
         catch (Error $e)
+        {
+            \system\libs\Services::BeautyPrint($e);
+            \system\libs\Services::BeautyPrint(\system\libs\orm\ORMObject::$logData);
+        }
+        catch (Exception $e)
         {
             \system\libs\Services::BeautyPrint($e);
             \system\libs\Services::BeautyPrint(\system\libs\orm\ORMObject::$logData);
