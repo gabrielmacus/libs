@@ -1,0 +1,53 @@
+.team-positions
+{
+  .td.team
+  {
+    line-height: 130%;
+    font-weight: 600;
+    .team-shield
+    {
+      width: 30px;
+      object-fit: contain;
+      height: 30px;
+      margin-right: 7px;
+    }
+  }
+
+  .tr
+  {
+    grid-template-columns: 1fr 25% repeat(8,1fr);
+  }
+}
+@media all and (max-width: 600px) {
+
+ .team-positions
+ {
+   .tr{
+     grid-template-columns: 1fr 35% repeat(4,1fr);
+   }
+   .th,.td{
+     &.gf,&.ga,&.draw,&.loses
+     {
+       display: none;
+     }
+   }
+
+ }
+
+}
+
+@media all and (max-width: 350px) {
+  .team-positions
+  {
+    .tr{
+      grid-template-columns: 1fr 35% repeat(2,1fr);
+    }
+
+    .th,.td{
+      &.gf,&.ga,&.draw,&.loses,&.played,&.won
+      {
+        display: none;
+      }
+    }
+  }
+}

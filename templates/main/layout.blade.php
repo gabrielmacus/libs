@@ -1,17 +1,59 @@
 <!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Volvé a jugar</title>
-    <link rel="stylesheet" href="{{$_ENV["app"]["url"]}}/static/styles/main.css">
+    @include("main.head",["title"=>"Volvé a jugar"])
 </head>
 <body>
 
+<header>
 
-@yield('content')
+    @section("menu")
+
+        @component('components.navbar.view',
+         ["items"=>[
+             ["text"=>"La Liga","href"=>"http://google.com.ar"],
+             ["text"=>"Torneos","items"=>[["text"=>"Torneo A","href"=>"http://google.com.ar"]]],
+             ["text"=>"Equipos","items"=>[["text"=>"Liverfoul","image"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
+              ["text"=>"Don Mateo","image"=>"https://as01.epimg.net/img/comunes/fotos/fichas/equipos/medium/16.png"]]]
+         ]])
+        @endcomponent
+
+    @endsection
+
+    @yield('menu')
+
+
+</header>
+
+
+@hasSection('left-bar')
+    <aside class="left-bar">
+        @yield("left-bar")
+    </aside>
+@endif
+
+
+
+@hasSection('main')
+<main>
+    @yield('main')
+
+</main>
+@endif
+
+
+@hasSection('right-bar')
+<aside class="right-bar">
+    @yield("right-bar")
+</aside>
+@endif
+
+@hasSection('footer')
+    <footer>
+        @yield("footer")
+    </footer>
+@endif
+
 
 
 

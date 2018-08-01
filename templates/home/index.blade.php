@@ -1,17 +1,21 @@
 
-@extends("home.layout")
+@extends("main.layout")
 
-@section('main')
+@section("main")
 
-
-    @component('components.navbar.view',
-    ["items"=>[
-        ["text"=>"La Liga","href"=>"http://google.com.ar"],
-        ["text"=>"Torneos","items"=>[["text"=>"Torneo A","href"=>"http://google.com.ar"]]]
-    ]])
+    @component("components.title.view",["type"=>"h2"])
+        Tabla de posiciones
+    @endcomponent
+    @component('components.table.view',    [
+          "rows"=>$positions,
+          "iterator"=>"team.row",
+          "class"=>"team-positions",
+          "title"=>"Torneo Apertura 2018",
+          "headers"=> ["position"=>"Pos.","team"=>"Equipo","played"=>"PJ","won"=>"PG","draw"=>"PE","loses"=>"PP","gf"=>"GF","ga"=>"GC","gd"=>"DG","points"=>"Pts."]
+      ])
     @endcomponent
 
-    @component('components.table.view',["rows"=>$posts,"headers"=>["id"=>"ID","title"=>"Título"]])
-    @endcomponent
+
 
 @endsection
+

@@ -97,7 +97,7 @@ class CrudController
     protected static function ProcessView($data,$template,$params)
     {
         $templatesFolder = Services::JoinPath(ROOT_PATH,"templates");
-        $templatesCache =  Services::JoinPath(ROOT_PATH,"templates_cache");
+        $templatesCache =  Services::JoinPath(ROOT_PATH,"cache/templates");
 
         $blade = new Blade($templatesFolder,$templatesCache);
         echo $blade->make("{$params["module"]}.{$template}",$data);

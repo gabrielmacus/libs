@@ -52,11 +52,14 @@ class HomeController extends CrudController
         if($template)
         {
 
+            /*
             include Services::JoinPath(ROOT_PATH,"app/modules/news/model.php");
             $news = new News($object->PDOInstance);
             $pagination = new ORMPagination();
             $query = new ORMQuery();
-            $posts = $news->read($query,$pagination);
+            $posts = $news->read($query,$pagination);*/
+
+
 
             /*
             $_GET["filter"]["selected"] = 1;
@@ -65,7 +68,27 @@ class HomeController extends CrudController
 
         }
 
-        parent::SendResponse(["posts"=>$posts],$template,$params);
+        $positions =[
+
+            ["position"=>1,"team"=>"Campos Team","played"=>7,"won"=>7,"draw"=>0,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>7,"points"=>21,"shield"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
+            ["position"=>1,"team"=>"Unión de amigos F.C","played"=>23,"won"=>23,"draw"=>23,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>27,"points"=>212,"shield"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
+
+            ["position"=>1,"team"=>"Unión de amigos F.C","played"=>23,"won"=>23,"draw"=>23,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>27,"points"=>212,"shield"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
+            ["position"=>1,"team"=>"Unión de amigos F.C","played"=>23,"won"=>23,"draw"=>23,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>27,"points"=>212,"shield"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
+            ["position"=>1,"team"=>"Unión de amigos F.C","played"=>23,"won"=>23,"draw"=>23,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>27,"points"=>212,"shield"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
+            ["position"=>1,"team"=>"Unión de amigos F.C","played"=>23,"won"=>23,"draw"=>23,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>27,"points"=>212,"shield"=>"https://vignette.wikia.nocookie.net/logopedia/images/5/51/Real_Zaragoza.png/revision/latest?cb=20161113145050"],
+            ["position"=>1,"team"=>"Unión de amigos F.C","played"=>23,"won"=>23,"draw"=>23,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>27,"points"=>212,"shield"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
+            ["position"=>1,"team"=>"Unión de amigos F.C","played"=>23,"won"=>23,"draw"=>23,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>27,"points"=>212,"shield"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
+            ["position"=>1,"team"=>"Unión de amigos F.C","played"=>23,"won"=>23,"draw"=>23,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>27,"points"=>212,"shield"=>"http://i44.tinypic.com/2wdwmef.png"],
+            ["position"=>1,"team"=>"Unión de amigos F.C","played"=>23,"won"=>23,"draw"=>23,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>27,"points"=>212,"shield"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
+            ["position"=>1,"team"=>"Unión de amigos F.C","played"=>23,"won"=>23,"draw"=>23,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>27,"points"=>212,"shield"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
+            ["position"=>1,"team"=>"Unión de amigos F.C","played"=>23,"won"=>23,"draw"=>23,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>27,"points"=>212,"shield"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
+            ["position"=>1,"team"=>"Unión de amigos F.C","played"=>23,"won"=>23,"draw"=>23,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>27,"points"=>212,"shield"=>"https://pronosticos.co/wp-content/uploads/2017/08/Tenerife.png"],
+
+        ];
+
+
+        parent::SendResponse(["positions"=>$positions],$template,$params);
         //parent::Read($object, $params, $template);
     }
 

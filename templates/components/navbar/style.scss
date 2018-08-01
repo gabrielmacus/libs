@@ -1,0 +1,173 @@
+.navbar
+{
+  ul
+  {
+    @include flex-wrap(wrap);
+    background-color: $main-background;
+    color: $main-color;
+    @include display-flex();
+    width: 100%;
+    li
+    {
+
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      padding: $padding-1;
+      & > img{
+        margin-left: auto;
+        width: 35px;
+        right: 0;
+        @include transition(all 0.2s);
+        position: relative;
+      }
+      &:hover
+      {
+        & > img
+        {
+          right: 10px;
+        }
+      }
+      ul
+      {
+        @include opacity(0);
+        visibility: hidden;
+        @include transition-property(#{opacity,visibility});
+        @include transition-duration(#{0.15s,0s});
+        @include transition-delay(#{0s,0.15s});
+
+
+      }
+      position: relative;
+
+      a
+      {
+        i{
+          display: none;
+        }
+      }
+      input
+      {
+        cursor: pointer;
+        opacity: 0;
+        position: absolute;height: 100%;
+        top: 0;
+        left: 0;
+        width: 100%;
+      }
+      input + a
+      {
+        i
+        {
+
+          @include transition(all 0.15s);
+          margin-left: 5px;
+          display: inline-block;
+        }
+      }
+      input:checked + a
+      {
+        i{
+          @include transform(rotate(180deg ));
+        }
+      }
+      input:checked + a +  ul
+      {
+        @include opacity(1);
+        visibility: visible;
+        @include transition-property(#{visibility,opacity});
+        @include transition-duration(#{0s,0.15s});
+
+
+      }
+    }
+
+
+  }
+
+  & > ul
+  {
+
+    & > li li
+    {
+      @include display-flex();
+      @include align-items(center);
+      padding: $padding-1 - 10px;
+      width: 100%;
+
+    }
+    & li ul
+    {
+      margin-top: $padding-1 - 5px;
+      background-color: $grey-1;
+      color:black;
+      @include box-shadow-1();
+      & > li
+      {
+
+        @include transition(all 0.2s);
+        font-weight: 600;
+        font-size: 15px;
+        &:hover
+        {
+          background-color: $secondary-background;
+          color:$secondary-color;
+        }
+        a{
+          margin: auto;
+        }
+        border-bottom: 1px solid $grey-2;
+        &:last-child
+        {
+          border-bottom: 0;
+        }
+      }
+    }
+
+    //level 1 submenu
+    & > li
+    {
+
+      & > .mask{
+        content: '';
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top:0;
+        right:0;
+      }
+
+      &:before
+      {
+
+        /*
+        content: '';
+        position: absolute;
+        width: 1px;
+        height: 70%;
+
+        background: $main-color;
+        right: 0;
+        top: 15%;*/
+
+      }
+      &:last-child:after
+      {
+        display: none;
+      }
+      /*
+      border-right: 1px solid $main-color;
+      &:last-child
+      {
+        border-right: 0;
+      }*/
+    }
+    & > li > ul
+    {
+      left: 0;
+      min-width: 170px;
+      position: absolute;
+    }
+  }
+
+  margin-bottom: $padding-1;
+}

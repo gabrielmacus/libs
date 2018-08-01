@@ -985,3 +985,23 @@
   ms-grid-row:$value;
   grid-row:$value;
 }
+
+
+@mixin width($value)
+{
+  @if($value == "max-content")
+  {
+    width:-webkit-max-content;
+    width:-moz-max-content;
+    width:max-content;
+  }
+  @else if($value == "min-content") {
+    width:-webkit-min-content;
+    width:-moz-min-content;
+    width:min-content;
+  }
+  @else
+  {
+    width: $value;
+  }
+}
