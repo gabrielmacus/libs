@@ -6,7 +6,7 @@
  * Time: 19:41
  */
 
-$_ENV["enviroments"] = ["production", "development"];
+$_ENV["enviroments"] = ["production","development"];
 
 include "autoload.php";
 

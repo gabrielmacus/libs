@@ -8,6 +8,7 @@
 
 namespace system\modules\crud;
 
+use Jenssegers\Blade\Blade;
 use Rakit\Validation\ErrorBag;
 use Rakit\Validation\Validation;
 use Rakit\Validation\Validator;
@@ -95,8 +96,13 @@ class CrudController
 
     protected static function ProcessView($data,$template,$params)
     {
+        $templatesFolder = Services::JoinPath(ROOT_PATH,"templates");
+        $templatesCache =  Services::JoinPath(ROOT_PATH,"templates_cache");
 
+        $blade = new Blade($templatesFolder,$templatesCache);
+        echo $blade->make("{$params["module"]}.{$template}",$data);
 
+        /*
         $arr = ["system","app"];
         $arr2 = ["layout","main","left","right","header","footer","head"];
         foreach ($arr as $value)
@@ -137,7 +143,7 @@ class CrudController
         include ($layout);
         $html = ob_get_contents();
         ob_end_clean();
-        return $html;
+        return $html;*/
     }
     protected static function SendResponse($data,$template = null,$params=null)
     {
