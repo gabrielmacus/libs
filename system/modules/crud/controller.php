@@ -301,6 +301,8 @@ class CrudController
      */
     static function ProcessPopulate(ORMArray &$results,\PDO $pdo,$params){
 
+        //Cleans repeated parameters
+
         if(is_array($params)  && count($params) > 0)
         {
 
@@ -542,6 +544,7 @@ class CrudController
     static function Read(ORMObject $object,$params,$template = null)
     {
 
+
         if(static::CrudAuthentication()["Read"])
         {
 
@@ -566,9 +569,12 @@ class CrudController
         }
         else
         {
+
             $object->readById($params["id"]);
 
             $results = new ORMArray([$object]);
+
+
 
             static::ProcessPopulate($results, $object->PDOInstance,(!empty($_GET["populate"]))?$_GET["populate"]:[]);
 

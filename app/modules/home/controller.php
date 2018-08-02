@@ -68,6 +68,17 @@ class HomeController extends CrudController
 
         }
 
+        $positions =[];
+        if($contents = file_get_contents(Services::JoinPath(CACHE_PATH,"league-positions.chn.1.json")))
+        {
+           $contents =  json_decode($contents,true);
+           if(json_last_error()==0)
+           {
+               $positions = $contents;
+           }
+        }
+
+        /*
         $positions =[
 
             ["position"=>1,"team"=>"Campos Team","played"=>7,"won"=>7,"draw"=>0,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>7,"points"=>21,"shield"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
@@ -85,7 +96,7 @@ class HomeController extends CrudController
             ["position"=>1,"team"=>"Unión de amigos F.C","played"=>23,"won"=>23,"draw"=>23,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>27,"points"=>212,"shield"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
             ["position"=>1,"team"=>"Unión de amigos F.C","played"=>23,"won"=>23,"draw"=>23,"loses"=>0,"gf"=>10,"ga"=>3,"gd"=>27,"points"=>212,"shield"=>"https://pronosticos.co/wp-content/uploads/2017/08/Tenerife.png"],
 
-        ];
+        ];*/
 
 
         parent::SendResponse(["positions"=>$positions],$template,$params);

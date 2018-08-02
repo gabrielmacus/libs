@@ -19,8 +19,12 @@ class NewsController extends PostController
 
     static function Read(ORMObject $object, $params, $template = null)
     {
-        $imagesPopulate["file"]["path"] = "images";
-        $_GET["populate"][] =$imagesPopulate;
+        if(empty($_GET["populate"]) || !in_array(["file"=>["path"=>"images"]],$_GET["populate"]))
+        {
+            $imagesPopulate["file"]["path"] = "images";
+            $_GET["populate"][] =$imagesPopulate;
+
+        }
 
         parent::Read($object, $params, $template);
     }

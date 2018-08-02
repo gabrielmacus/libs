@@ -15,6 +15,7 @@ include_once  "system/libs/Auth.php";
 
 
 define('ROOT_PATH',__DIR__);
+define("CACHE_PATH",ROOT_PATH."/cache");
 
 //Includes envs
 $_ENV["enviroments"] = empty($_ENV["enviroments"])?["production", "development"]:$_ENV["enviroments"];
