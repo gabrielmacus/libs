@@ -104,13 +104,15 @@
         @include transition(all 0.2s);
         font-weight: 600;
         font-size: 15px;
-        &:not(.caret):hover
+
+        &:not(.caret):hover,&:not(.caret).active
         {
           background-color: $secondary-background;
           color:$secondary-color;
         }
 
-        &:hover + .caret
+
+        &:hover + .caret,&.active + .caret
         {
           i{
             color: $secondary-background;

@@ -9,34 +9,38 @@
 
     @section("menu")
 
+
         @component('components.navbar.view',
          ["items"=>[
              ["text"=>"La Liga","active"=>true,"href"=>"http://google.com.ar"],
-             ["text"=>"Torneos","items"=>[["text"=>"Torneo A","href"=>"http://google.com.ar"]]],
-             ["text"=>"Equipos","items"=>[["text"=>"Liverfoul","image"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
+             ["text"=>"Torneos","items"=>[["text"=>"Torneo A","active"=>true,"href"=>"http://google.com.ar"]]],
+             ["text"=>"Equipos","items"=>[["text"=>"Liverfoul","active"=>true,"image"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
               ["text"=>"Don Mateo","image"=>"https://as01.epimg.net/img/comunes/fotos/fichas/equipos/medium/16.png"]]]
          ]])
         @endcomponent
 
-    @endsection
 
-        @component('components.navbar.view',
+            @component('components.navbar.view',
+         ["items"=>[
+             ["text"=>"Demo Liga","href"=>"http://google.com.ar"],
+             ["text"=>"Torneos","items"=>[["text"=>"Torneo A","href"=>"http://google.com.ar"]]],
+             ["text"=>"Equipos","items"=>[["text"=>"Liverfoul","image"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
+              ["text"=>"Don Mateo","image"=>"https://as01.epimg.net/img/comunes/fotos/fichas/equipos/medium/16.png"]]]
+         ]])
+            @endcomponent
+
+            @component('components.navbar.view',
      ["items"=>[
-         ["text"=>"Demo Liga","href"=>"http://google.com.ar"],
-         ["text"=>"Torneos","items"=>[["text"=>"Torneo A","href"=>"http://google.com.ar"]]],
+         ["text"=>"La as dasd asd asd","href"=>"http://google.com.ar","items"=>[["text"=>"Torneo A","href"=>"http://google.com.ar"]]],
+         ["text"=>"Tornsadsadeos"],
          ["text"=>"Equipos","items"=>[["text"=>"Liverfoul","image"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
           ["text"=>"Don Mateo","image"=>"https://as01.epimg.net/img/comunes/fotos/fichas/equipos/medium/16.png"]]]
      ]])
-        @endcomponent
+            @endcomponent
 
-        @component('components.navbar.view',
- ["items"=>[
-     ["text"=>"La as dasd asd asd","href"=>"http://google.com.ar","items"=>[["text"=>"Torneo A","href"=>"http://google.com.ar"]]],
-     ["text"=>"Tornsadsadeos"],
-     ["text"=>"Equipos","items"=>[["text"=>"Liverfoul","image"=>"https://2.bp.blogspot.com/-Rdm2dy_jCtU/WVP6h-xjjOI/AAAAAAABKLU/EVTBYSpPo4cELRP6Trz0mTOpL3zoGd7BwCLcBGAs/s1600/Real%2BOviedo.png"],
-      ["text"=>"Don Mateo","image"=>"https://as01.epimg.net/img/comunes/fotos/fichas/equipos/medium/16.png"]]]
- ]])
-        @endcomponent
+
+
+    @endsection
 
 
 

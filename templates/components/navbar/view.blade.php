@@ -15,7 +15,9 @@
                      <ul data-submenu class="submenu">
 
                             @foreach($item["items"] as  $k => $subitem)
-                                <li class="{{$item["active"]?"active":""}}" data-item>
+
+                                <li class="{{!empty($subitem["active"])?"active":""}}" data-item>
+
                                     <a href="{{!empty($subitem["href"])?$subitem["href"]:"#"}}">
                                       {{$subitem["text"]}}
                                     </a>
