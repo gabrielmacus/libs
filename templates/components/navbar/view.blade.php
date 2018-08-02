@@ -1,11 +1,10 @@
 
 @if(!empty($items))
 
-    <nav class="navbar">
+    <nav   data-navbar class="navbar">
         <ul>
             @foreach($items as $k => $item)
-                <li >
-                    <span class="mask"></span>
+                <li data-item class="{{!empty($item["active"])?"active":""}}">
                     @if(!empty($item["items"]))
                     <input id="{{$item["text"].$k}}" type="checkbox">
                     @endif
@@ -13,9 +12,10 @@
                     @if(!empty($item["items"]))
 
 
-                            <ul>
-                            @foreach($item["items"] as  $subitem)
-                                <li>
+                     <ul data-submenu class="submenu">
+
+                            @foreach($item["items"] as  $k => $subitem)
+                                <li class="{{$item["active"]?"active":""}}" data-item>
                                     <a href="{{!empty($subitem["href"])?$subitem["href"]:"#"}}">
                                       {{$subitem["text"]}}
                                     </a>
@@ -25,6 +25,12 @@
                                     @endif
 
                                 </li>
+                                @if($k == 0)
+
+                                 <li class="caret"><i class="fas fa-caret-up"></i></li>
+
+                                @endif
+
                             @endforeach
                         </ul>
                     @endif
@@ -33,5 +39,35 @@
             @endforeach
         </ul>
     </nav>
+
+    <script>
+
+        /*
+        (function () {
+
+            var navbar = $($("[data-navbar]").get(-1));
+            $(document).on("click",function (e) {
+
+                $("[data-navbar]").prop("checked",false);
+
+                if(navbar.has(e.target).length && !(navbar[0] == e.target))
+                {
+                    console.log(navbar[0]);
+
+                    navbar.prop("checked",true);
+                }
+
+            })
+
+
+
+
+        })()*/
+        /*if(navbar.has($(event.target)).length && !navbar.is($(event.target)))
+         {
+         console.log("CLICK");
+         }*/
+        
+    </script>
 
 @endif

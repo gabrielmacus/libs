@@ -6,3 +6,7 @@
 <link rel="stylesheet" href="{{$_ENV["app"]["url"]}}/static/styles/theme.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+
+<!-- Controllers -->
+<script src="{{$_ENV["app"]["url"]}}/templates/components/navbar/controller.js"></script>

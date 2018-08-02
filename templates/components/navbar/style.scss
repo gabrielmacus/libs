@@ -1,11 +1,17 @@
 .navbar
 {
+
+
+  //Todos los niveles
   ul
   {
+    z-index: 1;
     @include flex-wrap(wrap);
     background-color: $main-background;
     color: $main-color;
     @include display-flex();
+    width: 100%;
+
     width: 100%;
     li
     {
@@ -27,16 +33,9 @@
           right: 10px;
         }
       }
-      ul
-      {
-        @include opacity(0);
-        visibility: hidden;
-        @include transition-property(#{opacity,visibility});
-        @include transition-duration(#{0.15s,0s});
-        @include transition-delay(#{0s,0.15s});
 
 
-      }
+
       position: relative;
 
       a
@@ -81,92 +80,113 @@
       }
     }
 
-
   }
 
-  & > ul
+  //Todos los subniveles
+  ul ul
   {
-
-    & > li li
-    {
-      @include display-flex();
-      @include align-items(center);
-      padding: $padding-1 - 10px;
-      width: 100%;
-
-    }
-    & li ul
-    {
+      @include opacity(0);
+      visibility: hidden;
+      @include transition-property(#{opacity,visibility});
+      @include transition-duration(#{0.15s,0s});
+      @include transition-delay(#{0s,0.15s});
       margin-top: $padding-1 - 5px;
       background-color: $grey-1;
       color:black;
       @include box-shadow-1();
-      & > li
-      {
 
+      li
+      {
+        @include display-flex();
+        @include align-items(center);
+        padding: $padding-1 - 10px;
+        width: 100%;
         @include transition(all 0.2s);
         font-weight: 600;
         font-size: 15px;
-        &:hover
+        &:not(.caret):hover
         {
           background-color: $secondary-background;
           color:$secondary-color;
         }
+
+        &:hover + .caret
+        {
+          i{
+            color: $secondary-background;
+          }
+        }
+
         a{
           margin: auto;
         }
         border-bottom: 1px solid $grey-2;
         &:last-child
         {
-          border-bottom: 0;
+         // border-bottom: 0;
         }
       }
-    }
 
-    //level 1 submenu
-    & > li
+
+
+  }
+
+
+  //Primer nivel
+  & > ul > li
+  {
+    &.active
     {
+      left: 5px;
+      top: 10px;
+      color: $secondary-color;
+      background-color:$secondary-background;
 
-      & > .mask{
-        content: '';
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        top:0;
-        right:0;
-      }
-
-      &:before
-      {
-
-        /*
-        content: '';
-        position: absolute;
-        width: 1px;
-        height: 70%;
-
-        background: $main-color;
-        right: 0;
-        top: 15%;*/
-
-      }
-      &:last-child:after
-      {
-        display: none;
-      }
-      /*
-      border-right: 1px solid $main-color;
-      &:last-child
-      {
-        border-right: 0;
-      }*/
     }
-    & > li > ul
+    &:after
     {
-      left: 0;
-      min-width: 170px;
+      @include transition(all 0.2s);
+      content: '';
       position: absolute;
+      left: 45%;
+      height: 5px;
+      background: $secondary-background;
+      width: 0%;
+      bottom: 10px;
     }
+
+    &:hover:after
+    {
+
+      left:15%;
+      width: 70%;
+    }
+
+
+
+
+  }
+  //Primer subnivel
+  & > ul > li > ul
+  {
+    .caret
+    {
+      position: absolute;
+      top: -21px;
+      border: 0;
+      padding: 0;
+      left: 15px;
+      width: auto;
+      height: auto;
+      i
+      {
+        font-size: 35px;
+        color: $grey-1;
+      }
+    }
+    left: 10px;
+    min-width: 170px;
+    position: absolute;
   }
 
   margin-bottom: $padding-1;

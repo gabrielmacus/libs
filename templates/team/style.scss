@@ -1,3 +1,7 @@
+/**
+Estilos correspondientes al módulo team (Referente a los equipos)
+ */
+
 .team-positions
 {
   .td.team
@@ -15,32 +19,26 @@
 
   .tr
   {
-    grid-template-columns: 1fr 25% repeat(8,1fr);
+    @include grid-template(#{1fr 25% repeat(8,1fr)},"columns");
   }
-}
-@media all and (max-width: 600px) {
 
- .team-positions
- {
-   .tr{
-     grid-template-columns: 1fr 35% repeat(4,1fr);
-   }
-   .th,.td{
-     &.gf,&.ga,&.draw,&.loses
-     {
-       display: none;
-     }
-   }
+  @media all and (max-width: 600px) {
 
- }
-
-}
-
-@media all and (max-width: 350px) {
-  .team-positions
-  {
     .tr{
-      grid-template-columns: 1fr 35% repeat(2,1fr);
+      @include grid-template(#{1fr 35% repeat(4,1fr)},"columns")
+    }
+    .th,.td{
+      &.gf,&.ga,&.draw,&.loses
+      {
+        display: none;
+      }
+    }
+
+  }
+
+  @media all and (max-width: 350px) {
+    .tr{
+      @include grid-template(#{1fr 35% repeat(2,1fr)},"columns");
     }
 
     .th,.td{
@@ -50,4 +48,14 @@
       }
     }
   }
+
+  @media all and (max-width: 320px) {
+
+    .team-shield
+    {
+      display: none;
+    }
+  }
+
 }
+
