@@ -543,8 +543,10 @@ class CrudController
     }
 
 
-    protected static function ProcessPermission($permission,$user,ORMQuery &$query,ORMObject $object)
+    protected static function ProcessPermission($permission,$user,ORMQuery &$query=null,ORMObject $object)
     {
+        $query = empty($query)?new ORMQuery():$query;
+
         //Created/Updated by
         switch ($permission["level"])
         {
@@ -626,17 +628,48 @@ AND relation_parent_table = 'user' AND relation_child_table = 'role'";
 
 
 
-    static function Update(ORMObject $object,$params,$template = null)
+    static function Update(ORMObject $object,$params,$template = null,$sendResponse = true)
     {
 
         if(static::CrudAuthentication()["Update"])
         {
 
-            static::checkAuth($params + ["action"=>"Update"],true);
+           $permission = static::checkAuth($params + ["action"=>"Update"],true,$user);
 
         }
 
-        $object->readById((!empty($params["id"]))?$params["id"]:null);
+
+        $query = static::ProcessQuery(["filter"=>["id"=> !empty($params["id"])?$params["id"]:null ]],$object);
+
+
+        //Check permissions
+        static::ProcessPermission($permission,$user,$query,$object);
+
+        $pagination = new ORMPagination();
+        $pagination->limit = 1;
+        $results = $object->read($query,$pagination);
+
+
+
+        if(count($results) == 0)
+        {
+            http_response_code(403);
+            if($sendResponse)
+            {
+                static::SendResponse(["error"=>"You don't have the required permission to update this element"]);
+                exit();
+            }
+            else
+            {
+
+                return false;
+            }
+
+        }
+
+        $object = reset($results);
+
+        //$object->readById((!empty($params["id"]))?$params["id"]:null);
 
         //$object->id = (!empty($params["id"]))?$params["id"]:null;
 
@@ -667,17 +700,50 @@ AND relation_parent_table = 'user' AND relation_child_table = 'role'";
         }
 
 
+        if(!$sendResponse){
+            return $object;
+        }
+
         static::SendResponse($object,$template,$params);
     }
 
-    static function Delete(ORMObject $object,$params,$template=null)
+    static function Delete(ORMObject $object,$params,$template=null,$sendResponse = true)
     {
         if(static::CrudAuthentication()["Delete"])
         {
-            static::checkAuth($params + ["action"=>"Delete"],true);
+            $permission = static::checkAuth($params + ["action"=>"Delete"],true,$user);
 
         }
-        $object->readById((!empty($params["id"]))?$params["id"]:null);
+
+        $query = static::ProcessQuery(["filter"=>["id"=> !empty($params["id"])?$params["id"]:null ]],$object);
+        //Check permissions
+        static::ProcessPermission($permission,$user,$query,$object);
+
+        $pagination = new ORMPagination();
+        $pagination->limit = 1;
+        $results = $object->read($query,$pagination);
+
+        if(empty($results))
+        {
+            http_response_code(403);
+            if($sendResponse)
+            {
+                static::SendResponse(["error"=>"You don't have the required permission to update this element"]);
+                exit();
+            }
+            else
+            {
+
+                return false;
+            }
+
+        }
+
+        $object = reset($results);
+
+
+        //$object->readById((!empty($params["id"]))?$params["id"]:null);
+
 
        // $object->id = (!empty($params["id"]))?$params["id"]:null;
 
