@@ -505,11 +505,12 @@ class CrudController
 
         if(static::CrudAuthentication()["Create"])
         {
-            static::checkAuth($params + ["action"=>"Create"],true);
+            static::checkAuth($params + ["action"=>"Create"],true,$decoded);
         }
 
         static::AssignProperties($object);
 
+        $object->created_by  = $decoded["id"];
 
         if(($validationResult = static::Validate($object)) === true)
         {
@@ -541,6 +542,42 @@ class CrudController
 
     }
 
+
+    protected static function ProcessPermission($permission,$user,ORMQuery &$query,ORMObject $object)
+    {
+        //Created/Updated by
+        switch ($permission["level"])
+        {
+            case 1:
+                //Me
+                $query->where = empty($query->where)?"":$query->where." AND ";
+                $query->where .="  {$object->prefix}_created_by  =  ?  ";
+                $query->params[] = $user["id"];
+
+                //$query->join = (empty($query->join))?"  ";
+                break;
+
+            case 2:
+                //My group
+
+                $subquery="SELECT relation_parent_id FROM `_relations` 
+WHERE relation_child_id = {$user["role_id"]} 
+AND relation_parent_table = 'user' AND relation_child_table = 'role'";
+
+                $query->where = empty($query->where)?"":$query->where." AND ";
+                $query->where .="  {$object->prefix}_created_by  IN ({$subquery})  ";
+                $query->params[] = $user["id"];
+
+
+                break;
+            case 3:
+                //Everyone
+                break;
+        }
+
+
+    }
+
     static function Read(ORMObject $object,$params,$template = null)
     {
 
@@ -548,10 +585,12 @@ class CrudController
         if(static::CrudAuthentication()["Read"])
         {
 
-            static::checkAuth($params + ["action"=>"Read"],true);
+            $permission = static::checkAuth($params + ["action"=>"Read"],true,$user);
         }
 
         $query =static::ProcessQuery($_GET,$object);
+
+        static::ProcessPermission($permission,$user,$query,$object);
 
         $pagination = new ORMPagination();
         $pagination->offset = (!empty($_GET["p"]) && is_numeric($_GET["p"]) && $_GET["p"]>0)?$_GET["p"]-1:0;
@@ -562,8 +601,6 @@ class CrudController
 
             $results = $object->read($query,$pagination);
             static::ProcessPopulate($results, $object->PDOInstance,(!empty($_GET["populate"]))?$_GET["populate"]:[]);
-
-
 
             $data = ["results"=>$results,"pagination"=>$pagination];
         }

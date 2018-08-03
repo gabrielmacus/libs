@@ -14,7 +14,7 @@ use PHPUnit\Runner\Exception;
 
 trait Auth
 {
-    static function checkAuth($params,$sendResponse)
+    static function checkAuth($params,$sendResponse,&$decoded =null)
     {
         $decoded = static::checkAuthentication($sendResponse,$params);
         return static::checkAuthorization($decoded,$sendResponse,$params);
@@ -22,7 +22,7 @@ trait Auth
     }
     static function checkAuthorization($user,$sendResponse=false,$params=null)
     {
-
+        //TODO: Perhaps i could access permissions from object, in order to have them updated
         if(!empty($params) && !$user["root"])
         {
 
@@ -32,6 +32,7 @@ trait Auth
                 return $params["module"] == $var["module"] && $var["action"] == Services::DashesToCamelCase($params["action"],true);
 
             });
+
             if(empty($foundPermissions))
             {
                 if($sendResponse)
@@ -46,9 +47,12 @@ trait Auth
 
             }
 
+
+
         }
 
-        return true;
+
+        return (!empty($foundPermissions))?reset($foundPermissions):true;
 
     }
     static function checkAuthentication($sendResponse=false, $params=null, &$getToken = null)

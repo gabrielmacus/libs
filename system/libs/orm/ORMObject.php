@@ -23,6 +23,7 @@ abstract class ORMObject implements \JsonSerializable, \ArrayAccess
     public $updated_at;
     public $_related;
     public $_relationData;
+    public $created_by;
 
 
     protected $table;

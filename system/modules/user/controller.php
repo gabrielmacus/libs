@@ -81,6 +81,7 @@ class UserController extends CrudController
                     if(empty($result["root"]))
                     {
                         $result["role"] = $result["_related"]["role"][0]["name"];
+                        $result["role_id"] = $result["_related"]["role"][0]["id"];
                         $result["permissions"] = array_map(function($el){
 
                             return ["module"=>$el["name"],"action"=>$el["_relationData"]["extra_2"],"level"=>$el["_relationData"]["extra_1"]];
