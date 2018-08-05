@@ -106,13 +106,15 @@ if(!empty($match))
         }
         catch (Error $e)
         {
-            \system\libs\Services::BeautyPrint($e);
-            \system\libs\Services::BeautyPrint(\system\libs\orm\ORMObject::$logData);
+            $status=500;
+            //\system\libs\Services::BeautyPrint($e);
+           // \system\libs\Services::BeautyPrint(\system\libs\orm\ORMObject::$logData);
         }
         catch (Exception $e)
         {
-            \system\libs\Services::BeautyPrint($e);
-            \system\libs\Services::BeautyPrint(\system\libs\orm\ORMObject::$logData);
+            $status=500;
+            //\system\libs\Services::BeautyPrint($e);
+            //\system\libs\Services::BeautyPrint(\system\libs\orm\ORMObject::$logData);
         }
 
 
@@ -125,7 +127,7 @@ if(!empty($match))
 
 }
 
-
-http_response_code(404);
-//TODO: 404
-echo "404";
+$status = empty($status)?404:$status;
+http_response_code($status);
+//TODO: {$status}
+echo "{$status}";
